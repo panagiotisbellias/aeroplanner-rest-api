@@ -1,0 +1,16 @@
+spring:
+  config:
+    import: file:env.properties
+  application:
+    name: aeroplanner-rest-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+server:
+  port: 8005
