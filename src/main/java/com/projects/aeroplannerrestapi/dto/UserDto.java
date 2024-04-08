@@ -12,17 +12,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-
     @NotNull
     private Long id;
-
     @NotNull
     private String fullName;
-
     @Email
     @NotNull
     private String email;
-
     @NotNull
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$",
             message = """
@@ -31,8 +27,6 @@ public class UserDto {
                     and be at least 8 characters long.
                     """)
     private String password;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 }

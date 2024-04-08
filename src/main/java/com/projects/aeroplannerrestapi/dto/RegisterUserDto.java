@@ -13,11 +13,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterUserDto {
-
     @NotNull
     @Email
     private String email;
-
     @NotNull
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$",
             message = """
@@ -26,7 +24,6 @@ public class RegisterUserDto {
                     and be at least 8 characters long.
                     """)
     private String password;
-
     @NotNull
     private String fullName;
 }
