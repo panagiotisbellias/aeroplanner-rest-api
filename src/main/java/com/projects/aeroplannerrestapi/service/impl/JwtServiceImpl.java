@@ -1,5 +1,7 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
+import com.projects.aeroplannerrestapi.dto.ErrorDetails;
+import com.projects.aeroplannerrestapi.dto.UserDto;
 import com.projects.aeroplannerrestapi.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
