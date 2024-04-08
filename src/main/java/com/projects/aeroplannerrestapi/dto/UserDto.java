@@ -3,19 +3,24 @@ package com.projects.aeroplannerrestapi.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterUserDto {
+public class UserDto {
 
     @NotNull
+    private Long id;
+
+    @NotNull
+    private String fullName;
+
     @Email
+    @NotNull
     private String email;
 
     @NotNull
@@ -27,6 +32,7 @@ public class RegisterUserDto {
                     """)
     private String password;
 
-    @NotNull
-    private String fullName;
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }
