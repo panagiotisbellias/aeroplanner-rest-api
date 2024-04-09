@@ -5,6 +5,7 @@ import com.projects.aeroplannerrestapi.dto.LoginUserDto;
 import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
 import com.projects.aeroplannerrestapi.dto.UserDto;
 import com.projects.aeroplannerrestapi.service.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,12 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<UserDto> register(@RequestBody @Valid RegisterUserDto registerUserDto) {
         return new ResponseEntity<>(authenticationService.register(registerUserDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginUserDto loginUserDto) {
         return ResponseEntity.ok(authenticationService.authenticate(loginUserDto));
     }
 }

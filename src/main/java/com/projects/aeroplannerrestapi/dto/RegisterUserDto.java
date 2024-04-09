@@ -18,11 +18,9 @@ public class RegisterUserDto {
     private String email;
     @NotNull
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$",
-            message = """
-                    Password must contain at least one uppercase letter, 
-                    one lowercase letter, one digit, one special character 
-                    and be at least 8 characters long.
-                    """)
+            message = "Password must contain at least one uppercase letter, " +
+                    "one lowercase letter, one digit, one special character " +
+                    "and be at least 8 characters long.")
     private String password;
     @NotNull
     private String fullName;
