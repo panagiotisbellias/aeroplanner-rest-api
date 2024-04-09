@@ -6,6 +6,7 @@ import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
 import com.projects.aeroplannerrestapi.dto.UserDto;
 import com.projects.aeroplannerrestapi.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody RegisterUserDto registerUserDto) {
-        return ResponseEntity.ok(authenticationService.register(registerUserDto));
+        return new ResponseEntity<>(authenticationService.register(registerUserDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

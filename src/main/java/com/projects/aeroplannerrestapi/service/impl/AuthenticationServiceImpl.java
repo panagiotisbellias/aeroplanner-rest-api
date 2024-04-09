@@ -35,7 +35,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setFullName(registerUserDto.getFullName());
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
-        return UserMapper.INSTANCE.userToUserDto(user);
+        User savedUser = userRepository.save(user);
+        return UserMapper.INSTANCE.userToUserDto(savedUser);
     }
 
     @Override
