@@ -2,7 +2,7 @@ package com.projects.aeroplannerrestapi.bootsrap;
 
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
-import com.projects.aeroplannerrestapi.mapper.RoleRepository;
+import com.projects.aeroplannerrestapi.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -29,8 +29,8 @@ public class RoleSeeder implements ApplicationListener<ContextRefreshedEvent> {
                 RoleEnum.ADMIN, "Administrator role",
                 RoleEnum.SUPER_ADMIN, "Super administrator role");
         Arrays.stream(roleEnums).forEach(roleEnum -> {
-            boolean isRoleEmpty = roleRepository.findByName(roleEnum).isEmpty();
-            if (isRoleEmpty) {
+            boolean isRoleExists = roleRepository.existsByName(roleEnum);
+            if (!isRoleExists) {
                 Role role = new Role();
                 role.setName(roleEnum);
                 role.setDescription(roleNameDescriptionMap.get(roleEnum));
