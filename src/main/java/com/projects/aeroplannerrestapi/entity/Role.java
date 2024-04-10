@@ -27,7 +27,7 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false, unique = true)
-    private RoleEnum role;
+    private RoleEnum name;
 
     @Column(nullable = false)
     private String description;
