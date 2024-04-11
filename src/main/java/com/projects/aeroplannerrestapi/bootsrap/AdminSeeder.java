@@ -21,11 +21,11 @@ import java.util.Optional;
 public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
 
     @Value("${super.admin.name}")
-    private final String superAdminName;
+    private String superAdminName;
     @Value("${super.admin.email}")
-    private final String superAdminEmail;
+    private String superAdminEmail;
     @Value("${super.admin.password}")
-    private final String superAdminPassword;
+    private String superAdminPassword;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
