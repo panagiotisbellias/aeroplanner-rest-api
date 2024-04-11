@@ -1,8 +1,8 @@
 package com.projects.aeroplannerrestapi.exception;
 
-public class UserAlreadyExistsException extends RuntimeException{
+public class UserAlreadyExistsException extends RuntimeException {
 
-    public UserAlreadyExistsException(String message) {
-        super(message);
+    public UserAlreadyExistsException(String email) {
+        super(String.format("User already exists with email: %s", email));
     }
 }
