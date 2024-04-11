@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         boolean isUserExists = userRepository.existsByEmail(email);
         Optional<Role> role = roleRepository.findByName(RoleEnum.USER);
         if(role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.USER.name());
-        if (isUserExists) throw new UserAlreadyExistsException("User already exists.");
+        if (isUserExists) throw new UserAlreadyExistsException(email);
         User user = new User();
         user.setFullName(registerUserDto.getFullName());
         user.setEmail(registerUserDto.getEmail());
