@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -17,12 +18,12 @@ import java.util.Set;
 public class UserDto {
     @NotNull
     private Long id;
-    @NotNull
+    @NotBlank
     private String fullName;
     @Email
-    @NotNull
+    @NotBlank
     private String email;
-    @NotNull
+    @NotBlank
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$",
             message = """
                     Password must contain at least one uppercase letter, 
