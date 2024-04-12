@@ -36,14 +36,17 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void createSuperAdministrator() {
-        Optional<Role> role = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
-        if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.SUPER_ADMIN.name());
-        if (userRepository.existsByEmail(superAdminEmail)) throw new UserAlreadyExistsException(superAdminEmail);
-        User user = new User();
-        user.setFullName(superAdminName);
-        user.setEmail(superAdminEmail);
-        user.setPassword(passwordEncoder.encode(superAdminPassword));
-        user.setRole(role.get());
-        userRepository.save(user);
+        boolean isSuperAdminExists = userRepository.existsByEmail(superAdminEmail);
+        if (!isSuperAdminExists) {
+            Optional<Role> role = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
+            if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.SUPER_ADMIN.name());
+            if (userRepository.existsByEmail(superAdminEmail)) throw new UserAlreadyExistsException(superAdminEmail);
+            User user = new User();
+            user.setFullName(superAdminName);
+            user.setEmail(superAdminEmail);
+            user.setPassword(passwordEncoder.encode(superAdminPassword));
+            user.setRole(role.get());
+            userRepository.save(user);
+        }
     }
 }
