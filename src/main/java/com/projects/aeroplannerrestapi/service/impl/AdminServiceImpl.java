@@ -12,12 +12,17 @@ import com.projects.aeroplannerrestapi.repository.RoleRepository;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,14 +43,19 @@ public class AdminServiceImpl implements AdminService {
         user.setFullName(registerUserDto.getFullName());
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
-        user.setRole(role.get());
+        Set<Role> roles = new HashSet<>();
+        roles.add(role.get());
+        user.setRoles(roles);
         User savedUser = userRepository.save(user);
         return UserMapper.INSTANCE.userToUserDto(savedUser);
     }
 
     @Override
-    public List<UserDto> getAllAdministrators() {
-        return userRepository.findAll().stream()
+    public List<UserDto> getAllAdministrators(int pageNumber, int pageSize, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() :
+                Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+        return userRepository.findAll(pageable).getContent().stream()
                 .map(UserMapper.INSTANCE::userToUserDto)
                 .collect(Collectors.toList());
     }

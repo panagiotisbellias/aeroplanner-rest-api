@@ -9,7 +9,7 @@ public interface AdminService {
 
     UserDto createAdministrator(RegisterUserDto registerUserDto);
 
-    List<UserDto> getAllAdministrators();
+    List<UserDto> getAllAdministrators(int pageNumber, int pageSize, String sortBy, String sortDirection);
 
     UserDto getAdministrator(Long id);
 

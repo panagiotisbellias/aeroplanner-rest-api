@@ -11,13 +11,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
+@Order(2)
 public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
 
     @Value("${super.admin.name}")
@@ -45,7 +49,9 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
             user.setFullName(superAdminName);
             user.setEmail(superAdminEmail);
             user.setPassword(passwordEncoder.encode(superAdminPassword));
-            user.setRole(role.get());
+            Set<Role> set = new HashSet<>();
+            set.add(role.get());
+            user.setRoles(set);
             userRepository.save(user);
         }
     }

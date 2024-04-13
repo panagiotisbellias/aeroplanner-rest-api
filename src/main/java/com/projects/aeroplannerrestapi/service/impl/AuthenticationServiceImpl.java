@@ -20,7 +20,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +45,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setFullName(registerUserDto.getFullName());
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
-        user.setRole(role.get());
+        Set<Role> roles = new HashSet<>();
+        roles.add(role.get());
+        user.setRoles(roles);
         User savedUser = userRepository.save(user);
         return UserMapper.INSTANCE.userToUserDto(savedUser);
     }

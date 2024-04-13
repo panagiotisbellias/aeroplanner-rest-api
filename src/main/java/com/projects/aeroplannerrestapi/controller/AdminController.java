@@ -25,8 +25,12 @@ public class AdminController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllAdministrators() {
-        return ResponseEntity.ok(adminService.getAllAdministrators());
+    public ResponseEntity<List<UserDto>> getAllAdministrators(
+            @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(name = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+        return ResponseEntity.ok(adminService.getAllAdministrators(pageNumber, pageSize, sortBy, sortDir));
     }
 
     @GetMapping("{id}")
@@ -35,7 +39,8 @@ public class AdminController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<UserDto> updateAdministrator(@PathVariable Long id, @RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<UserDto> updateAdministrator(@PathVariable Long id,
+                                                       @RequestBody RegisterUserDto registerUserDto) {
         return ResponseEntity.ok(adminService.updateAdministrator(id, registerUserDto));
     }
 
