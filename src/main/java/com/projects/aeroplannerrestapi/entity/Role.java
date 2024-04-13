@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,17 +21,19 @@ import java.time.LocalDateTime;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_generator")
-    @SequenceGenerator(name = "role_generator", sequenceName = "role_sequence", initialValue = 100, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, updatable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private RoleEnum name;
 
     @Column(nullable = false)
     private String description;
+
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    private Set<User> users;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

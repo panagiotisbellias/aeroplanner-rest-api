@@ -12,8 +12,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -38,9 +40,12 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -52,8 +57,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getName().toString());
-        return List.of(authority);
+        List<SimpleGrantedAuthority> list = new ArrayList<>();
+        for (Role r : roles) {
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + r.getName().toString());
+            list.add(authority);
+        }
+        return list;
     }
 
     @Override
