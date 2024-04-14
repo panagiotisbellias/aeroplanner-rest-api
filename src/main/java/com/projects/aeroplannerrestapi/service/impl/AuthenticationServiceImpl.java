@@ -8,6 +8,7 @@ import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
+import com.projects.aeroplannerrestapi.exception.TokenNotFoundException;
 import com.projects.aeroplannerrestapi.exception.UserAlreadyExistsException;
 import com.projects.aeroplannerrestapi.mapper.UserMapper;
 import com.projects.aeroplannerrestapi.repository.RoleRepository;
@@ -82,7 +83,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
             return authorizationHeader.substring(7);
         }
-        // TODO: Create a custom exception
-        return null;
+        throw new TokenNotFoundException();
     }
 }
