@@ -14,11 +14,14 @@ import com.projects.aeroplannerrestapi.repository.RoleRepository;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.AuthenticationService;
 import com.projects.aeroplannerrestapi.service.JwtService;
+import com.projects.aeroplannerrestapi.service.TokenBlacklistService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -31,6 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
+    private final TokenBlacklistService tokenBlacklistService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -39,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String email = registerUserDto.getEmail();
         boolean isUserExists = userRepository.existsByEmail(email);
         Optional<Role> role = roleRepository.findByName(RoleEnum.USER);
-        if(role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.USER.name());
+        if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.USER.name());
         if (isUserExists) throw new UserAlreadyExistsException(email);
         User user = new User();
         user.setFullName(registerUserDto.getFullName());
@@ -64,5 +68,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         loginResponse.setToken(token);
         loginResponse.setExpiredIn(jwtService.getExpirationTime());
         return loginResponse;
+    }
+
+    @Override
+    public void logout(HttpServletRequest request) {
+        String token = this.extractTokenFromRequest(request);
+        tokenBlacklistService.addToBlacklist(token);
+    }
+
+    @Override
+    public String extractTokenFromRequest(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
+        }
+        // TODO: Create a custom exception
+        return null;
     }
 }

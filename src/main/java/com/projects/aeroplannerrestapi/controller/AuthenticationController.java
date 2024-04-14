@@ -5,6 +5,8 @@ import com.projects.aeroplannerrestapi.dto.LoginUserDto;
 import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
 import com.projects.aeroplannerrestapi.dto.UserDto;
 import com.projects.aeroplannerrestapi.service.AuthenticationService;
+import com.projects.aeroplannerrestapi.service.TokenBlacklistService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,5 +31,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginUserDto loginUserDto) {
         return ResponseEntity.ok(authenticationService.authenticate(loginUserDto));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout (HttpServletRequest request) {
+        authenticationService.logout(request);
+        return ResponseEntity.ok("Logged out successfully");
     }
 }
