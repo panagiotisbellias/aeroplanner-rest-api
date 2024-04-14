@@ -54,8 +54,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleTokenNotFoundException(TokenNotFoundException exception,
+                                                                     WebRequest webRequest) {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setTimestamp(LocalDateTime.now());
+        errorDetails.setMessage(exception.getMessage());
+        errorDetails.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDetails> handleGlobalExceptionHandler(Exception exception, WebRequest webRequest) {
+    public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setTimestamp(LocalDateTime.now());
         errorDetails.setPath(webRequest.getDescription(false));
