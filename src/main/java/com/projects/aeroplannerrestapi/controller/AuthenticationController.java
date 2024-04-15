@@ -5,7 +5,6 @@ import com.projects.aeroplannerrestapi.dto.LoginUserDto;
 import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
 import com.projects.aeroplannerrestapi.dto.UserDto;
 import com.projects.aeroplannerrestapi.service.AuthenticationService;
-import com.projects.aeroplannerrestapi.service.TokenBlacklistService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

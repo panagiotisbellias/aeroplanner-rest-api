@@ -47,15 +47,13 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public UserDto getAdministrator(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
+        User user = findByIdAndRole(id, RoleEnum.ADMIN);
         return UserMapper.INSTANCE.userToUserDto(user);
     }
 
     @Override
     public UserDto updateAdministrator(Long id, RegisterUserDto registerUserDto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
+        User user = findByIdAndRole(id, RoleEnum.ADMIN);
         user.setUpdatedAt(LocalDateTime.now());
         user.setEmail(registerUserDto.getEmail());
         user.setFullName(registerUserDto.getFullName());
@@ -67,8 +65,12 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public void deleteAdministrator(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
+        User user = findByIdAndRole(id, RoleEnum.ADMIN);
         userRepository.delete(user);
+    }
+
+    private User findByIdAndRole(Long id, RoleEnum roleEnum) {
+        return userRepository.findByIdAndRolesName(id, roleEnum)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
     }
 }
