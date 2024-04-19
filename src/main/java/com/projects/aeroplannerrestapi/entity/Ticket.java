@@ -32,6 +32,5 @@ public class Ticket {
     private int seatNumber;
 
     @Column(nullable = false)
-    @DecimalMin(value = "0.0")
     private BigDecimal price;
 }
