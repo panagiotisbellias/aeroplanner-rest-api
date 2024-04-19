@@ -32,16 +32,15 @@ public class Flight {
     private String flightNumber;
 
     @Column(nullable = false)
-    private LocalDateTime departureTime;
+    private String departureTime;
 
     @Column(nullable = false)
-    private LocalDateTime arrivalTime;
+    private String arrivalTime;
 
     @Column(nullable = false)
     private Duration duration;
 
     @Column(nullable = false)
-    @DecimalMin(value = "0.0")
     private BigDecimal price;
 
     @Column(nullable = false)
