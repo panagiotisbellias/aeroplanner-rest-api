@@ -2,6 +2,7 @@ package com.projects.aeroplannerrestapi.controller;
 
 import com.projects.aeroplannerrestapi.dto.FlightDto;
 import com.projects.aeroplannerrestapi.service.FlightService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class FlightController {
     private final FlightService flightService;
 
     @PostMapping
-    public ResponseEntity<FlightDto> createFlight(@RequestBody FlightDto flightDto) {
+    public ResponseEntity<FlightDto> createFlight(@RequestBody @Valid FlightDto flightDto) {
         return new ResponseEntity<>(flightService.createFlight(flightDto), HttpStatus.CREATED);
     }
 
@@ -34,7 +35,7 @@ public class FlightController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<FlightDto> updateFlight(@PathVariable Long id, @RequestBody FlightDto flightDto) {
+    public ResponseEntity<FlightDto> updateFlight(@PathVariable Long id, @RequestBody @Valid FlightDto flightDto) {
         return ResponseEntity.ok(flightService.updateFlight(id, flightDto));
     }
 
