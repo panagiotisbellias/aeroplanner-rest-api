@@ -23,6 +23,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightDto createFlight(FlightDto flightDto) {
         Flight flight = FlightMapper.INSTANCE.flightDtoToFlight(flightDto);
+        flight.setCurrentAvailableSeat(flightDto.getSeatAvailability());
         flight.setDuration(Duration.between(LocalDateTime.parse(flightDto.getDepartureTime()),
                 LocalDateTime.parse(flightDto.getArrivalTime())));
         Flight savedFlight = flightRepository.save(flight);

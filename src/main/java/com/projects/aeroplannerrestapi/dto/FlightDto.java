@@ -31,5 +31,6 @@ public class FlightDto {
     private String aircraftType;
     @PositiveOrZero
     private int seatAvailability;
+    private int currentAvailableSeat;
     private FlightStatusEnum status;
 }

@@ -29,7 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
         int seatDifference = flight.getSeatAvailability() - reservationDto.getSeatNumber();
-        flight.setSeatAvailability(seatDifference);
+        flight.setCurrentAvailableSeat(seatDifference);
         flightRepository.save(flight);
         Reservation reservation = ReservationMapper.INSTANCE.reservationDtoToReservation(reservationDto);
         return ReservationMapper.INSTANCE.reservationToReservationDto(reservationRepository.save(reservation));
@@ -50,9 +50,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public ReservationDto updateReservation(Long id, ReservationDto reservationDto) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
+        Long flightId = reservationDto.getFlightId();
+        Flight flight = flightRepository.findById(flightId)
+                .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
+        int seatNumber = reservationDto.getSeatNumber();
+        int availableSeat = flight.getSeatAvailability() - seatNumber;
+        flight.setCurrentAvailableSeat(availableSeat);
+        flightRepository.save(flight);
         reservation.setFlightId(reservationDto.getFlightId());
         reservation.setPassengerId(reservationDto.getPassengerId());
         reservation.setSeatNumber(reservationDto.getSeatNumber());
