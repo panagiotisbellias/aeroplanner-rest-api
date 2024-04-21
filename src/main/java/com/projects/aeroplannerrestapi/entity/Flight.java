@@ -28,13 +28,13 @@ public class Flight {
     @Column(nullable = false)
     private String airline;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "flight_number", nullable = false, unique = true)
     private String flightNumber;
 
-    @Column(nullable = false)
+    @Column(name = "departure_time", nullable= false)
     private String departureTime;
 
-    @Column(nullable = false)
+    @Column(name = "arrival_time", nullable = false)
     private String arrivalTime;
 
     @Column(nullable = false)
@@ -43,11 +43,14 @@ public class Flight {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
+    @Column(name = "aircraft_type", nullable = false)
     private String aircraftType;
 
-    @Column(nullable = false)
+    @Column(name = "seat_availability", nullable = false)
     private int seatAvailability;
+
+    @Column(name = "current_available_seat")
+    private int currentAvailableSeat;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
