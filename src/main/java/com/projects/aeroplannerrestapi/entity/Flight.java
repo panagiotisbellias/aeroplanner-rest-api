@@ -16,7 +16,7 @@ import java.time.Duration;
 @NoArgsConstructor
 @Entity
 @Table(name = "flights")
-public class Flight {
+public class Flight extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "flights_generator")
@@ -50,7 +50,7 @@ public class Flight {
     @Column(name = "current_available_seat")
     private int currentAvailableSeat;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FlightStatusEnum status;
 }

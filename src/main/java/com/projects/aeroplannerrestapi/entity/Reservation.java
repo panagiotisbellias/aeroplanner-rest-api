@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "reservations")
-public class Reservation {
+public class Reservation extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class Reservation {
     @Column(name = "reservation_date", nullable = false)
     private String reservationDate;
 
-    @Column(name = "reservation_status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "reservation_status", nullable = false)
     private ReservationStatusEnum reservationStatus;
 }
