@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.entity;
 
+import com.projects.aeroplannerrestapi.enums.TicketStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 @Table(name = "tickets")
-public class Ticket {
+public class Ticket extends BaseEntityAudit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tickets_generator")
@@ -29,6 +30,13 @@ public class Ticket {
 
     @Column(name = "seat_number", nullable = false)
     private int seatNumber;
+
+    @Column(name = "issue_date")
+    private String issueDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ticket_status", nullable = false)
+    private TicketStatusEnum ticketStatusEnum;
 
     @Column(nullable = false)
     private BigDecimal price;

@@ -24,11 +24,13 @@ public class FlightController {
         return new ResponseEntity<>(flightService.createFlight(flightDto), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<List<FlightDto>> getAllFlights() {
         return ResponseEntity.ok(flightService.getAllFlights());
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("{id}")
     public ResponseEntity<FlightDto> getFlight(@PathVariable Long id) {
         return ResponseEntity.ok(flightService.getFlight(id));
