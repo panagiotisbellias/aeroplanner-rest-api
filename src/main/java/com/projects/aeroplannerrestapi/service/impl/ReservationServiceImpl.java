@@ -3,6 +3,7 @@ package com.projects.aeroplannerrestapi.service.impl;
 import com.projects.aeroplannerrestapi.dto.ReservationDto;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Reservation;
+import com.projects.aeroplannerrestapi.enums.ReservationStatusEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.mapper.ReservationMapper;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
@@ -70,9 +71,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void deleteReservation(Long id) {
+    public void cancelReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
-        reservationRepository.delete(reservation);
+        reservation.setReservationStatus(ReservationStatusEnum.CANCELLED);
     }
 }

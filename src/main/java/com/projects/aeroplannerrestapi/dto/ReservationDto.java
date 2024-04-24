@@ -1,6 +1,5 @@
 package com.projects.aeroplannerrestapi.dto;
 
-import com.projects.aeroplannerrestapi.enums.FlightStatusEnum;
 import com.projects.aeroplannerrestapi.enums.ReservationStatusEnum;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
