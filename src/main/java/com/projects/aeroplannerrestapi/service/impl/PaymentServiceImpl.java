@@ -4,7 +4,9 @@ import com.projects.aeroplannerrestapi.dto.PaymentRequest;
 import com.projects.aeroplannerrestapi.dto.PaymentResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Payment;
+import com.projects.aeroplannerrestapi.entity.Reservation;
 import com.projects.aeroplannerrestapi.enums.PaymentStatusEnum;
+import com.projects.aeroplannerrestapi.enums.ReservationStatusEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.mapper.PaymentMapper;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
@@ -31,6 +33,9 @@ public class PaymentServiceImpl implements PaymentService {
         Long flightId = savedPayment.getFlightId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
+        Reservation reservation = reservationRepository.findByFlightId(flightId)
+                .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
+        reservation.setReservationStatus(ReservationStatusEnum.CONFIRMED);
         return PaymentResponse.builder()
                 .transactionId(UUID.randomUUID().toString())
                 .amount(flight.getPrice())
