@@ -1,7 +1,7 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.UserDto;
-import com.projects.aeroplannerrestapi.dto.UserResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public ResponseEntity<UserResponse> getAllAdministrators(
+    public ResponseEntity<PaginatedAndSortedUserResponseResponse> getAllAdministrators(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserDto> getAuthenticatedUser() {
+    public ResponseEntity<UserResponse> getAuthenticatedUser() {
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }
 }

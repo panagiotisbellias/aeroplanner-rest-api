@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.FlightDto;
+import com.projects.aeroplannerrestapi.dto.request.FlightRequest;
+import com.projects.aeroplannerrestapi.dto.response.FlightResponse;
 import com.projects.aeroplannerrestapi.service.FlightService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,25 +21,25 @@ public class FlightController {
     private final FlightService flightService;
 
     @PostMapping
-    public ResponseEntity<FlightDto> createFlight(@RequestBody @Valid FlightDto flightDto) {
-        return new ResponseEntity<>(flightService.createFlight(flightDto), HttpStatus.CREATED);
+    public ResponseEntity<FlightResponse> createFlight(@RequestBody @Valid FlightRequest flightRequest) {
+        return new ResponseEntity<>(flightService.createFlight(flightRequest), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
-    public ResponseEntity<List<FlightDto>> getAllFlights() {
+    public ResponseEntity<List<FlightResponse>> getAllFlights() {
         return ResponseEntity.ok(flightService.getAllFlights());
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("{id}")
-    public ResponseEntity<FlightDto> getFlight(@PathVariable Long id) {
+    public ResponseEntity<FlightResponse> getFlight(@PathVariable Long id) {
         return ResponseEntity.ok(flightService.getFlight(id));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<FlightDto> updateFlight(@PathVariable Long id, @RequestBody @Valid FlightDto flightDto) {
-        return ResponseEntity.ok(flightService.updateFlight(id, flightDto));
+    public ResponseEntity<FlightResponse> updateFlight(@PathVariable Long id, @RequestBody @Valid FlightRequest flightRequest) {
+        return ResponseEntity.ok(flightService.updateFlight(id, flightRequest));
     }
 
     @DeleteMapping("{id}")

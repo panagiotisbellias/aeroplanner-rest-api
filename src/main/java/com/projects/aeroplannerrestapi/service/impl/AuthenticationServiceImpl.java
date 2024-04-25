@@ -1,9 +1,9 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
-import com.projects.aeroplannerrestapi.dto.LoginResponse;
-import com.projects.aeroplannerrestapi.dto.LoginUserDto;
-import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
-import com.projects.aeroplannerrestapi.dto.UserDto;
+import com.projects.aeroplannerrestapi.dto.response.LoginResponse;
+import com.projects.aeroplannerrestapi.dto.request.LoginRequest;
+import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
@@ -40,27 +40,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
 
     @Override
-    public UserDto register(RegisterUserDto registerUserDto) {
-        String email = registerUserDto.getEmail();
+    public UserResponse register(RegisterRequest registerRequest) {
+        String email = registerRequest.getEmail();
         boolean isUserExists = userRepository.existsByEmail(email);
         Optional<Role> role = roleRepository.findByName(RoleEnum.USER);
         if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.USER.name());
         if (isUserExists) throw new UserAlreadyExistsException(email);
         User user = new User();
-        user.setFullName(registerUserDto.getFullName());
-        user.setEmail(registerUserDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
+        user.setFullName(registerRequest.getFullName());
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         Set<Role> roles = new HashSet<>();
         roles.add(role.get());
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
-        return UserMapper.INSTANCE.userToUserDto(savedUser);
+        return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
 
     @Override
-    public LoginResponse authenticate(LoginUserDto loginUserDto) {
-        String email = loginUserDto.getEmail();
-        String password = loginUserDto.getPassword();
+    public LoginResponse authenticate(LoginRequest loginRequest) {
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));

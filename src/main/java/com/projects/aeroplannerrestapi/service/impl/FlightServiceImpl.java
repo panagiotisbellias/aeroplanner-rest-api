@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
-import com.projects.aeroplannerrestapi.dto.FlightDto;
+import com.projects.aeroplannerrestapi.dto.request.FlightRequest;
+import com.projects.aeroplannerrestapi.dto.response.FlightResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.mapper.FlightMapper;
@@ -21,44 +22,44 @@ public class FlightServiceImpl implements FlightService {
     private final FlightRepository flightRepository;
 
     @Override
-    public FlightDto createFlight(FlightDto flightDto) {
-        Flight flight = FlightMapper.INSTANCE.flightDtoToFlight(flightDto);
-        flight.setCurrentAvailableSeat(flightDto.getSeatAvailability());
-        flight.setDuration(Duration.between(LocalDateTime.parse(flightDto.getDepartureTime()),
-                LocalDateTime.parse(flightDto.getArrivalTime())));
+    public FlightResponse createFlight(FlightRequest flightRequest) {
+        Flight flight = FlightMapper.INSTANCE.flightRequestToFlight(flightRequest);
+        flight.setCurrentAvailableSeat(flightRequest.getSeatAvailability());
+        flight.setDuration(Duration.between(LocalDateTime.parse(flightRequest.getDepartureTime()),
+                LocalDateTime.parse(flightRequest.getArrivalTime())));
         Flight savedFlight = flightRepository.save(flight);
-        return FlightMapper.INSTANCE.flightToFlightDto(savedFlight);
+        return FlightMapper.INSTANCE.flightToFlightResponse(savedFlight);
     }
 
     @Override
-    public List<FlightDto> getAllFlights() {
+    public List<FlightResponse> getAllFlights() {
         return flightRepository.findAll().stream()
-                .map(FlightMapper.INSTANCE::flightToFlightDto)
+                .map(FlightMapper.INSTANCE::flightToFlightResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public FlightDto getFlight(Long id) {
+    public FlightResponse getFlight(Long id) {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", id.toString()));
-        return FlightMapper.INSTANCE.flightToFlightDto(flight);
+        return FlightMapper.INSTANCE.flightToFlightResponse(flight);
     }
 
     @Override
-    public FlightDto updateFlight(Long id, FlightDto flightDto) {
+    public FlightResponse updateFlight(Long id, FlightRequest flightRequest) {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", id.toString()));
-        flight.setFlightNumber(flightDto.getFlightNumber());
-        flight.setAirline(flightDto.getAirline());
-        flight.setAircraftType(flightDto.getAircraftType());
-        flight.setDuration(Duration.between(LocalDateTime.parse(flightDto.getDepartureTime()),
-                LocalDateTime.parse(flightDto.getArrivalTime())));
-        flight.setPrice(flightDto.getPrice());
-        flight.setStatus(flightDto.getStatus());
-        flight.setArrivalTime(flightDto.getArrivalTime());
-        flight.setDepartureTime(flightDto.getDepartureTime());
-        flight.setSeatAvailability(flightDto.getSeatAvailability());
-        return FlightMapper.INSTANCE.flightToFlightDto(flightRepository.save(flight));
+        flight.setFlightNumber(flightRequest.getFlightNumber());
+        flight.setAirline(flightRequest.getAirline());
+        flight.setAircraftType(flightRequest.getAircraftType());
+        flight.setDuration(Duration.between(LocalDateTime.parse(flightRequest.getDepartureTime()),
+                LocalDateTime.parse(flightRequest.getArrivalTime())));
+        flight.setPrice(flightRequest.getPrice());
+        flight.setStatus(flightRequest.getStatus());
+        flight.setArrivalTime(flightRequest.getArrivalTime());
+        flight.setDepartureTime(flightRequest.getDepartureTime());
+        flight.setSeatAvailability(flightRequest.getSeatAvailability());
+        return FlightMapper.INSTANCE.flightToFlightResponse(flightRepository.save(flight));
     }
 
     @Override

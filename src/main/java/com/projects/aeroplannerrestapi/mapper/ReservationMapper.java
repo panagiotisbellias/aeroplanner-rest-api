@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.mapper;
 
-import com.projects.aeroplannerrestapi.dto.ReservationDto;
+import com.projects.aeroplannerrestapi.dto.request.ReservationRequest;
+import com.projects.aeroplannerrestapi.dto.response.ReservationResponse;
 import com.projects.aeroplannerrestapi.entity.Reservation;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -10,7 +11,7 @@ public interface ReservationMapper {
 
     ReservationMapper INSTANCE = Mappers.getMapper(ReservationMapper.class);
 
-    Reservation reservationDtoToReservation(ReservationDto reservationDto);
+    ReservationResponse reservationToReservationResponse(Reservation reservation);
 
-    ReservationDto reservationToReservationDto(Reservation reservation);
+    Reservation reservationRequestToReservation(ReservationRequest reservationRequest);
 }

@@ -1,4 +1,4 @@
-package com.projects.aeroplannerrestapi.dto;
+package com.projects.aeroplannerrestapi.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorDetails {
+public class ErrorDetailsResponse {
     private LocalDateTime timestamp;
     private String message;
     private String path;
