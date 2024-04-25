@@ -1,4 +1,4 @@
-package com.projects.aeroplannerrestapi.dto;
+package com.projects.aeroplannerrestapi.dto.response;
 
 import com.projects.aeroplannerrestapi.enums.PaymentStatusEnum;
 import lombok.*;

@@ -1,13 +1,7 @@
-package com.projects.aeroplannerrestapi.dto;
+package com.projects.aeroplannerrestapi.dto.response;
 
 import com.projects.aeroplannerrestapi.enums.FlightStatusEnum;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -15,21 +9,15 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FlightDto {
+@Builder
+public class FlightResponse {
     private Long id;
-    @NotEmpty
     private String airline;
-    @NotEmpty
     private String flightNumber;
-    @NotEmpty
     private String departureTime;
-    @NotEmpty
     private String arrivalTime;
-    @DecimalMin(value = "0")
     private BigDecimal price;
-    @NotEmpty
     private String aircraftType;
-    @PositiveOrZero
     private int seatAvailability;
     private int currentAvailableSeat;
     private FlightStatusEnum status;

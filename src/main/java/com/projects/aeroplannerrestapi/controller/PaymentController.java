@@ -1,7 +1,7 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.PaymentRequest;
-import com.projects.aeroplannerrestapi.dto.PaymentResponse;
+import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
+import com.projects.aeroplannerrestapi.dto.response.PaymentResponse;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import com.projects.aeroplannerrestapi.service.PaymentService;
 import jakarta.validation.Valid;

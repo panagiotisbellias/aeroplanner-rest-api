@@ -1,9 +1,9 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.LoginResponse;
-import com.projects.aeroplannerrestapi.dto.LoginUserDto;
-import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
-import com.projects.aeroplannerrestapi.dto.UserDto;
+import com.projects.aeroplannerrestapi.dto.response.LoginResponse;
+import com.projects.aeroplannerrestapi.dto.request.LoginRequest;
+import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -23,13 +23,13 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register(@RequestBody @Valid RegisterUserDto registerUserDto) {
-        return new ResponseEntity<>(authenticationService.register(registerUserDto), HttpStatus.CREATED);
+    public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
+        return new ResponseEntity<>(authenticationService.register(registerRequest), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginUserDto loginUserDto) {
-        return ResponseEntity.ok(authenticationService.authenticate(loginUserDto));
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
+        return ResponseEntity.ok(authenticationService.authenticate(loginRequest));
     }
 
     @PostMapping("/logout")

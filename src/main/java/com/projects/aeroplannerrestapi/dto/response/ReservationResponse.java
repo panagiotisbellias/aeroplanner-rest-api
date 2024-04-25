@@ -1,25 +1,18 @@
-package com.projects.aeroplannerrestapi.dto;
+package com.projects.aeroplannerrestapi.dto.response;
 
 import com.projects.aeroplannerrestapi.enums.ReservationStatusEnum;
-import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservationDto {
+@Builder
+public class ReservationResponse {
     private Long id;
-    @NotNull
     private Long passengerId;
-    @NotNull
     private Long flightId;
-    @PositiveOrZero
     private int seatNumber;
-    @NotEmpty
     private String reservationDate;
     private ReservationStatusEnum reservationStatus;
 }

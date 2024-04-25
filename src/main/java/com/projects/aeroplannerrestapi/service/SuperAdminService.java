@@ -1,15 +1,15 @@
 package com.projects.aeroplannerrestapi.service;
 
-import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
-import com.projects.aeroplannerrestapi.dto.UserDto;
+import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 
 public interface SuperAdminService {
 
-    UserDto createAdministrator(RegisterUserDto registerUserDto);
+    UserResponse createAdministrator(RegisterRequest registerRequest);
 
-    UserDto getAdministrator(Long id);
+    UserResponse getAdministrator(Long id);
 
-    UserDto updateAdministrator(Long id, RegisterUserDto registerUserDto);
+    UserResponse updateAdministrator(Long id, RegisterRequest registerRequest);
 
     void deleteAdministrator(Long id);
 }

@@ -1,13 +1,13 @@
 package com.projects.aeroplannerrestapi.service;
 
-import com.projects.aeroplannerrestapi.dto.PassengerResponse;
-import com.projects.aeroplannerrestapi.dto.UserDto;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 
 public interface PassengerService {
 
-    PassengerResponse getPassengers(int pageNumber, int pageSize, String sortBy, String sortDir);
+    PaginatedAndSortedPassengerResponseResponse getPassengers(int pageNumber, int pageSize, String sortBy, String sortDir);
 
-    UserDto getPassenger(Long id);
+    UserResponse getPassenger(Long id);
 
     void deletePassenger(Long id);
 }

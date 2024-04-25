@@ -1,7 +1,7 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
-import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
-import com.projects.aeroplannerrestapi.dto.UserDto;
+import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
@@ -29,38 +29,38 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDto createAdministrator(RegisterUserDto registerUserDto) {
-        String email = registerUserDto.getEmail();
+    public UserResponse createAdministrator(RegisterRequest registerRequest) {
+        String email = registerRequest.getEmail();
         Optional<Role> role = roleRepository.findByName(RoleEnum.ADMIN);
         if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.ADMIN.name());
         if (userRepository.existsByEmail(email)) throw new UserAlreadyExistsException(email);
         User user = new User();
-        user.setFullName(registerUserDto.getFullName());
+        user.setFullName(registerRequest.getFullName());
         user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         Set<Role> roles = new HashSet<>();
         roles.add(role.get());
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
-        return UserMapper.INSTANCE.userToUserDto(savedUser);
+        return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
 
     @Override
-    public UserDto getAdministrator(Long id) {
+    public UserResponse getAdministrator(Long id) {
         User user = findByIdAndRole(id, RoleEnum.ADMIN);
-        return UserMapper.INSTANCE.userToUserDto(user);
+        return UserMapper.INSTANCE.userToUserResponse(user);
     }
 
     @Override
-    public UserDto updateAdministrator(Long id, RegisterUserDto registerUserDto) {
+    public UserResponse updateAdministrator(Long id, RegisterRequest registerRequest) {
         User user = findByIdAndRole(id, RoleEnum.ADMIN);
         user.setUpdatedAt(LocalDateTime.now());
-        user.setEmail(registerUserDto.getEmail());
-        user.setFullName(registerUserDto.getFullName());
-        user.setEmail(registerUserDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registerUserDto.getPassword()));
+        user.setEmail(registerRequest.getEmail());
+        user.setFullName(registerRequest.getFullName());
+        user.setEmail(registerRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         User updatedUser = userRepository.save(user);
-        return UserMapper.INSTANCE.userToUserDto(updatedUser);
+        return UserMapper.INSTANCE.userToUserResponse(updatedUser);
     }
 
     @Override

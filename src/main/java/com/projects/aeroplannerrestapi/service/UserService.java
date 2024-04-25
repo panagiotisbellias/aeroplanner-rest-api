@@ -1,11 +1,11 @@
 package com.projects.aeroplannerrestapi.service;
 
-import com.projects.aeroplannerrestapi.dto.UserDto;
-import com.projects.aeroplannerrestapi.dto.UserResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 
 public interface UserService {
 
-    UserDto getAuthenticatedUser();
+    UserResponse getAuthenticatedUser();
 
-    UserResponse getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDir);
+    PaginatedAndSortedUserResponseResponse getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDir);
 }

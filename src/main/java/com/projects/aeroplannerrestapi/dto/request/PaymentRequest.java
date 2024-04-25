@@ -1,4 +1,4 @@
-package com.projects.aeroplannerrestapi.dto;
+package com.projects.aeroplannerrestapi.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

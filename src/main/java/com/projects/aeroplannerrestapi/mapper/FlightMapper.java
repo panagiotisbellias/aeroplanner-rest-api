@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.mapper;
 
-import com.projects.aeroplannerrestapi.dto.FlightDto;
+import com.projects.aeroplannerrestapi.dto.request.FlightRequest;
+import com.projects.aeroplannerrestapi.dto.response.FlightResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -10,7 +11,7 @@ public interface FlightMapper {
 
     FlightMapper INSTANCE = Mappers.getMapper(FlightMapper.class);
 
-    FlightDto flightToFlightDto(Flight flight);
+    FlightResponse flightToFlightResponse(Flight flight);
 
-    Flight flightDtoToFlight(FlightDto flightDto);
+    Flight flightRequestToFlight(FlightRequest flightRequest);
 }

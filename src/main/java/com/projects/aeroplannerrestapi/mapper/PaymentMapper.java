@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.mapper;
 
-import com.projects.aeroplannerrestapi.dto.PaymentRequest;
+import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
