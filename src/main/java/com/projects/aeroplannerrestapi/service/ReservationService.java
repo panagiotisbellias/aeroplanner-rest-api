@@ -1,18 +1,19 @@
 package com.projects.aeroplannerrestapi.service;
 
-import com.projects.aeroplannerrestapi.dto.ReservationDto;
+import com.projects.aeroplannerrestapi.dto.request.ReservationRequest;
+import com.projects.aeroplannerrestapi.dto.response.ReservationResponse;
 
 import java.util.List;
 
 public interface ReservationService {
 
-    ReservationDto createReservation(ReservationDto reservationDto);
+    ReservationResponse createReservation(ReservationRequest reservationRequest);
 
-    List<ReservationDto> getAllReservations();
+    List<ReservationResponse> getAllReservations();
 
-    ReservationDto getReservation(Long id);
+    ReservationResponse getReservation(Long id);
 
-    ReservationDto updateReservation(Long id, ReservationDto reservationDto);
+    ReservationResponse updateReservation(Long id, ReservationRequest reservationRequest);
 
     void cancelReservation(Long id);
 }

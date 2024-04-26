@@ -1,7 +1,7 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.PassengerResponse;
-import com.projects.aeroplannerrestapi.dto.UserDto;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.PassengerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class PassengerController {
     private final PassengerService adminService;
 
     @GetMapping
-    public ResponseEntity<PassengerResponse> getPassengers(
+    public ResponseEntity<PaginatedAndSortedPassengerResponseResponse> getPassengers(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
@@ -26,7 +26,7 @@ public class PassengerController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserDto> getPassenger(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getPassenger(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.getPassenger(id));
     }
 

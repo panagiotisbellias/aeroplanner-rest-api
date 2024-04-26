@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
-import com.projects.aeroplannerrestapi.dto.ReservationDto;
+import com.projects.aeroplannerrestapi.dto.request.ReservationRequest;
+import com.projects.aeroplannerrestapi.dto.response.ReservationResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Reservation;
 import com.projects.aeroplannerrestapi.enums.ReservationStatusEnum;
@@ -25,49 +26,49 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional
-    public ReservationDto createReservation(ReservationDto reservationDto) {
-        Long flightId = reservationDto.getFlightId();
+    public ReservationResponse createReservation(ReservationRequest reservationRequest) {
+        Long flightId = reservationRequest.getFlightId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
-        int seatDifference = flight.getSeatAvailability() - reservationDto.getSeatNumber();
+        int seatDifference = flight.getSeatAvailability() - reservationRequest.getSeatNumber();
         flight.setCurrentAvailableSeat(seatDifference);
         flightRepository.save(flight);
-        Reservation reservation = ReservationMapper.INSTANCE.reservationDtoToReservation(reservationDto);
-        return ReservationMapper.INSTANCE.reservationToReservationDto(reservationRepository.save(reservation));
+        Reservation reservation = ReservationMapper.INSTANCE.reservationRequestToReservation(reservationRequest);
+        return ReservationMapper.INSTANCE.reservationToReservationResponse(reservationRepository.save(reservation));
     }
 
     @Override
-    public List<ReservationDto> getAllReservations() {
+    public List<ReservationResponse> getAllReservations() {
         return reservationRepository.findAll().stream()
-                .map(ReservationMapper.INSTANCE::reservationToReservationDto)
+                .map(ReservationMapper.INSTANCE::reservationToReservationResponse)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ReservationDto getReservation(Long id) {
+    public ReservationResponse getReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
-        return ReservationMapper.INSTANCE.reservationToReservationDto(reservation);
+        return ReservationMapper.INSTANCE.reservationToReservationResponse(reservation);
     }
 
     @Override
     @Transactional
-    public ReservationDto updateReservation(Long id, ReservationDto reservationDto) {
+    public ReservationResponse updateReservation(Long id, ReservationRequest reservationRequest) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
-        Long flightId = reservationDto.getFlightId();
+        Long flightId = reservationRequest.getFlightId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
-        int seatNumber = reservationDto.getSeatNumber();
+        int seatNumber = reservationRequest.getSeatNumber();
         int availableSeat = flight.getSeatAvailability() - seatNumber;
         flight.setCurrentAvailableSeat(availableSeat);
         flightRepository.save(flight);
-        reservation.setFlightId(reservationDto.getFlightId());
-        reservation.setPassengerId(reservationDto.getPassengerId());
-        reservation.setSeatNumber(reservationDto.getSeatNumber());
-        reservation.setReservationDate(reservationDto.getReservationDate());
-        reservation.setReservationStatus(reservationDto.getReservationStatus());
-        return ReservationMapper.INSTANCE.reservationToReservationDto(reservationRepository.save(reservation));
+        reservation.setFlightId(reservationRequest.getFlightId());
+        reservation.setPassengerId(reservationRequest.getPassengerId());
+        reservation.setSeatNumber(reservationRequest.getSeatNumber());
+        reservation.setReservationDate(reservationRequest.getReservationDate());
+        reservation.setReservationStatus(reservationRequest.getReservationStatus());
+        return ReservationMapper.INSTANCE.reservationToReservationResponse(reservationRepository.save(reservation));
     }
 
     @Override

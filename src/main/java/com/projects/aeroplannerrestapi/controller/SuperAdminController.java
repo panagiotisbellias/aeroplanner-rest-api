@@ -1,7 +1,7 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.RegisterUserDto;
-import com.projects.aeroplannerrestapi.dto.UserDto;
+import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.SuperAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,19 +18,19 @@ public class SuperAdminController {
     private final SuperAdminService superAdminService;
 
     @PostMapping
-    public ResponseEntity<UserDto> createAdministrator(@RequestBody RegisterUserDto registerUserDto) {
-        return new ResponseEntity<>(superAdminService.createAdministrator(registerUserDto), HttpStatus.CREATED);
+    public ResponseEntity<UserResponse> createAdministrator(@RequestBody RegisterRequest registerRequest) {
+        return new ResponseEntity<>(superAdminService.createAdministrator(registerRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserDto> getAdministrator(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getAdministrator(@PathVariable Long id) {
         return ResponseEntity.ok(superAdminService.getAdministrator(id));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<UserDto> updateAdministrator(@PathVariable Long id,
-                                                       @RequestBody RegisterUserDto registerUserDto) {
-        return ResponseEntity.ok(superAdminService.updateAdministrator(id, registerUserDto));
+    public ResponseEntity<UserResponse> updateAdministrator(@PathVariable Long id,
+                                                       @RequestBody RegisterRequest registerRequest) {
+        return ResponseEntity.ok(superAdminService.updateAdministrator(id, registerRequest));
     }
 
     @DeleteMapping("{id}")
