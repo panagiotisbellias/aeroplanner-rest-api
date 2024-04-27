@@ -13,7 +13,7 @@ class TicketTest {
 
     @Test
     void testAllArgsConstructor() {
-        Ticket ticket = new Ticket(0L, "passenger id", "flight id", 1, "issue date", TicketStatusEnum.BOARDED, BigDecimal.valueOf(2));
+        Ticket ticket = new Ticket(0L, "passenger id", "flight id", 1, "issue date", TicketStatusEnum.BOARDED);
         assertEquals(ticket);
     }
 
@@ -32,7 +32,6 @@ class TicketTest {
         ticket.setSeatNumber(1);
         ticket.setIssueDate("issue date");
         ticket.setTicketStatusEnum(TicketStatusEnum.BOARDED);
-        ticket.setPrice(BigDecimal.valueOf(2));
         assertEquals(ticket);
     }
 
@@ -43,7 +42,6 @@ class TicketTest {
         Assertions.assertEquals(1, ticket.getSeatNumber());
         Assertions.assertEquals("issue date", ticket.getIssueDate());
         Assertions.assertEquals(TicketStatusEnum.BOARDED, ticket.getTicketStatusEnum());
-        Assertions.assertEquals(BigDecimal.valueOf(2), ticket.getPrice());
     }
 
 }

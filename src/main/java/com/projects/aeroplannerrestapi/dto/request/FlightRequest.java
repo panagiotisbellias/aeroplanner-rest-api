@@ -31,6 +31,5 @@ public class FlightRequest {
     private String aircraftType;
     @PositiveOrZero
     private int seatAvailability;
-    private int currentAvailableSeat;
     private FlightStatusEnum status;
 }

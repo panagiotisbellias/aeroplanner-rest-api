@@ -7,8 +7,10 @@ import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.mapper.FlightMapper;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.service.FlightService;
+import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -46,6 +48,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
+    @Transactional
     public FlightResponse updateFlight(Long id, FlightRequest flightRequest) {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", id.toString()));
@@ -63,6 +66,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
+    @Transactional
     public void deleteFlight(Long id) {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", id.toString()));

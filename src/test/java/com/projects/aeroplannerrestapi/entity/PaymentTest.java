@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.entity;
 
+import com.projects.aeroplannerrestapi.enums.PaymentStatusEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +13,7 @@ class PaymentTest {
 
     @Test
     void testAllArgsConstructor() {
-        Payment payment = new Payment(0L, 1L, 2L, 3, "card number", "card holder name", "expiry date", "cvv", BigDecimal.valueOf(4), "status", "transaction id");
+        Payment payment = new Payment(0L, 1L, 2L, 3, "card number", "card holder name", "expiry date", "cvv", BigDecimal.valueOf(4), PaymentStatusEnum.PENDING, "transaction id");
         assertEquals(payment);
     }
 
@@ -33,8 +34,8 @@ class PaymentTest {
         payment.setCardHolderName("card holder name");
         payment.setExpiryDate("expiry date");
         payment.setCvv("cvv");
+        payment.setStatus(PaymentStatusEnum.PENDING);
         payment.setAmount(BigDecimal.valueOf(4));
-        payment.setStatus("status");
         payment.setTransactionId("transaction id");
         assertEquals(payment);
     }

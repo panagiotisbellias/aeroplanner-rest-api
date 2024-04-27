@@ -13,7 +13,7 @@ class FlightRequestTest {
 
     @Test
     void testAllArgsConstructor() {
-        FlightRequest flightRequest = new FlightRequest(0L, "airline", "flight number", "departure time", "arrival time", BigDecimal.valueOf(1), "aircraft type", 2, 0, FlightStatusEnum.IN_FLIGHT);
+        FlightRequest flightRequest = new FlightRequest(0L, "airline", "flight number", "departure time", "arrival time", BigDecimal.valueOf(1), "aircraft type", 2, FlightStatusEnum.IN_FLIGHT);
         assertEquals(flightRequest);
     }
 
@@ -34,7 +34,6 @@ class FlightRequestTest {
         flightRequest.setPrice(BigDecimal.valueOf(1));
         flightRequest.setAircraftType("aircraft type");
         flightRequest.setSeatAvailability(2);
-        flightRequest.setCurrentAvailableSeat(0);
         flightRequest.setStatus(FlightStatusEnum.IN_FLIGHT);
         assertEquals(flightRequest);
     }
@@ -48,7 +47,6 @@ class FlightRequestTest {
         Assertions.assertEquals(BigDecimal.valueOf(1), flightRequest.getPrice());
         Assertions.assertEquals("aircraft type", flightRequest.getAircraftType());
         Assertions.assertEquals(2, flightRequest.getSeatAvailability());
-        Assertions.assertEquals(0, flightRequest.getCurrentAvailableSeat());
         Assertions.assertEquals(FlightStatusEnum.IN_FLIGHT, flightRequest.getStatus());
     }
 
