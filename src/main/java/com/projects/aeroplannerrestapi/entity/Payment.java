@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.entity;
 
+import com.projects.aeroplannerrestapi.enums.PaymentStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,7 +46,8 @@ public class Payment extends BaseEntityAudit {
     private BigDecimal amount;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatusEnum status;
 
     @Column(name = "transaction_id")
     private String transactionId;

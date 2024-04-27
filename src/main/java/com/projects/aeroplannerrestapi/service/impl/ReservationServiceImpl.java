@@ -25,19 +25,20 @@ public class ReservationServiceImpl implements ReservationService {
     private final FlightRepository flightRepository;
 
     @Override
-    @Transactional
     public ReservationResponse createReservation(ReservationRequest reservationRequest) {
         Long flightId = reservationRequest.getFlightId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
-        int seatDifference = flight.getSeatAvailability() - reservationRequest.getSeatNumber();
+        int seatDifference = flight.getCurrentAvailableSeat() - reservationRequest.getSeatNumber();
         flight.setCurrentAvailableSeat(seatDifference);
         flightRepository.save(flight);
         Reservation reservation = ReservationMapper.INSTANCE.reservationRequestToReservation(reservationRequest);
+        reservation.setReservationStatus(ReservationStatusEnum.CONFIRMED);
         return ReservationMapper.INSTANCE.reservationToReservationResponse(reservationRepository.save(reservation));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ReservationResponse> getAllReservations() {
         return reservationRepository.findAll().stream()
                 .map(ReservationMapper.INSTANCE::reservationToReservationResponse)
@@ -45,6 +46,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ReservationResponse getReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
@@ -60,21 +62,28 @@ public class ReservationServiceImpl implements ReservationService {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
         int seatNumber = reservationRequest.getSeatNumber();
-        int availableSeat = flight.getSeatAvailability() - seatNumber;
+        int availableSeat = flight.getCurrentAvailableSeat() - seatNumber;
         flight.setCurrentAvailableSeat(availableSeat);
         flightRepository.save(flight);
         reservation.setFlightId(reservationRequest.getFlightId());
         reservation.setPassengerId(reservationRequest.getPassengerId());
         reservation.setSeatNumber(reservationRequest.getSeatNumber());
         reservation.setReservationDate(reservationRequest.getReservationDate());
-        reservation.setReservationStatus(reservationRequest.getReservationStatus());
+        reservation.setReservationStatus(ReservationStatusEnum.CONFIRMED);
         return ReservationMapper.INSTANCE.reservationToReservationResponse(reservationRepository.save(reservation));
     }
 
     @Override
+    @Transactional
     public void cancelReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
+        Long flightId = reservation.getFlightId();
+        Flight flight = flightRepository.findById(flightId)
+                .orElseThrow(() -> new ResourceNotFoundException("flight", "id", flightId.toString()));
+        flight.setCurrentAvailableSeat(flight.getCurrentAvailableSeat() + reservation.getSeatNumber());
+        flightRepository.save(flight);
         reservation.setReservationStatus(ReservationStatusEnum.CANCELLED);
+        reservationRepository.save(reservation);
     }
 }

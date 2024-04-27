@@ -37,7 +37,4 @@ public class Ticket extends BaseEntityAudit {
     @Enumerated(EnumType.STRING)
     @Column(name = "ticket_status", nullable = false)
     private TicketStatusEnum ticketStatusEnum;
-
-    @Column(nullable = false)
-    private BigDecimal price;
 }

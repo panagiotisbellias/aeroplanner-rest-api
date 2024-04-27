@@ -3,6 +3,7 @@ package com.projects.aeroplannerrestapi.dto.request;
 import com.projects.aeroplannerrestapi.enums.ReservationStatusEnum;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class ReservationRequest {
     private Long passengerId;
     @NotNull
     private Long flightId;
-    @PositiveOrZero
+    @Positive
     private int seatNumber;
     @NotEmpty
     private String reservationDate;

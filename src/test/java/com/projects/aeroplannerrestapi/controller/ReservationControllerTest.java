@@ -60,8 +60,8 @@ class ReservationControllerTest {
     }
 
     @Test
-    void testDeleteReservation() {
-        ResponseEntity<Void> response = reservationController.deleteReservation(0L);
+    void testCancelReservation() {
+        ResponseEntity<Void> response = reservationController.cancelReservation(0L);
         AssertionsUtil.assertNullBodyStatusCode(HttpStatus.NO_CONTENT, response);
     }
 

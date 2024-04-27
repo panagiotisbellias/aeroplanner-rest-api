@@ -14,6 +14,7 @@ import com.projects.aeroplannerrestapi.service.SuperAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -46,6 +47,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getAdministrator(Long id) {
         User user = findByIdAndRole(id, RoleEnum.ADMIN);
         return UserMapper.INSTANCE.userToUserResponse(user);
