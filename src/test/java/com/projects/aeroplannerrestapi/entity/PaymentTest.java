@@ -50,7 +50,7 @@ class PaymentTest {
         Assertions.assertEquals("expiry date", payment.getExpiryDate());
         Assertions.assertEquals("cvv", payment.getCvv());
         Assertions.assertEquals(BigDecimal.valueOf(4), payment.getAmount());
-        Assertions.assertEquals("status", payment.getStatus());
+        Assertions.assertEquals(PaymentStatusEnum.PENDING, payment.getStatus());
         Assertions.assertEquals("transaction id", payment.getTransactionId());
     }
 
