@@ -1,7 +1,6 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
 import com.projects.aeroplannerrestapi.dto.request.ReservationRequest;
-import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponse;
 import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedReservationResponse;
 import com.projects.aeroplannerrestapi.dto.response.ReservationResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
@@ -45,7 +44,6 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public PaginatedAndSortedReservationResponse getAllReservations(int pageNum, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortBy).ascending() :
@@ -55,18 +53,17 @@ public class ReservationServiceImpl implements ReservationService {
         List<ReservationResponse> reservationResponses = page.getContent().stream()
                 .map(ReservationMapper.INSTANCE::reservationToReservationResponse)
                 .collect(Collectors.toList());
-        return (PaginatedAndSortedReservationResponse) PaginatedAndSortedPassengerResponse.builder()
-                .content(Collections.singletonList(reservationResponses))
-                .totalPages(page.getTotalPages())
-                .totalElements(page.getTotalElements())
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .last(page.isLast())
-                .build();
+        PaginatedAndSortedReservationResponse reservationResponse = new PaginatedAndSortedReservationResponse();
+        reservationResponse.setContent(Collections.singletonList(reservationResponses));
+        reservationResponse.setTotalPages(page.getTotalPages());
+        reservationResponse.setTotalElements(page.getTotalElements());
+        reservationResponse.setPageNumber(page.getNumber());
+        reservationResponse.setPageSize(page.getSize());
+        reservationResponse.setLast(page.isLast());
+        return reservationResponse;
      }
 
     @Override
-    @Transactional(readOnly = true)
     public ReservationResponse getReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));

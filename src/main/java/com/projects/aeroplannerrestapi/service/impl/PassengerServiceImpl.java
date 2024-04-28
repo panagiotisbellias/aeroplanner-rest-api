@@ -35,14 +35,14 @@ public class PassengerServiceImpl implements PassengerService {
         List<UserResponse> passengers = page.getContent().stream()
                 .map(UserMapper.INSTANCE::userToUserResponse)
                 .collect(Collectors.toList());
-        return (PaginatedAndSortedPassengerResponse) PaginatedAndSortedPassengerResponse.builder()
-                .content(Collections.singletonList(passengers))
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalPages(page.getTotalPages())
-                .totalElements(page.getTotalElements())
-                .last(page.isLast())
-                .build();
+        PaginatedAndSortedPassengerResponse passengerResponse = new PaginatedAndSortedPassengerResponse();
+        passengerResponse.setContent(Collections.singletonList(passengers));
+        passengerResponse.setPageNumber(page.getNumber());
+        passengerResponse.setPageSize(page.getSize());
+        passengerResponse.setTotalPages(page.getTotalPages());
+        passengerResponse.setTotalElements(page.getTotalElements());
+        passengerResponse.setLast(page.isLast());
+        return passengerResponse;
     }
 
     @Override
