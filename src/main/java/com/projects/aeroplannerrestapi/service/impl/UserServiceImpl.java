@@ -44,13 +44,13 @@ public class UserServiceImpl implements UserService {
         List<UserResponse> users = page.getContent().stream()
                 .map(UserMapper.INSTANCE::userToUserResponse)
                 .collect(Collectors.toList());
-        return (PaginatedAndSortedUserResponse) PaginatedAndSortedUserResponse.builder()
-                .content(Collections.singletonList(users))
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .last(page.isLast())
-                .build();
+        PaginatedAndSortedUserResponse userResponse = new PaginatedAndSortedUserResponse();
+        userResponse.setContent(Collections.singletonList(users));
+        userResponse.setPageNumber(page.getNumber());
+        userResponse.setPageSize(page.getSize());
+        userResponse.setTotalElements(page.getTotalElements());
+        userResponse.setTotalPages(page.getTotalPages());
+        userResponse.setLast(page.isLast());
+        return userResponse;
     }
 }
