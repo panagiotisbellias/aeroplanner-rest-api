@@ -1,6 +1,8 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
 import com.projects.aeroplannerrestapi.dto.request.ReservationRequest;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedReservationResponse;
 import com.projects.aeroplannerrestapi.dto.response.ReservationResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Reservation;
@@ -11,9 +13,14 @@ import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.repository.ReservationRepository;
 import com.projects.aeroplannerrestapi.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,11 +46,24 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getAllReservations() {
-        return reservationRepository.findAll().stream()
+    public PaginatedAndSortedReservationResponse getAllReservations(int pageNum, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortBy).ascending() :
+                Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
+        Page<Reservation> page = reservationRepository.findAll(pageable);
+        List<ReservationResponse> reservationResponses = page.getContent().stream()
                 .map(ReservationMapper.INSTANCE::reservationToReservationResponse)
                 .collect(Collectors.toList());
-    }
+        return (PaginatedAndSortedReservationResponse) PaginatedAndSortedPassengerResponse.builder()
+                .content(Collections.singletonList(reservationResponses))
+                .totalPages(page.getTotalPages())
+                .totalElements(page.getTotalElements())
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .last(page.isLast())
+                .build();
+     }
 
     @Override
     @Transactional(readOnly = true)

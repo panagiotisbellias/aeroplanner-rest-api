@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.UserService;
 import com.projects.aeroplannerrestapi.util.AssertionsUtil;
@@ -30,7 +30,7 @@ class UserControllerTest {
 
     @Test
     void testGetAllAdministrators() {
-        ResponseEntity<PaginatedAndSortedUserResponseResponse> response = userController.getAllAdministrators(0, 1, "sort by", "sort dir");
+        ResponseEntity<PaginatedAndSortedUserResponse> response = userController.getAllAdministrators(0, 1, "sort by", "sort dir");
         AssertionsUtil.assertNullBodyStatusCode(HttpStatus.OK, response);
     }
 

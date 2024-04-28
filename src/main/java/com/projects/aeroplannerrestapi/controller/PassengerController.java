@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.PassengerService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class PassengerController {
     private final PassengerService adminService;
 
     @GetMapping
-    public ResponseEntity<PaginatedAndSortedPassengerResponseResponse> getPassengers(
+    public ResponseEntity<PaginatedAndSortedPassengerResponse> getPassengers(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,

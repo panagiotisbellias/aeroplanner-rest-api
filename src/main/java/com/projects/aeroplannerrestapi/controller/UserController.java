@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public ResponseEntity<PaginatedAndSortedUserResponseResponse> getAllAdministrators(
+    public ResponseEntity<PaginatedAndSortedUserResponse> getAllAdministrators(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
