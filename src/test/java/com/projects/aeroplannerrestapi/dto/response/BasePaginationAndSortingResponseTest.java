@@ -39,7 +39,7 @@ class BasePaginationAndSortingResponseTest {
     }
 
     void assertEquals(BasePaginationAndSortingResponse basePaginationAndSortingResponse) {
-        List<UserResponse> content = basePaginationAndSortingResponse.getContent();
+        List<Object> content = basePaginationAndSortingResponse.getContent();
         Assertions.assertEquals(1, content.size());
         Assertions.assertEquals(userResponse, content.get(0));
         Assertions.assertEquals(0, basePaginationAndSortingResponse.getPageNumber());

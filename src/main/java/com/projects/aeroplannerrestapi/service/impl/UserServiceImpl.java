@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
-import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.mapper.UserMapper;
@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaginatedAndSortedUserResponseResponse getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDirection) {
+    public PaginatedAndSortedUserResponse getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
@@ -43,8 +44,8 @@ public class UserServiceImpl implements UserService {
         List<UserResponse> users = page.getContent().stream()
                 .map(UserMapper.INSTANCE::userToUserResponse)
                 .collect(Collectors.toList());
-        return (PaginatedAndSortedUserResponseResponse) PaginatedAndSortedUserResponseResponse.builder()
-                .content(users)
+        return (PaginatedAndSortedUserResponse) PaginatedAndSortedUserResponse.builder()
+                .content(Collections.singletonList(users))
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())
                 .totalElements(page.getTotalElements())

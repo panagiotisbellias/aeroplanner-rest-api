@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.controller;
 
 import com.projects.aeroplannerrestapi.dto.request.ReservationRequest;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedReservationResponse;
 import com.projects.aeroplannerrestapi.dto.response.ReservationResponse;
 import com.projects.aeroplannerrestapi.service.ReservationService;
 import com.projects.aeroplannerrestapi.util.AssertionsUtil;
@@ -13,9 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.Objects;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationControllerTest {
@@ -41,9 +39,8 @@ class ReservationControllerTest {
 
     @Test
     void testGetAllReservations() {
-        ResponseEntity<List<ReservationResponse>> response = reservationController.getAllReservations();
-        Assertions.assertTrue(Objects.requireNonNull(response.getBody()).isEmpty());
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ResponseEntity<PaginatedAndSortedReservationResponse> response = reservationController.getAllReservations(0, 1, "sort by", "sort dir");
+        AssertionsUtil.assertNullBodyStatusCode(HttpStatus.OK, response);
     }
 
     @Test

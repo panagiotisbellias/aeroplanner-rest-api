@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
-import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponseResponse;
+import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class PassengerServiceImpl implements PassengerService {
     private final UserRepository userRepository;
 
     @Override
-    public PaginatedAndSortedPassengerResponseResponse getPassengers(int pageNumber, int pageSize, String sortBy, String sortDir) {
+    public PaginatedAndSortedPassengerResponse getPassengers(int pageNumber, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
@@ -34,8 +35,8 @@ public class PassengerServiceImpl implements PassengerService {
         List<UserResponse> passengers = page.getContent().stream()
                 .map(UserMapper.INSTANCE::userToUserResponse)
                 .collect(Collectors.toList());
-        return (PaginatedAndSortedPassengerResponseResponse) PaginatedAndSortedPassengerResponseResponse.builder()
-                .content(passengers)
+        return (PaginatedAndSortedPassengerResponse) PaginatedAndSortedPassengerResponse.builder()
+                .content(Collections.singletonList(passengers))
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())
                 .totalPages(page.getTotalPages())
