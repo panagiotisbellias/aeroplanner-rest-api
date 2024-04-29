@@ -61,7 +61,7 @@ class ReservationServiceTest {
     @Test
     void testGetAllReservationsAsc() {
         Mockito.when(reservationRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
-        PaginatedAndSortedReservationResponse response = reservationService.getAllReservations(1, 2, "asc", "sort dir");
+        PaginatedAndSortedReservationResponse response = reservationService.getAllReservations(1, 2, "sort by", "asc");
 
         Assertions.assertEquals(1, response.getContent().size());
         Assertions.assertEquals(0, response.getTotalPages());
@@ -74,7 +74,7 @@ class ReservationServiceTest {
     @Test
     void testGetAllReservationsDesc() {
         Mockito.when(reservationRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
-        PaginatedAndSortedReservationResponse response = reservationService.getAllReservations(1, 2, "desc", "sort dir");
+        PaginatedAndSortedReservationResponse response = reservationService.getAllReservations(1, 2, "sort by", "desc");
 
         Assertions.assertEquals(1, response.getContent().size());
         Assertions.assertEquals(0, response.getTotalPages());

@@ -5,6 +5,7 @@ import com.projects.aeroplannerrestapi.entity.Reservation;
 import com.projects.aeroplannerrestapi.entity.Ticket;
 import com.projects.aeroplannerrestapi.enums.ReservationStatusEnum;
 import com.projects.aeroplannerrestapi.enums.TicketStatusEnum;
+import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.repository.ReservationRepository;
 import com.projects.aeroplannerrestapi.repository.TicketRepository;
 import com.projects.aeroplannerrestapi.service.impl.TicketServiceImpl;
@@ -72,17 +73,29 @@ class TicketServiceTest {
     @Test
     void testCancelTicket() {
         Mockito.when(ticket.getFlightId()).thenReturn("0");
+        Mockito.when(ticket.getPassengerId()).thenReturn("1");
         Mockito.when(ticketRepository.findById(0L)).thenReturn(Optional.of(ticket));
-        Mockito.when(reservationRepository.findByFlightId(0L)).thenReturn(Optional.of(reservation));
+        Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
         ticketService.cancelTicket(0L);
 
         Mockito.verify(ticketRepository).findById(0L);
         Mockito.verify(ticket).setTicketStatusEnum(TicketStatusEnum.CANCELLED);
         Mockito.verify(ticketRepository).save(ticket);
         Mockito.verify(ticket).getFlightId();
-        Mockito.verify(reservationRepository).findByFlightId(0L);
+        Mockito.verify(ticket).getPassengerId();
+        Mockito.verify(reservationRepository).findByFlightIdAndPassengerId(0L, 1L);
         Mockito.verify(reservation).setReservationStatus(ReservationStatusEnum.CANCELLED);
         Mockito.verify(reservationRepository).save(reservation);
+    }
+
+    @Test
+    void testCancelTicketReservationNotFound() {
+        Mockito.when(ticket.getFlightId()).thenReturn("0");
+        Mockito.when(ticket.getPassengerId()).thenReturn("1");
+        Mockito.when(ticketRepository.findById(0L)).thenReturn(Optional.of(ticket));
+
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> ticketService.cancelTicket(0L));
+        Assertions.assertEquals("Reservation not found with flight id and passenger id : 0 : 1", resourceNotFoundException.getMessage());
     }
 
 }

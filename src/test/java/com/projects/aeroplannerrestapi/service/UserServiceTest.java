@@ -50,7 +50,7 @@ class UserServiceTest {
     @Test
     void testGetAllUsersAsc() {
         Mockito.when(userRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
-        PaginatedAndSortedUserResponse response = userService.getAllUsers(1, 2, "asc", "sort dir");
+        PaginatedAndSortedUserResponse response = userService.getAllUsers(1, 2, "sort by", "asc");
 
         Assertions.assertEquals(1, response.getContent().size());
         Assertions.assertEquals(0, response.getPageNumber());
@@ -63,7 +63,7 @@ class UserServiceTest {
     @Test
     void testGetAllUsersDesc() {
         Mockito.when(userRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
-        PaginatedAndSortedUserResponse response = userService.getAllUsers(1, 2, "desc", "sort dir");
+        PaginatedAndSortedUserResponse response = userService.getAllUsers(1, 2, "sort by", "desc");
 
         Assertions.assertEquals(1, response.getContent().size());
         Assertions.assertEquals(0, response.getPageNumber());
