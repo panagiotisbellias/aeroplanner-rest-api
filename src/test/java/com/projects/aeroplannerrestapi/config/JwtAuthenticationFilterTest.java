@@ -89,6 +89,15 @@ class JwtAuthenticationFilterTest {
     }
 
     @Test
+    void testDoFilterInternalNullHeader() throws ServletException, IOException {
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+        Mockito.verify(request).getHeader("Authorization");
+        Mockito.verifyNoInteractions(jwtService);
+        verifyNoTokenBlacklistUserDetailServices();
+        verifyNoUserDetailsNoMoreRequest();
+    }
+
+    @Test
     void testDoFilterInternalNoBearerHeader() throws ServletException, IOException {
         Mockito.when(request.getHeader("Authorization")).thenReturn("header");
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
