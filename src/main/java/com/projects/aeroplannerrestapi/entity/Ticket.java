@@ -22,10 +22,10 @@ public class Ticket extends BaseEntityAudit {
     @SequenceGenerator(name = "tickets_generator", sequenceName = "tickets_sequence", allocationSize = 1)
     private Long id;
 
-    @Column(name = "passenger_id", nullable = false, unique = true)
+    @Column(name = "passenger_id", nullable = false)
     private String passengerId;
 
-    @Column(name = "flight_id", nullable = false, unique = true)
+    @Column(name = "flight_id", nullable = false)
     private String flightId;
 
     @Column(name = "seat_number", nullable = false)
