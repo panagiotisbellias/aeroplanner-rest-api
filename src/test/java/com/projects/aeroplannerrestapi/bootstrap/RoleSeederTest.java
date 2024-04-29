@@ -32,10 +32,11 @@ class RoleSeederTest {
     @Test
     void testOnApplicationEvent() {
         ContextRefreshedEvent event = Mockito.mock(ContextRefreshedEvent.class);
-        roleSeeder.onApplicationEvent(event);
+        Mockito.when(roleRepository.existsByName(RoleEnum.USER)).thenReturn(true);
 
+        roleSeeder.onApplicationEvent(event);
         Mockito.verify(roleRepository, Mockito.times(3)).existsByName(ArgumentMatchers.any(RoleEnum.class));
-        Mockito.verify(roleRepository, Mockito.times(3)).save(ArgumentMatchers.any(Role.class));
+        Mockito.verify(roleRepository, Mockito.times(2)).save(ArgumentMatchers.any(Role.class));
     }
 
 }
