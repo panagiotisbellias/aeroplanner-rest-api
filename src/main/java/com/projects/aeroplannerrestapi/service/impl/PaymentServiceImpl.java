@@ -3,6 +3,7 @@ package com.projects.aeroplannerrestapi.service.impl;
 import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
 import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.dto.response.PaymentResponse;
+import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import com.projects.aeroplannerrestapi.entity.Reservation;
@@ -12,9 +13,12 @@ import com.projects.aeroplannerrestapi.mapper.PaymentMapper;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.repository.PaymentRepository;
 import com.projects.aeroplannerrestapi.repository.ReservationRepository;
+import com.projects.aeroplannerrestapi.service.EmailService;
 import com.projects.aeroplannerrestapi.service.PaymentService;
 import com.projects.aeroplannerrestapi.service.TicketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +32,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final ReservationRepository reservationRepository;
     private final FlightRepository flightRepository;
     private final TicketService ticketService;
+    private final EmailService emailService;
+    private final SimpleMailMessage template;
 
     @Override
     @Transactional
@@ -46,7 +52,16 @@ public class PaymentServiceImpl implements PaymentService {
                         String.format("%s : %s", flightId, passengerId)));
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setReservationId(reservation.getId());
-        ticketService.createTicket(ticketRequest);
+        TicketResponse ticketResponse = ticketService.createTicket(ticketRequest);
+        String to = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+        String subject = template.getSubject();
+        String text = String.format(template.getText(), to,
+                ticketResponse.getPassengerId().toString(),
+                ticketResponse.getFlightId().toString(),
+                ticketResponse.getSeatNumber(),
+                ticketResponse.getIssueDate().toString(),
+                ticketResponse.getTicketStatusEnum().toString());
+        emailService.emailUser(to, subject, text);
         return PaymentResponse.builder()
                 .transactionId(savedPayment.getTransactionId())
                 .amount(flight.getPrice())
