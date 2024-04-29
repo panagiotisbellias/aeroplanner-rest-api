@@ -33,19 +33,24 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public PaymentResponse processPayment(PaymentRequest paymentRequest) {
         Payment payment = PaymentMapper.INSTANCE.paymentRequestToPayment(paymentRequest);
+        payment.setStatus(PaymentStatusEnum.PAID);
+        payment.setTransactionId(UUID.randomUUID().toString());
         Payment savedPayment = paymentRepository.save(payment);
         Long flightId = savedPayment.getFlightId();
+        Long passengerId = savedPayment.getPassengerId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
-        Reservation reservation = reservationRepository.findByFlightId(flightId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "flight id", flightId.toString()));
+        Reservation reservation = reservationRepository.findByFlightIdAndPassengerId(flightId, passengerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation",
+                        "flight id and passenger id",
+                        String.format("%s : %s", flightId, passengerId)));
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setReservationId(reservation.getId());
         ticketService.createTicket(ticketRequest);
         return PaymentResponse.builder()
-                .transactionId(UUID.randomUUID().toString())
+                .transactionId(savedPayment.getTransactionId())
                 .amount(flight.getPrice())
-                .status(PaymentStatusEnum.PAID)
+                .status(savedPayment.getStatus())
                 .message("Paid")
                 .build();
     }
