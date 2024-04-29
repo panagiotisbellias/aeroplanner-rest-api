@@ -69,8 +69,11 @@ public class TicketServiceImpl implements TicketService {
         ticket.setTicketStatusEnum(TicketStatusEnum.CANCELLED);
         ticketRepository.save(ticket);
         Long flightId = Long.parseLong(ticket.getFlightId());
-        Reservation reservation = reservationRepository.findByFlightId(flightId)
-                .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
+        Long passengerId = Long.parseLong(ticket.getPassengerId());
+        Reservation reservation = reservationRepository.findByFlightIdAndPassengerId(flightId, passengerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation",
+                        "flight id and passenger id",
+                        String.format("%s : %s", flightId, passengerId)));
         reservation.setReservationStatus(ReservationStatusEnum.CANCELLED);
         reservationRepository.save(reservation);
     }
