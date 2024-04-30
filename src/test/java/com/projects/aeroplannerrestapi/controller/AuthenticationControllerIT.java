@@ -1,2 +1,4 @@
-package com.projects.aeroplannerrestapi.controller;public class AuthenticationIT {
+package com.projects.aeroplannerrestapi.controller;
+
+public class AuthenticationControllerIT {
 }
