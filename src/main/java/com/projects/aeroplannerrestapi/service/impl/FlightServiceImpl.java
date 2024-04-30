@@ -7,7 +7,6 @@ import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.mapper.FlightMapper;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.service.FlightService;
-import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
