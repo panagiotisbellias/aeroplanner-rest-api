@@ -53,4 +53,9 @@ class ApplicationConfigurationTest {
         Assertions.assertInstanceOf(AuthenticationProvider.class, applicationConfiguration.authenticationProvider());
     }
 
+    @Test
+    void testTemplateSimpleMessage() {
+        Assertions.assertEquals("SimpleMailMessage: from=null; replyTo=null; to=; cc=; bcc=; sentDate=null; subject=Confirmation of Successful Payment for Your Ticket; text=Dear %s,\n" + "\n" + "We are pleased to inform you that we have received your payment for your flight ticket. Here are the details of your booking:\n" + "\n" + "- Passenger ID: %s\n" + "- Flight ID: %s\n" + "- Seat Number: %s\n" + "- Issue Date: %s\n" + "- Status: %s\n" + "\n" + "Thank you for choosing our airline. We look forward to serving you on your journey.\n", applicationConfiguration.templateSimpleMessage().toString());
+    }
+
 }
