@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
         } else if (exception instanceof ExpiredJwtException) {
             errorMessage.append("The JWT token has expired");
             httpStatus = HttpStatus.FORBIDDEN;
-        } else if (exception instanceof Exception){
+        } else if (exception != null){
             errorMessage.append("Unknown internal server error.");
         }
         errorDetailsResponse.setMessage(errorMessage.toString());

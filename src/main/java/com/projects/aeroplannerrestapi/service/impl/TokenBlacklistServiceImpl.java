@@ -11,7 +11,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class TokenBlacklistServiceImpl implements TokenBlacklistService {
 
-    private Set<String> blacklist = new HashSet<>();
+    private final Set<String> blacklist = new HashSet<>();
 
     @Override
     public void addToBlacklist(String token) {

@@ -49,13 +49,13 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse getAdministrator(Long id) {
-        User user = findByIdAndRole(id, RoleEnum.ADMIN);
+        User user = findByIdAndRole(id);
         return UserMapper.INSTANCE.userToUserResponse(user);
     }
 
     @Override
     public UserResponse updateAdministrator(Long id, RegisterRequest registerRequest) {
-        User user = findByIdAndRole(id, RoleEnum.ADMIN);
+        User user = findByIdAndRole(id);
         user.setUpdatedAt(LocalDateTime.now());
         user.setEmail(registerRequest.getEmail());
         user.setFullName(registerRequest.getFullName());
@@ -67,12 +67,12 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public void deleteAdministrator(Long id) {
-        User user = findByIdAndRole(id, RoleEnum.ADMIN);
+        User user = findByIdAndRole(id);
         userRepository.delete(user);
     }
 
-    private User findByIdAndRole(Long id, RoleEnum roleEnum) {
-        return userRepository.findByIdAndRolesName(id, roleEnum)
+    private User findByIdAndRole(Long id) {
+        return userRepository.findByIdAndRolesName(id, RoleEnum.ADMIN)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
     }
 }

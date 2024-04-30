@@ -1,7 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
 import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
-import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
