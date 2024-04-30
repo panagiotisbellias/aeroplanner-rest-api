@@ -15,7 +15,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
@@ -60,31 +59,28 @@ class JwtAuthenticationFilterTest {
     void testDoFilterInternal() throws ServletException, IOException {
         Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
         Mockito.when(jwtService.extractUsername("header")).thenReturn("user email");
-        Mockito.when(userDetailsService.loadUserByUsername("user email")).thenReturn(userDetails);
-        Mockito.when(jwtService.isTokenValid("header", userDetails)).thenReturn(true);
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
         verifyValidFlow();
-        Mockito.verify(userDetails).getAuthorities();
-        Mockito.verify(request).getRemoteAddr();
-        Mockito.verify(request).getSession(false);
+        Mockito.verify(jwtService, Mockito.times(0)).isTokenValid("header", userDetails);
+        Mockito.verify(userDetails, Mockito.times(0)).getAuthorities();
+        Mockito.verify(request, Mockito.times(0)).getRemoteAddr();
+        Mockito.verify(request, Mockito.times(0)).getSession(false);
     }
 
     @Test
     void testDoFilterInternalInvalidJWT() throws ServletException, IOException {
         Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
         Mockito.when(jwtService.extractUsername("header")).thenReturn("user email");
-        Mockito.when(userDetailsService.loadUserByUsername("user email")).thenReturn(userDetails);
-        Mockito.when(jwtService.isTokenValid("header", userDetails)).thenReturn(false);
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
+        Mockito.verify(jwtService, Mockito.times(0)).isTokenValid("header", userDetails);
         verifyValidFlow();
         verifyNoMoreUserDetailsRequest();
     }
 
     void verifyValidFlow() {
-        verifyValidFlowBeforeChecks();
-        Mockito.verify(jwtService).isTokenValid("header", userDetails);
+        verifyRequestHeaderExtractedUsername();
         Mockito.verify(userDetails, Mockito.times(0)).getUsername();
     }
 
@@ -132,17 +128,10 @@ class JwtAuthenticationFilterTest {
     void testDoFilterInternalException() throws ServletException, IOException {
         Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
         Mockito.when(jwtService.extractUsername("header")).thenReturn("user email");
-        Mockito.when(userDetailsService.loadUserByUsername("user email")).thenThrow(UsernameNotFoundException.class);
-        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-        verifyValidFlowBeforeChecks();
-        Mockito.verifyNoMoreInteractions(jwtService);
-        verifyNoUserDetailsNoMoreRequest();
-    }
 
-    void verifyValidFlowBeforeChecks() {
+        jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
         verifyRequestHeaderExtractedUsername();
-        Mockito.verify(tokenBlacklistService).isBlacklisted("header");
-        Mockito.verify(userDetailsService).loadUserByUsername("user email");
+        verifyNoUserDetailsNoMoreRequest();
     }
 
     void verifyRequestHeaderExtractedUsername() {
