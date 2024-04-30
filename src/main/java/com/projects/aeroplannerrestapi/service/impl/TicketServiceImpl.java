@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +23,8 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
     private final ReservationRepository reservationRepository;
+
+    private static final String RESOURCE_NAME = "Ticket";
 
     @Override
     public TicketResponse createTicket(TicketRequest ticketRequest) {
@@ -43,20 +44,20 @@ public class TicketServiceImpl implements TicketService {
     public List<TicketResponse> getAllTickets() {
         return ticketRepository.findAll().stream()
                 .map(TicketMapper.INSTANCE::ticketToTicketResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public TicketResponse getTicket(Long id) {
         return ticketRepository.findById(id)
                 .map(TicketMapper.INSTANCE::ticketToTicketResponse)
-                .orElseThrow(() -> new ResourceNotFoundException("Ticket", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
     }
 
     @Override
     public TicketResponse updateTicket(Long id, TicketRequest ticketRequest) {
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ticket", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
         ticket.setTicketStatusEnum(TicketStatusEnum.ISSUED);
         ticket.setIssueDate(LocalDateTime.now().toString());
         return TicketMapper.INSTANCE.ticketToTicketResponse(ticketRepository.save(ticket));
@@ -65,7 +66,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void cancelTicket(Long id) {
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ticket", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
         ticket.setTicketStatusEnum(TicketStatusEnum.CANCELLED);
         ticketRepository.save(ticket);
         Long flightId = Long.parseLong(ticket.getFlightId());

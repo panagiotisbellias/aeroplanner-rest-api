@@ -51,17 +51,17 @@ public class ApplicationConfiguration {
         message.setSubject("Confirmation of Successful Payment for Your Ticket");
         message.setText("""
                 Dear %s,
-                                
+                               \s
                 We are pleased to inform you that we have received your payment for your flight ticket. Here are the details of your booking:
-                                
+                               \s
                 - Passenger ID: %s
                 - Flight ID: %s
                 - Seat Number: %s
                 - Issue Date: %s
                 - Status: %s
-                                
+                               \s
                 Thank you for choosing our airline. We look forward to serving you on your journey.
-                """);
+               \s""");
         return message;
     }
 

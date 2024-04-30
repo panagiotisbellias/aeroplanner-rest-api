@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -53,13 +54,13 @@ public class PaymentServiceImpl implements PaymentService {
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setReservationId(reservation.getId());
         TicketResponse ticketResponse = ticketService.createTicket(ticketRequest);
-        String to = SecurityContextHolder.getContext().getAuthentication().getName().toString();
+        String to = SecurityContextHolder.getContext().getAuthentication().getName();
         String subject = template.getSubject();
-        String text = String.format(template.getText(), to,
-                ticketResponse.getPassengerId().toString(),
-                ticketResponse.getFlightId().toString(),
+        String text = String.format(Objects.requireNonNull(template.getText()), to,
+                ticketResponse.getPassengerId(),
+                ticketResponse.getFlightId(),
                 ticketResponse.getSeatNumber(),
-                ticketResponse.getIssueDate().toString(),
+                ticketResponse.getIssueDate(),
                 ticketResponse.getTicketStatusEnum().toString());
         emailService.emailUser(to, subject, text);
         return PaymentResponse.builder()

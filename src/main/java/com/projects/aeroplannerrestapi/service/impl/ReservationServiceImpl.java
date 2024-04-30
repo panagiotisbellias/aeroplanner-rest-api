@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +28,8 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final FlightRepository flightRepository;
+
+    private static final String RESOURCE_NAME = "Reservation";
 
     @Override
     public ReservationResponse createReservation(ReservationRequest reservationRequest) {
@@ -52,7 +53,7 @@ public class ReservationServiceImpl implements ReservationService {
         Page<Reservation> page = reservationRepository.findAll(pageable);
         List<ReservationResponse> reservationResponses = page.getContent().stream()
                 .map(ReservationMapper.INSTANCE::reservationToReservationResponse)
-                .collect(Collectors.toList());
+                .toList();
         PaginatedAndSortedReservationResponse reservationResponse = new PaginatedAndSortedReservationResponse();
         reservationResponse.setContent(Collections.singletonList(reservationResponses));
         reservationResponse.setTotalPages(page.getTotalPages());
@@ -66,7 +67,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationResponse getReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
         return ReservationMapper.INSTANCE.reservationToReservationResponse(reservation);
     }
 
@@ -74,7 +75,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public ReservationResponse updateReservation(Long id, ReservationRequest reservationRequest) {
         Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
         Long flightId = reservationRequest.getFlightId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
@@ -94,7 +95,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public void cancelReservation(Long id) {
         Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
         Long flightId = reservation.getFlightId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException("flight", "id", flightId.toString()));

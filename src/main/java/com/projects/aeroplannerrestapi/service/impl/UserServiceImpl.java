@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService {
         Page<User> page = userRepository.findAll(pageable);
         List<UserResponse> users = page.getContent().stream()
                 .map(UserMapper.INSTANCE::userToUserResponse)
-                .collect(Collectors.toList());
+                .toList();
         PaginatedAndSortedUserResponse userResponse = new PaginatedAndSortedUserResponse();
         userResponse.setContent(Collections.singletonList(users));
         userResponse.setPageNumber(page.getNumber());
