@@ -55,6 +55,8 @@ class ReservationServiceTest {
     void testCreateReservation() {
         Mockito.when(reservationRequest.getFlightId()).thenReturn(0L);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
+        // TODO Actual method needs to call the reservation mapper at the beginning in order to have 100% coverage in
+        //  ReservationMapperImpl
         Assertions.assertNull(reservationService.createReservation(reservationRequest));
     }
 

@@ -53,6 +53,12 @@ class FlightServiceTest {
     }
 
     @Test
+    void testCreateFlightNull() {
+        NullPointerException nullPointerException = Assertions.assertThrows(NullPointerException.class, () -> flightService.createFlight(null));
+        Assertions.assertEquals("Cannot invoke \"com.projects.aeroplannerrestapi.dto.request.FlightRequest.getSeatAvailability()\" because \"flightRequest\" is null", nullPointerException.getMessage());
+    }
+
+    @Test
     void testGetAllFlights() {
         Assertions.assertTrue(flightService.getAllFlights().isEmpty());
     }

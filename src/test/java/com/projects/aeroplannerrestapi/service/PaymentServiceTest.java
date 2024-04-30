@@ -1,18 +1,19 @@
 package com.projects.aeroplannerrestapi.service;
 
 import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
+import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.dto.response.PaymentResponse;
+import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import com.projects.aeroplannerrestapi.entity.Reservation;
-import com.projects.aeroplannerrestapi.enums.PaymentStatusEnum;
+import com.projects.aeroplannerrestapi.enums.TicketStatusEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.repository.PaymentRepository;
 import com.projects.aeroplannerrestapi.repository.ReservationRepository;
 import com.projects.aeroplannerrestapi.service.impl.PaymentServiceImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -66,11 +67,11 @@ class PaymentServiceTest {
         Assertions.assertInstanceOf(PaymentService.class, paymentService);
     }
 
-    @Disabled("Security context must be mocked")
     @Test
     void testProcessPayment() {
         Reservation reservation = Mockito.mock(Reservation.class);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        TicketResponse ticketResponse = Mockito.mock(TicketResponse.class);
         Authentication authentication = Mockito.mock(Authentication.class);
 
         Mockito.when(payment.getFlightId()).thenReturn(0L);
@@ -78,15 +79,28 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
-
+        Mockito.when(ticketResponse.getPassengerId()).thenReturn("passenger id");
+        Mockito.when(ticketResponse.getFlightId()).thenReturn("flight id");
+        Mockito.when(ticketResponse.getIssueDate()).thenReturn("issue date");
+        Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
+        Mockito.when(ticketService.createTicket(ArgumentMatchers.any(TicketRequest.class))).thenReturn(ticketResponse);
+        Mockito.when(template.getText()).thenReturn("text");
+        Mockito.when(authentication.getName()).thenReturn("name");
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        Mockito.when(SecurityContextHolder.getContext()).thenReturn(securityContext);
 
+        SecurityContextHolder.setContext(securityContext);
         PaymentResponse response = paymentService.processPayment(paymentRequest);
+
         Assertions.assertNull(response.getTransactionId());
         Assertions.assertNull(response.getAmount());
         Assertions.assertNull(response.getStatus());
         Assertions.assertEquals("Paid", response.getMessage());
+    }
+
+    @Test
+    void testProcessPaymentNull() {
+        NullPointerException nullPointerException = Assertions.assertThrows(NullPointerException.class, () -> paymentService.processPayment(null));
+        Assertions.assertEquals("Cannot invoke \"com.projects.aeroplannerrestapi.entity.Payment.setStatus(com.projects.aeroplannerrestapi.enums.PaymentStatusEnum)\" because \"payment\" is null", nullPointerException.getMessage());
     }
 
     @Test
