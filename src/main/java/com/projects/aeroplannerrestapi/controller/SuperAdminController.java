@@ -9,9 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_SUPER_ADMINS;
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.ID;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/super-admins")
+@RequestMapping(API_V1_SUPER_ADMINS)
 @PreAuthorize("hasRole('SUPER_ADMIN')")
 public class SuperAdminController {
 
@@ -22,18 +25,18 @@ public class SuperAdminController {
         return new ResponseEntity<>(superAdminService.createAdministrator(registerRequest), HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
+    @GetMapping(ID)
     public ResponseEntity<UserResponse> getAdministrator(@PathVariable Long id) {
         return ResponseEntity.ok(superAdminService.getAdministrator(id));
     }
 
-    @PutMapping("{id}")
+    @PutMapping(ID)
     public ResponseEntity<UserResponse> updateAdministrator(@PathVariable Long id,
                                                        @RequestBody RegisterRequest registerRequest) {
         return ResponseEntity.ok(superAdminService.updateAdministrator(id, registerRequest));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(ID)
     public ResponseEntity<Void> deleteAdministrator(@PathVariable Long id) {
         superAdminService.deleteAdministrator(id);
         return ResponseEntity.noContent().build();

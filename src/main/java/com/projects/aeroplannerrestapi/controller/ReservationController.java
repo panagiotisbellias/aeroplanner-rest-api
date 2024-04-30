@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_RESERVATIONS;
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.ID;
+
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('USER')")
-@RequestMapping("/api/v1/reservations")
+@RequestMapping(API_V1_RESERVATIONS)
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -33,18 +36,18 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.getAllReservations(pageNum, pageSize, sortBy, sortDir));
     }
 
-    @GetMapping("{id}")
+    @GetMapping(ID)
     public ResponseEntity<ReservationResponse> getReservation(@PathVariable Long id) {
         return ResponseEntity.ok(reservationService.getReservation(id));
     }
 
-    @PutMapping("{id}")
+    @PutMapping(ID)
     public ResponseEntity<ReservationResponse> updateReservation(@PathVariable Long id,
                                                             @RequestBody @Valid ReservationRequest reservationRequest) {
         return ResponseEntity.ok(reservationService.updateReservation(id, reservationRequest));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(ID)
     public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
         reservationService.cancelReservation(id);
         return ResponseEntity.noContent().build();

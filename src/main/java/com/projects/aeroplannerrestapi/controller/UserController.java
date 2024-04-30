@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_USERS;
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.ME;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users")
+@RequestMapping(API_V1_USERS)
 public class UserController {
 
     private final UserService userService;
@@ -28,7 +31,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers(pageNumber, pageSize, sortBy, sortDir));
     }
 
-    @GetMapping("/me")
+    @GetMapping(ME)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponse> getAuthenticatedUser() {
         return ResponseEntity.ok(userService.getAuthenticatedUser());

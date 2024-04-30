@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_FLIGHTS;
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.ID;
+
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("/api/v1/flights")
+@RequestMapping(API_V1_FLIGHTS)
 public class FlightController {
 
     private final FlightService flightService;
@@ -32,17 +35,17 @@ public class FlightController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @GetMapping("{id}")
+    @GetMapping(ID)
     public ResponseEntity<FlightResponse> getFlight(@PathVariable Long id) {
         return ResponseEntity.ok(flightService.getFlight(id));
     }
 
-    @PutMapping("{id}")
+    @PutMapping(ID)
     public ResponseEntity<FlightResponse> updateFlight(@PathVariable Long id, @RequestBody @Valid FlightRequest flightRequest) {
         return ResponseEntity.ok(flightService.updateFlight(id, flightRequest));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(ID)
     public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
         flightService.deleteFlight(id);
         return ResponseEntity.noContent().build();

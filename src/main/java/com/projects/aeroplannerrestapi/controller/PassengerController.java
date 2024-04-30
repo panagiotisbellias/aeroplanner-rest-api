@@ -8,9 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_PASSENGERS;
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.ID;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/passengers")
+@RequestMapping(API_V1_PASSENGERS)
 @PreAuthorize("hasRole('ADMIN')")
 public class PassengerController {
 
@@ -25,12 +28,12 @@ public class PassengerController {
         return ResponseEntity.ok(adminService.getPassengers(pageNumber, pageSize, sortBy, sortDir));
     }
 
-    @GetMapping("{id}")
+    @GetMapping(ID)
     public ResponseEntity<UserResponse> getPassenger(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.getPassenger(id));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(ID)
     public ResponseEntity<Void> deletePassenger(@PathVariable Long id) {
         adminService.deletePassenger(id);
         return ResponseEntity.noContent().build();

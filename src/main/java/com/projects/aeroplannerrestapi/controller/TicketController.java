@@ -6,14 +6,18 @@ import com.projects.aeroplannerrestapi.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_TICKETS;
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.ID;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/tickets")
-//@PreAuthorize("hasAnyRole('ADMINS', 'USER')")
+@RequestMapping(API_V1_TICKETS)
+@PreAuthorize("hasAnyRole('ADMINS', 'USER')")
 public class TicketController {
 
     private final TicketService ticketService;
@@ -23,17 +27,17 @@ public class TicketController {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
-    @GetMapping("{id}")
+    @GetMapping(ID)
     public ResponseEntity<TicketResponse> getTicket(@PathVariable Long id) {
         return ResponseEntity.ok(ticketService.getTicket(id));
     }
 
-    @PutMapping("{id}")
+    @PutMapping(ID)
     public ResponseEntity<TicketResponse> updateTicket(@PathVariable Long id, @RequestBody @Valid TicketRequest ticketRequest) {
         return ResponseEntity.ok(ticketService.updateTicket(id, ticketRequest));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(ID)
     public ResponseEntity<Void> cancelTicket(@PathVariable Long id) {
         ticketService.cancelTicket(id);
         return ResponseEntity.noContent().build();

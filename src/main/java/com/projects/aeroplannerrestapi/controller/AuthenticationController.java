@@ -15,24 +15,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.projects.aeroplannerrestapi.contstants.PathConstants.*;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping(API_V1_AUTH)
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register")
+    @PostMapping(REGISTER)
     public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         return new ResponseEntity<>(authenticationService.register(registerRequest), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping(LOGIN)
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(loginRequest));
     }
 
-    @PostMapping("/logout")
+    @PostMapping(LOGOUT)
     public ResponseEntity<String> logout (HttpServletRequest request) {
         authenticationService.logout(request);
         return ResponseEntity.ok("Logged out successfully");
