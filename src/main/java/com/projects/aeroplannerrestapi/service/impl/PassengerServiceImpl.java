@@ -34,7 +34,7 @@ public class PassengerServiceImpl implements PassengerService {
         Page<User> page = userRepository.findByRole(RoleEnum.USER, pageable);
         List<UserResponse> passengers = page.getContent().stream()
                 .map(UserMapper.INSTANCE::userToUserResponse)
-                .collect(Collectors.toList());
+                .toList();
         PaginatedAndSortedPassengerResponse passengerResponse = new PaginatedAndSortedPassengerResponse();
         passengerResponse.setContent(Collections.singletonList(passengers));
         passengerResponse.setPageNumber(page.getNumber());

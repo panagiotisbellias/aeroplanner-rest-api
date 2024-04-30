@@ -56,10 +56,10 @@ public class PaymentServiceImpl implements PaymentService {
         String to = SecurityContextHolder.getContext().getAuthentication().getName().toString();
         String subject = template.getSubject();
         String text = String.format(template.getText(), to,
-                ticketResponse.getPassengerId().toString(),
-                ticketResponse.getFlightId().toString(),
+                ticketResponse.getPassengerId(),
+                ticketResponse.getFlightId(),
                 ticketResponse.getSeatNumber(),
-                ticketResponse.getIssueDate().toString(),
+                ticketResponse.getIssueDate(),
                 ticketResponse.getTicketStatusEnum().toString());
         emailService.emailUser(to, subject, text);
         return PaymentResponse.builder()
