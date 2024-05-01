@@ -26,6 +26,9 @@ public class Ticket extends BaseEntityAudit {
     @Column(name = "flight_id", nullable = false)
     private String flightId;
 
+    @Column(name = "reservation_id", nullable = false)
+    private String reservationId;
+
     @Column(name = "seat_number", nullable = false)
     private int seatNumber;
 

@@ -32,6 +32,7 @@ public class TicketServiceImpl implements TicketService {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", reservationId.toString()));
         Ticket ticket = new Ticket();
+        ticket.setReservationId(reservationId.toString());
         ticket.setPassengerId(reservation.getPassengerId().toString());
         ticket.setFlightId(reservation.getFlightId().toString());
         ticket.setSeatNumber(reservation.getSeatNumber());
