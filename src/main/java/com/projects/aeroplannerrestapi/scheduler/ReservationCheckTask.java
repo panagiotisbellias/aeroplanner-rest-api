@@ -35,7 +35,7 @@ public class ReservationCheckTask {
             String reservationId = reservation.getId().toString();
             Ticket ticket = ticketRepository.findByReservationId(reservationId)
                     .orElseThrow(() -> new ResourceNotFoundException("Ticket", "reservation id", reservationId));
-            if (ticket.getTicketStatusEnum().equals(TicketStatusEnum.ISSUED)) {
+            if (!ticket.getTicketStatusEnum().toString().equals(TicketStatusEnum.ISSUED.name())) {
                 String reservationDate = reservation.getReservationDate();
                 LocalDateTime givenDateTime = LocalDateTime.parse(reservationDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                 LocalDateTime twoDaysBefore = givenDateTime.minusDays(2);
