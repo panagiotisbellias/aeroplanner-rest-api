@@ -1,6 +1,11 @@
 package com.projects.aeroplannerrestapi.contstants;
 
 public class PathConstants {
+
+    private PathConstants() {
+        // empty constructor
+    }
+
     public static final String API_V1 = "/api/v1";
     public static final String ID = "/{id}";
 
