@@ -11,7 +11,7 @@ class TicketTest {
 
     @Test
     void testAllArgsConstructor() {
-        Ticket ticket = new Ticket(0L, "passenger id", "flight id", 1, "issue date", TicketStatusEnum.BOARDED);
+        Ticket ticket = new Ticket(0L, "passenger id", "flight id", "reservation id", 1, "issue date", TicketStatusEnum.BOARDED);
         assertEquals(ticket);
     }
 
@@ -27,6 +27,7 @@ class TicketTest {
         ticket.setId(0L);
         ticket.setPassengerId("passenger id");
         ticket.setFlightId("flight id");
+        ticket.setReservationId("reservation id");
         ticket.setSeatNumber(1);
         ticket.setIssueDate("issue date");
         ticket.setTicketStatusEnum(TicketStatusEnum.BOARDED);
@@ -37,6 +38,7 @@ class TicketTest {
         Assertions.assertEquals(0L, ticket.getId());
         Assertions.assertEquals("passenger id", ticket.getPassengerId());
         Assertions.assertEquals("flight id", ticket.getFlightId());
+        Assertions.assertEquals("reservation id", ticket.getReservationId());
         Assertions.assertEquals(1, ticket.getSeatNumber());
         Assertions.assertEquals("issue date", ticket.getIssueDate());
         Assertions.assertEquals(TicketStatusEnum.BOARDED, ticket.getTicketStatusEnum());
