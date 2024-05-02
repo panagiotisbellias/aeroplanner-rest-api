@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.ID;
+import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.PASSENGER;
+
 @Service
 @RequiredArgsConstructor
 public class PassengerServiceImpl implements PassengerService {
@@ -48,13 +51,13 @@ public class PassengerServiceImpl implements PassengerService {
     public UserResponse getPassenger(Long id) {
         return userRepository.findByIdAndRolesName(id, RoleEnum.USER)
                 .map(UserMapper.INSTANCE::userToUserResponse)
-                .orElseThrow(() -> new ResourceNotFoundException("Passenger", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(PASSENGER, ID, id.toString()));
     }
 
     @Override
     public void deletePassenger(Long id) {
         if (!userRepository.existsByIdAndRoles_Name(id, RoleEnum.USER)) {
-            throw new ResourceNotFoundException("Passenger", "id", id.toString());
+            throw new ResourceNotFoundException(PASSENGER, ID, id.toString());
         }
         userRepository.deleteByIdAndRoles_Name(id, RoleEnum.USER);
     }

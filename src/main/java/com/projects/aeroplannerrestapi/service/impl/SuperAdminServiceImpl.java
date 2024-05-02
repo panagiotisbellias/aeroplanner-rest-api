@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class SuperAdminServiceImpl implements SuperAdminService {
@@ -33,7 +35,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     public UserResponse createAdministrator(RegisterRequest registerRequest) {
         String email = registerRequest.getEmail();
         Optional<Role> role = roleRepository.findByName(RoleEnum.ADMIN);
-        if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.ADMIN.name());
+        if (role.isEmpty()) throw new ResourceNotFoundException(ROLE, NAME, RoleEnum.ADMIN.name());
         if (userRepository.existsByEmail(email)) throw new UserAlreadyExistsException(email);
         User user = new User();
         user.setFullName(registerRequest.getFullName());
@@ -73,6 +75,6 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     private User findByIdAndRole(Long id) {
         return userRepository.findByIdAndRolesName(id, RoleEnum.ADMIN)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(USER, ID, id.toString()));
     }
 }
