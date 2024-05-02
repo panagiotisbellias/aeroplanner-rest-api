@@ -31,7 +31,7 @@ public class ReservationCheckTask {
     @Scheduled(cron = "0 * * * * ?")
     public void checkReservations() {
         List<Reservation> reservations = reservationRepository.findByReservationStatus(ReservationStatusEnum.CONFIRMED);
-        reservations.stream().forEach(reservation -> {
+        reservations.forEach(reservation -> {
             String reservationId = reservation.getId().toString();
             Ticket ticket = ticketRepository.findByReservationId(reservationId)
                     .orElseThrow(() -> new ResourceNotFoundException("Ticket", "reservation id", reservationId));
