@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_TICKETS;
-import static com.projects.aeroplannerrestapi.contstants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_TICKETS;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
 
 @RestController
 @RequiredArgsConstructor

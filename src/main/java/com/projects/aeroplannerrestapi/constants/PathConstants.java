@@ -1,4 +1,4 @@
-package com.projects.aeroplannerrestapi.contstants;
+package com.projects.aeroplannerrestapi.constants;
 
 public class PathConstants {
 

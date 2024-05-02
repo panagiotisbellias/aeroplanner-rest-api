@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.*;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

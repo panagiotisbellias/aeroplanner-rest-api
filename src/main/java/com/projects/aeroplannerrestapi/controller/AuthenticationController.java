@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.projects.aeroplannerrestapi.contstants.PathConstants.*;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
 
 @RestController
 @RequiredArgsConstructor

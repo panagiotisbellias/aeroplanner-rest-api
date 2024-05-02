@@ -1,4 +1,4 @@
-package com.projects.aeroplannerrestapi.contstants;
+package com.projects.aeroplannerrestapi.constants;
 
 public class ErrorMessage {
 
@@ -18,7 +18,7 @@ public class ErrorMessage {
     public static final String RESERVATION = "Reservation";
     
     public static final String USER_NOT_FOUND = "User not found";
-    public static final String FLIGHT_ID_PASSENGER_ID = "Fight Id and Passenger Id";
+    public static final String FLIGHT_ID_PASSENGER_ID = "Flight Id and Passenger Id";
     public static final String USER_ALREADY_EXISTS = "User already exists with email: %s";
     public static final String TOKEN_NOT_FOUND = "Token not found";
     public static final String RESOURCE_NOT_FOUND = "%s not found with %s : %s";

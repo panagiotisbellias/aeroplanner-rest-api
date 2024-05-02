@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.*;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor

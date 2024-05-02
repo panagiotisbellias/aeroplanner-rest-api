@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.exception;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.RESOURCE_NOT_FOUND;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.RESOURCE_NOT_FOUND;
 
 public class ResourceNotFoundException extends RuntimeException {
 

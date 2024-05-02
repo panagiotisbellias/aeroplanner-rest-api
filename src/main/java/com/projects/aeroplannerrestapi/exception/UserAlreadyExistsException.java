@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.exception;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.USER_ALREADY_EXISTS;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.USER_ALREADY_EXISTS;
 
 public class UserAlreadyExistsException extends RuntimeException {
 

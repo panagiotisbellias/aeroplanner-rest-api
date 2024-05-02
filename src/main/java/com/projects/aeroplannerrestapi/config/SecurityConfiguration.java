@@ -16,7 +16,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static com.projects.aeroplannerrestapi.contstants.PathConstants.*;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
 
 @Configuration
 @EnableWebSecurity

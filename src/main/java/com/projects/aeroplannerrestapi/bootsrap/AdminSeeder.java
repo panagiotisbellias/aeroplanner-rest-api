@@ -19,8 +19,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.NAME;
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.ROLE;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.NAME;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ROLE;
 
 @Component
 @RequiredArgsConstructor

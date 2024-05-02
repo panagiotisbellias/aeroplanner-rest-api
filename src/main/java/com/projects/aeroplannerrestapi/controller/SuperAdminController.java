@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import static com.projects.aeroplannerrestapi.contstants.PathConstants.API_V1_SUPER_ADMINS;
-import static com.projects.aeroplannerrestapi.contstants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_SUPER_ADMINS;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
 
 @RestController
 @RequiredArgsConstructor

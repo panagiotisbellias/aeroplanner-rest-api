@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.USER_NOT_FOUND;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.USER_NOT_FOUND;
 
 @EnableAsync
 @Configuration

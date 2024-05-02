@@ -15,8 +15,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.FLIGHT;
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.ID;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.FLIGHT;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ID;
 
 @Service
 @RequiredArgsConstructor

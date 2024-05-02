@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.*;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor

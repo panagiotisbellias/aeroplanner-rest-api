@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.ID;
-import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.PASSENGER;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ID;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.PASSENGER;
 
 @Service
 @RequiredArgsConstructor
