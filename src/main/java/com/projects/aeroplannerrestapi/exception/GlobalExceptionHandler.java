@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.*;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -73,22 +75,22 @@ public class GlobalExceptionHandler {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
         if (exception instanceof BadCredentialsException) {
-            errorMessage.append("The username or password is incorrect");
+            errorMessage.append(USERNAME_PASSWORD_INCORRECT);
             httpStatus = HttpStatus.UNAUTHORIZED;
         } else if (exception instanceof AccountStatusException) {
-            errorMessage.append("The account is locked");
+            errorMessage.append(ACCOUNT_LOCKED);
             httpStatus = HttpStatus.FORBIDDEN;
         } else if (exception instanceof AccessDeniedException) {
-            errorMessage.append("You are not authorized to access this resource");
+            errorMessage.append(UNAUTHORIZED_USER);
             httpStatus = HttpStatus.FORBIDDEN;
         } else if (exception instanceof SignatureException) {
-            errorMessage.append("The JWT signature is invalid");
+            errorMessage.append(JWT_SIGNATURE_INVALID);
             httpStatus = HttpStatus.FORBIDDEN;
         } else if (exception instanceof ExpiredJwtException) {
-            errorMessage.append("The JWT token has expired");
+            errorMessage.append(JWT_SIGNATURE_EXPIRED);
             httpStatus = HttpStatus.FORBIDDEN;
         } else if (exception != null){
-            errorMessage.append("Unknown internal server error.");
+            errorMessage.append(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         }
         errorDetailsResponse.setMessage(errorMessage.toString());
         return new ResponseEntity<>(errorDetailsResponse, httpStatus);
