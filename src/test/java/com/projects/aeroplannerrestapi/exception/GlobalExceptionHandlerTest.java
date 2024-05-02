@@ -86,7 +86,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleGlobalException(exception, webRequest);
         ErrorDetailsResponse responseBody = response.getBody();
 
-        Assertions.assertEquals("Unknown internal server error.", Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertEquals("Internal Server Error", Objects.requireNonNull(responseBody).getMessage());
         Assertions.assertNull(responseBody.getPath());
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }

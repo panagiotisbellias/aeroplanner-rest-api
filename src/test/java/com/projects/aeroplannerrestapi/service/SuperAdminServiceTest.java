@@ -59,7 +59,7 @@ class SuperAdminServiceTest {
     @Test
     void testCreateAdministratorRoleNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> superAdminService.createAdministrator(registerRequest));
-        Assertions.assertEquals("Role not found with name : ADMIN", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Role not found with Name : ADMIN", resourceNotFoundException.getMessage());
     }
 
     @Test
