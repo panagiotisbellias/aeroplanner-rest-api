@@ -8,12 +8,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.MESSAGE;
+import static com.projects.aeroplannerrestapi.util.TestConstants.TRANSACTION_ID;
+
 @ExtendWith(MockitoExtension.class)
 class PaymentResponseTest {
 
     @Test
     void testAllArgsConstructor() {
-        PaymentResponse paymentResponse = new PaymentResponse("transaction id", PaymentStatusEnum.PAID, "message", BigDecimal.valueOf(0));
+        PaymentResponse paymentResponse = new PaymentResponse(TRANSACTION_ID, PaymentStatusEnum.PAID, MESSAGE, BigDecimal.valueOf(0));
         assertEquals(paymentResponse);
     }
 
@@ -26,17 +29,17 @@ class PaymentResponseTest {
     @Test
     void testSetters() {
         PaymentResponse paymentResponse = new PaymentResponse();
-        paymentResponse.setTransactionId("transaction id");
+        paymentResponse.setTransactionId(TRANSACTION_ID);
         paymentResponse.setStatus(PaymentStatusEnum.PAID);
-        paymentResponse.setMessage("message");
+        paymentResponse.setMessage(MESSAGE);
         paymentResponse.setAmount(BigDecimal.valueOf(0));
         assertEquals(paymentResponse);
     }
 
     void assertEquals(PaymentResponse paymentResponse) {
-        Assertions.assertEquals("transaction id", paymentResponse.getTransactionId());
+        Assertions.assertEquals(TRANSACTION_ID, paymentResponse.getTransactionId());
         Assertions.assertEquals(PaymentStatusEnum.PAID, paymentResponse.getStatus());
-        Assertions.assertEquals("message", paymentResponse.getMessage());
+        Assertions.assertEquals(MESSAGE, paymentResponse.getMessage());
         Assertions.assertEquals(BigDecimal.valueOf(0), paymentResponse.getAmount());
     }
 

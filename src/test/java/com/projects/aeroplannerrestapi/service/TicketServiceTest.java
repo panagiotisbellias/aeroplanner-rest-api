@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.entity.Reservation;
 import com.projects.aeroplannerrestapi.entity.Ticket;
@@ -95,7 +96,7 @@ class TicketServiceTest {
         Mockito.when(ticketRepository.findById(0L)).thenReturn(Optional.of(ticket));
 
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> ticketService.cancelTicket(0L));
-        Assertions.assertEquals("Reservation not found with Fight Id and Passenger Id : 0 : 1", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 0 : 1"), resourceNotFoundException.getMessage());
     }
 
 }

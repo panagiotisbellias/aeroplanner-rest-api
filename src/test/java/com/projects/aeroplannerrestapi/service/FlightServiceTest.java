@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.request.FlightRequest;
 import com.projects.aeroplannerrestapi.dto.response.FlightResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
@@ -83,7 +84,7 @@ class FlightServiceTest {
     @Test
     void testGetFlightNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.getFlight(0L));
-        Assertions.assertEquals("Flight not found with Id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(String.format(ErrorMessage.RESOURCE_NOT_FOUND, ErrorMessage.FLIGHT, ErrorMessage.ID, "0"), resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -95,7 +96,7 @@ class FlightServiceTest {
     @Test
     void testUpdateFlightNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.updateFlight(0L, flightRequest));
-        Assertions.assertEquals("Flight not found with Id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.FLIGHT.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 0"), resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -110,7 +111,7 @@ class FlightServiceTest {
     @Test
     void testDeleteFlightNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.deleteFlight(0L));
-        Assertions.assertEquals("Flight not found with Id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.FLIGHT.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 0"), resourceNotFoundException.getMessage());
     }
 
 }

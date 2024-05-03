@@ -14,6 +14,10 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.EMAIL;
+import static com.projects.aeroplannerrestapi.util.TestConstants.FULL_NAME;
+import static com.projects.aeroplannerrestapi.util.TestConstants.PASSWORD;
+
 @ExtendWith(MockitoExtension.class)
 class UserTest {
 
@@ -25,7 +29,7 @@ class UserTest {
 
     @Test
     void testAllArgsConstructor() {
-        User user = new User(0L, "full name", "email", "password", Set.of(role));
+        User user = new User(0L, FULL_NAME, EMAIL, PASSWORD, Set.of(role));
         assertEquals(user);
     }
 
@@ -39,18 +43,18 @@ class UserTest {
     void testSetters() {
         User user = new User();
         user.setId(0L);
-        user.setFullName("full name");
-        user.setEmail("email");
-        user.setPassword("password");
+        user.setFullName(FULL_NAME);
+        user.setEmail(EMAIL);
+        user.setPassword(PASSWORD);
         user.setRoles(Set.of(role));
         assertEquals(user);
     }
 
     void assertEquals(User user) {
         Assertions.assertEquals(0L, user.getId());
-        Assertions.assertEquals("full name", user.getFullName());
-        Assertions.assertEquals("email", user.getEmail());
-        Assertions.assertEquals("password", user.getPassword());
+        Assertions.assertEquals(FULL_NAME, user.getFullName());
+        Assertions.assertEquals(EMAIL, user.getEmail());
+        Assertions.assertEquals(PASSWORD, user.getPassword());
         Assertions.assertEquals(Set.of(role), user.getRoles());
     }
 

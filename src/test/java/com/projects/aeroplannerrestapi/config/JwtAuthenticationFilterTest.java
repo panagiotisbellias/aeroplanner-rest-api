@@ -19,6 +19,11 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.AUTHORIZATION;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.BEARER;
+import static com.projects.aeroplannerrestapi.util.TestConstants.HEADER;
+import static com.projects.aeroplannerrestapi.util.TestConstants.USER_EMAIL;
+
 @ExtendWith(MockitoExtension.class)
 class JwtAuthenticationFilterTest {
 
@@ -57,12 +62,12 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void testDoFilterInternal() throws ServletException, IOException {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
-        Mockito.when(jwtService.extractUsername("header")).thenReturn("user email");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn(BEARER.concat(HEADER));
+        Mockito.when(jwtService.extractUsername(HEADER)).thenReturn(USER_EMAIL);
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
         verifyValidFlow();
-        Mockito.verify(jwtService, Mockito.times(0)).isTokenValid("header", userDetails);
+        Mockito.verify(jwtService, Mockito.times(0)).isTokenValid(HEADER, userDetails);
         Mockito.verify(userDetails, Mockito.times(0)).getAuthorities();
         Mockito.verify(request, Mockito.times(0)).getRemoteAddr();
         Mockito.verify(request, Mockito.times(0)).getSession(false);
@@ -70,11 +75,11 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void testDoFilterInternalInvalidJWT() throws ServletException, IOException {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
-        Mockito.when(jwtService.extractUsername("header")).thenReturn("user email");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn(BEARER.concat(HEADER));
+        Mockito.when(jwtService.extractUsername(HEADER)).thenReturn(USER_EMAIL);
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-        Mockito.verify(jwtService, Mockito.times(0)).isTokenValid("header", userDetails);
+        Mockito.verify(jwtService, Mockito.times(0)).isTokenValid(HEADER, userDetails);
         verifyValidFlow();
         verifyNoMoreUserDetailsRequest();
     }
@@ -87,7 +92,7 @@ class JwtAuthenticationFilterTest {
     @Test
     void testDoFilterInternalNullHeader() throws ServletException, IOException {
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-        Mockito.verify(request).getHeader("Authorization");
+        Mockito.verify(request).getHeader(AUTHORIZATION);
         Mockito.verifyNoInteractions(jwtService);
         verifyNoTokenBlacklistUserDetailServices();
         verifyNoUserDetailsNoMoreRequest();
@@ -95,9 +100,9 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void testDoFilterInternalNoBearerHeader() throws ServletException, IOException {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("header");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn(HEADER);
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
-        Mockito.verify(request).getHeader("Authorization");
+        Mockito.verify(request).getHeader(AUTHORIZATION);
         Mockito.verifyNoInteractions(jwtService);
         verifyNoTokenBlacklistUserDetailServices();
         verifyNoUserDetailsNoMoreRequest();
@@ -105,7 +110,7 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void testDoFilterInternalUserEmailNull() throws ServletException, IOException {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn(BEARER.concat(HEADER));
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
         verifyRequestHeaderExtractedUsername();
         verifyNoTokenBlacklistUserDetailServices();
@@ -126,8 +131,8 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void testDoFilterInternalException() throws ServletException, IOException {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
-        Mockito.when(jwtService.extractUsername("header")).thenReturn("user email");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn(BEARER.concat(HEADER));
+        Mockito.when(jwtService.extractUsername(HEADER)).thenReturn(USER_EMAIL);
 
         jwtAuthenticationFilter.doFilterInternal(request, response, filterChain);
         verifyRequestHeaderExtractedUsername();
@@ -135,8 +140,8 @@ class JwtAuthenticationFilterTest {
     }
 
     void verifyRequestHeaderExtractedUsername() {
-        Mockito.verify(request).getHeader("Authorization");
-        Mockito.verify(jwtService).extractUsername("header");
+        Mockito.verify(request).getHeader(AUTHORIZATION);
+        Mockito.verify(jwtService).extractUsername(HEADER);
     }
 
     void verifyNoUserDetailsNoMoreRequest() {

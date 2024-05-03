@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.TOKEN;
+
 @ExtendWith(MockitoExtension.class)
 class JwtServiceTest {
 
@@ -28,13 +30,13 @@ class JwtServiceTest {
     @Disabled("Decode argument cannot be null.")
     @Test
     void testExtractUsername() {
-        Assertions.assertEquals("", jwtService.extractUsername("token"));
+        Assertions.assertEquals("", jwtService.extractUsername(TOKEN));
     }
 
     @Disabled("Decode argument cannot be null.")
     @Test
     void testExtractClaim() {
-        Assertions.assertEquals("", jwtService.extractClaim("token", Claims::getSubject));
+        Assertions.assertEquals("", jwtService.extractClaim(TOKEN, Claims::getSubject));
     }
 
     @Disabled("Decode argument cannot be null.")
@@ -51,7 +53,7 @@ class JwtServiceTest {
     @Disabled("Decode argument cannot be null.")
     @Test
     void testIsTokenValid() {
-        Assertions.assertFalse(jwtService.isTokenValid("token", userDetails));
+        Assertions.assertFalse(jwtService.isTokenValid(TOKEN, userDetails));
     }
 
 }

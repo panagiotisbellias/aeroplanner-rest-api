@@ -6,12 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.RESERVATION_ID;
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
+
 @ExtendWith(MockitoExtension.class)
 class TicketTest {
 
     @Test
     void testAllArgsConstructor() {
-        Ticket ticket = new Ticket(0L, "passenger id", "flight id", "reservation id", 1, "issue date", TicketStatusEnum.BOARDED);
+        Ticket ticket = new Ticket(0L, PASSENGER_ID, FLIGHT_ID, RESERVATION_ID, 1, ISSUE_DATE, TicketStatusEnum.BOARDED);
         assertEquals(ticket);
     }
 
@@ -25,22 +28,22 @@ class TicketTest {
     void testSetters() {
         Ticket ticket = new Ticket();
         ticket.setId(0L);
-        ticket.setPassengerId("passenger id");
-        ticket.setFlightId("flight id");
-        ticket.setReservationId("reservation id");
+        ticket.setPassengerId(PASSENGER_ID);
+        ticket.setFlightId(FLIGHT_ID);
+        ticket.setReservationId(RESERVATION_ID);
         ticket.setSeatNumber(1);
-        ticket.setIssueDate("issue date");
+        ticket.setIssueDate(ISSUE_DATE);
         ticket.setTicketStatusEnum(TicketStatusEnum.BOARDED);
         assertEquals(ticket);
     }
 
     void assertEquals(Ticket ticket) {
         Assertions.assertEquals(0L, ticket.getId());
-        Assertions.assertEquals("passenger id", ticket.getPassengerId());
-        Assertions.assertEquals("flight id", ticket.getFlightId());
-        Assertions.assertEquals("reservation id", ticket.getReservationId());
+        Assertions.assertEquals(PASSENGER_ID, ticket.getPassengerId());
+        Assertions.assertEquals(FLIGHT_ID, ticket.getFlightId());
+        Assertions.assertEquals(RESERVATION_ID, ticket.getReservationId());
         Assertions.assertEquals(1, ticket.getSeatNumber());
-        Assertions.assertEquals("issue date", ticket.getIssueDate());
+        Assertions.assertEquals(ISSUE_DATE, ticket.getIssueDate());
         Assertions.assertEquals(TicketStatusEnum.BOARDED, ticket.getTicketStatusEnum());
     }
 

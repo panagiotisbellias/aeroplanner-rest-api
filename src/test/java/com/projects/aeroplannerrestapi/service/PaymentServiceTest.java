@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
 import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.dto.response.PaymentResponse;
@@ -27,6 +28,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
+
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.NAME;
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
@@ -79,13 +83,13 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
-        Mockito.when(ticketResponse.getPassengerId()).thenReturn("passenger id");
-        Mockito.when(ticketResponse.getFlightId()).thenReturn("flight id");
-        Mockito.when(ticketResponse.getIssueDate()).thenReturn("issue date");
+        Mockito.when(ticketResponse.getPassengerId()).thenReturn(PASSENGER_ID);
+        Mockito.when(ticketResponse.getFlightId()).thenReturn(FLIGHT_ID);
+        Mockito.when(ticketResponse.getIssueDate()).thenReturn(ISSUE_DATE);
         Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
         Mockito.when(ticketService.createTicket(ArgumentMatchers.any(TicketRequest.class))).thenReturn(ticketResponse);
         Mockito.when(template.getText()).thenReturn("text");
-        Mockito.when(authentication.getName()).thenReturn("name");
+        Mockito.when(authentication.getName()).thenReturn(NAME);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
 
         SecurityContextHolder.setContext(securityContext);
@@ -109,7 +113,7 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> paymentService.processPayment(paymentRequest));
-        Assertions.assertEquals("Reservation not found with Fight Id and Passenger Id : 0 : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 0 : 0"), resourceNotFoundException.getMessage());
     }
 
     @Test

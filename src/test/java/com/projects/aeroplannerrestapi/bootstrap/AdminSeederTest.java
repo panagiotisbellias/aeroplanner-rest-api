@@ -1,6 +1,7 @@
 package com.projects.aeroplannerrestapi.bootstrap;
 
 import com.projects.aeroplannerrestapi.bootsrap.AdminSeeder;
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
@@ -20,6 +21,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
+
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.SUPER_ADMIN;
 
 @ExtendWith(MockitoExtension.class)
 class AdminSeederTest {
@@ -62,14 +65,14 @@ class AdminSeederTest {
     @Test
     void testOnApplicationEventRoleNotFound() {
         ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class, () -> adminSeeder.onApplicationEvent(event));
-        Assertions.assertEquals("Role not found with Name : SUPER_ADMIN", exception.getMessage());
+        Assertions.assertEquals(String.format(ErrorMessage.RESOURCE_NOT_FOUND, ErrorMessage.ROLE, ErrorMessage.NAME, SUPER_ADMIN), exception.getMessage());
     }
 
     @Test
     void testOnApplicationEventUserExists() {
         Mockito.when(userRepository.existsByEmail(null)).thenReturn(true);
         UserAlreadyExistsException userAlreadyExistsException = Assertions.assertThrows(UserAlreadyExistsException.class, () -> adminSeeder.onApplicationEvent(event));
-        Assertions.assertEquals("User already exists with email: null", userAlreadyExistsException.getMessage());
+        Assertions.assertEquals(String.format(ErrorMessage.USER_ALREADY_EXISTS, (Object) null), userAlreadyExistsException.getMessage());
     }
 
 }

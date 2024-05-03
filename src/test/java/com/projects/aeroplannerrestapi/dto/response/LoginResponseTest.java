@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.TOKEN;
+
 @ExtendWith(MockitoExtension.class)
 class LoginResponseTest {
 
     @Test
     void testAllArgsConstructor() {
-        LoginResponse loginResponse = new LoginResponse("token", 0L);
+        LoginResponse loginResponse = new LoginResponse(TOKEN, 0L);
         assertEquals(loginResponse);
     }
 
@@ -23,13 +25,13 @@ class LoginResponseTest {
     @Test
     void testSetters() {
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken("token");
+        loginResponse.setToken(TOKEN);
         loginResponse.setExpiredIn(0L);
         assertEquals(loginResponse);
     }
 
     void assertEquals(LoginResponse loginResponse) {
-        Assertions.assertEquals("token", loginResponse.getToken());
+        Assertions.assertEquals(TOKEN, loginResponse.getToken());
         Assertions.assertEquals(0L, loginResponse.getExpiredIn());
     }
 

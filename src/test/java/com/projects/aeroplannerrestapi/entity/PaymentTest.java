@@ -8,12 +8,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
+
 @ExtendWith(MockitoExtension.class)
 class PaymentTest {
 
     @Test
     void testAllArgsConstructor() {
-        Payment payment = new Payment(0L, 1L, 2L, 3, "card number", "card holder name", "expiry date", "cvv", BigDecimal.valueOf(4), PaymentStatusEnum.PENDING, "transaction id");
+        Payment payment = new Payment(0L, 1L, 2L, 3, CARD_NUMBER, CARD_HOLDER_NAME, EXPIRY_DATE, CVV, BigDecimal.valueOf(4), PaymentStatusEnum.PENDING, TRANSACTION_ID);
         assertEquals(payment);
     }
 
@@ -30,13 +32,13 @@ class PaymentTest {
         payment.setPassengerId(1L);
         payment.setFlightId(2L);
         payment.setSeatNumber(3);
-        payment.setCardNumber("card number");
-        payment.setCardHolderName("card holder name");
-        payment.setExpiryDate("expiry date");
-        payment.setCvv("cvv");
+        payment.setCardNumber(CARD_NUMBER);
+        payment.setCardHolderName(CARD_HOLDER_NAME);
+        payment.setExpiryDate(EXPIRY_DATE);
+        payment.setCvv(CVV);
         payment.setStatus(PaymentStatusEnum.PENDING);
         payment.setAmount(BigDecimal.valueOf(4));
-        payment.setTransactionId("transaction id");
+        payment.setTransactionId(TRANSACTION_ID);
         assertEquals(payment);
     }
 
@@ -45,13 +47,13 @@ class PaymentTest {
         Assertions.assertEquals(1L, payment.getPassengerId());
         Assertions.assertEquals(2L, payment.getFlightId());
         Assertions.assertEquals(3, payment.getSeatNumber());
-        Assertions.assertEquals("card number", payment.getCardNumber());
-        Assertions.assertEquals("card holder name", payment.getCardHolderName());
-        Assertions.assertEquals("expiry date", payment.getExpiryDate());
-        Assertions.assertEquals("cvv", payment.getCvv());
+        Assertions.assertEquals(CARD_NUMBER, payment.getCardNumber());
+        Assertions.assertEquals(CARD_HOLDER_NAME, payment.getCardHolderName());
+        Assertions.assertEquals(EXPIRY_DATE, payment.getExpiryDate());
+        Assertions.assertEquals(CVV, payment.getCvv());
         Assertions.assertEquals(BigDecimal.valueOf(4), payment.getAmount());
         Assertions.assertEquals(PaymentStatusEnum.PENDING, payment.getStatus());
-        Assertions.assertEquals("transaction id", payment.getTransactionId());
+        Assertions.assertEquals(TRANSACTION_ID, payment.getTransactionId());
     }
 
 }

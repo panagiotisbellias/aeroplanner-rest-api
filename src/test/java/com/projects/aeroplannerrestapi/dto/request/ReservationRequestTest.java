@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.RESERVATION_DATE;
+
 @ExtendWith(MockitoExtension.class)
 class ReservationRequestTest {
 
     @Test
     void testAllArgsConstructor() {
-        ReservationRequest reservationRequest = new ReservationRequest(0L, 1L, 2L, 3, "reservation date", ReservationStatusEnum.CONFIRMED);
+        ReservationRequest reservationRequest = new ReservationRequest(0L, 1L, 2L, 3, RESERVATION_DATE, ReservationStatusEnum.CONFIRMED);
         assertEquals(reservationRequest);
     }
 
@@ -28,7 +30,7 @@ class ReservationRequestTest {
         reservationRequest.setPassengerId(1L);
         reservationRequest.setFlightId(2L);
         reservationRequest.setSeatNumber(3);
-        reservationRequest.setReservationDate("reservation date");
+        reservationRequest.setReservationDate(RESERVATION_DATE);
         reservationRequest.setReservationStatus(ReservationStatusEnum.CONFIRMED);
         assertEquals(reservationRequest);
     }
@@ -38,7 +40,7 @@ class ReservationRequestTest {
         Assertions.assertEquals(1L, reservationRequest.getPassengerId());
         Assertions.assertEquals(2L, reservationRequest.getFlightId());
         Assertions.assertEquals(3, reservationRequest.getSeatNumber());
-        Assertions.assertEquals("reservation date", reservationRequest.getReservationDate());
+        Assertions.assertEquals(RESERVATION_DATE, reservationRequest.getReservationDate());
         Assertions.assertEquals(ReservationStatusEnum.CONFIRMED, reservationRequest.getReservationStatus());
     }
 

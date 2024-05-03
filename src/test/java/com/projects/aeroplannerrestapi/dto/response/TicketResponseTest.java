@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
+
 @ExtendWith(MockitoExtension.class)
 class TicketResponseTest {
 
     @Test
     void testAllArgsConstructor() {
-        TicketResponse ticketResponse = new TicketResponse(0L, "passenger id", "flight id", 1, "issue date", TicketStatusEnum.BOARDED);
+        TicketResponse ticketResponse = new TicketResponse(0L, PASSENGER_ID, FLIGHT_ID, 1, ISSUE_DATE, TicketStatusEnum.BOARDED);
         assertEquals(ticketResponse);
     }
 
@@ -25,20 +27,20 @@ class TicketResponseTest {
     void testSetters() {
         TicketResponse ticketResponse = new TicketResponse();
         ticketResponse.setId(0L);
-        ticketResponse.setPassengerId("passenger id");
-        ticketResponse.setFlightId("flight id");
+        ticketResponse.setPassengerId(PASSENGER_ID);
+        ticketResponse.setFlightId(FLIGHT_ID);
         ticketResponse.setSeatNumber(1);
-        ticketResponse.setIssueDate("issue date");
+        ticketResponse.setIssueDate(ISSUE_DATE);
         ticketResponse.setTicketStatusEnum(TicketStatusEnum.BOARDED);
         assertEquals(ticketResponse);
     }
 
     void assertEquals(TicketResponse ticketResponse) {
         Assertions.assertEquals(0L, ticketResponse.getId());
-        Assertions.assertEquals("passenger id", ticketResponse.getPassengerId());
-        Assertions.assertEquals("flight id", ticketResponse.getFlightId());
+        Assertions.assertEquals(PASSENGER_ID, ticketResponse.getPassengerId());
+        Assertions.assertEquals(FLIGHT_ID, ticketResponse.getFlightId());
         Assertions.assertEquals(1, ticketResponse.getSeatNumber());
-        Assertions.assertEquals("issue date", ticketResponse.getIssueDate());
+        Assertions.assertEquals(ISSUE_DATE, ticketResponse.getIssueDate());
         Assertions.assertEquals(TicketStatusEnum.BOARDED, ticketResponse.getTicketStatusEnum());
     }
 
