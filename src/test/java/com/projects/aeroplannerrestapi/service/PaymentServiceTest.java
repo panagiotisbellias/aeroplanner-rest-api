@@ -29,6 +29,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.NAME;
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
+
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
 
@@ -80,13 +83,13 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
-        Mockito.when(ticketResponse.getPassengerId()).thenReturn("passenger id");
-        Mockito.when(ticketResponse.getFlightId()).thenReturn("flight id");
-        Mockito.when(ticketResponse.getIssueDate()).thenReturn("issue date");
+        Mockito.when(ticketResponse.getPassengerId()).thenReturn(PASSENGER_ID);
+        Mockito.when(ticketResponse.getFlightId()).thenReturn(FLIGHT_ID);
+        Mockito.when(ticketResponse.getIssueDate()).thenReturn(ISSUE_DATE);
         Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
         Mockito.when(ticketService.createTicket(ArgumentMatchers.any(TicketRequest.class))).thenReturn(ticketResponse);
         Mockito.when(template.getText()).thenReturn("text");
-        Mockito.when(authentication.getName()).thenReturn("name");
+        Mockito.when(authentication.getName()).thenReturn(NAME);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
 
         SecurityContextHolder.setContext(securityContext);

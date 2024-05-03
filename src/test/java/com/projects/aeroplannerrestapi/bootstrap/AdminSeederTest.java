@@ -65,7 +65,7 @@ class AdminSeederTest {
     @Test
     void testOnApplicationEventRoleNotFound() {
         ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class, () -> adminSeeder.onApplicationEvent(event));
-        Assertions.assertEquals(ErrorMessage.ROLE.concat(" not found with ").concat(ErrorMessage.NAME).concat(" : ").concat(SUPER_ADMIN), exception.getMessage());
+        Assertions.assertEquals(String.format(ErrorMessage.RESOURCE_NOT_FOUND, ErrorMessage.ROLE, ErrorMessage.NAME, SUPER_ADMIN), exception.getMessage());
     }
 
     @Test

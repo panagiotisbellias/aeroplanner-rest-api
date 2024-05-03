@@ -10,6 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.Duration;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
+
 @ExtendWith(MockitoExtension.class)
 class FlightTest {
 
@@ -18,7 +20,7 @@ class FlightTest {
 
     @Test
     void testAllArgsConstructor() {
-        Flight flight = new Flight(0L, "airline", "flight number", "departure time", "arrival time", duration, BigDecimal.valueOf(1), "aircraft type", 2, 3, FlightStatusEnum.IN_FLIGHT);
+        Flight flight = new Flight(0L, AIRLINE, FLIGHT_NUMBER, DEPARTURE_TIME, ARRIVAL_TIME, duration, BigDecimal.valueOf(1), AIRCRAFT_TYPE, 2, 3, FlightStatusEnum.IN_FLIGHT);
         assertEquals(flight);
     }
 
@@ -32,13 +34,13 @@ class FlightTest {
     void testSetters() {
         Flight flight = new Flight();
         flight.setId(0L);
-        flight.setAirline("airline");
-        flight.setFlightNumber("flight number");
-        flight.setDepartureTime("departure time");
-        flight.setArrivalTime("arrival time");
+        flight.setAirline(AIRLINE);
+        flight.setFlightNumber(FLIGHT_NUMBER);
+        flight.setDepartureTime(DEPARTURE_TIME);
+        flight.setArrivalTime(ARRIVAL_TIME);
         flight.setDuration(duration);
         flight.setPrice(BigDecimal.valueOf(1));
-        flight.setAircraftType("aircraft type");
+        flight.setAircraftType(AIRCRAFT_TYPE);
         flight.setSeatAvailability(2);
         flight.setCurrentAvailableSeat(3);
         flight.setStatus(FlightStatusEnum.IN_FLIGHT);
@@ -47,13 +49,13 @@ class FlightTest {
 
     void assertEquals(Flight flight) {
         Assertions.assertEquals(0L, flight.getId());
-        Assertions.assertEquals("airline", flight.getAirline());
-        Assertions.assertEquals("flight number", flight.getFlightNumber());
-        Assertions.assertEquals("departure time", flight.getDepartureTime());
-        Assertions.assertEquals("arrival time", flight.getArrivalTime());
+        Assertions.assertEquals(AIRLINE, flight.getAirline());
+        Assertions.assertEquals(FLIGHT_NUMBER, flight.getFlightNumber());
+        Assertions.assertEquals(DEPARTURE_TIME, flight.getDepartureTime());
+        Assertions.assertEquals(ARRIVAL_TIME, flight.getArrivalTime());
         Assertions.assertEquals(duration, flight.getDuration());
         Assertions.assertEquals(BigDecimal.valueOf(1), flight.getPrice());
-        Assertions.assertEquals("aircraft type", flight.getAircraftType());
+        Assertions.assertEquals(AIRCRAFT_TYPE, flight.getAircraftType());
         Assertions.assertEquals(2, flight.getSeatAvailability());
         Assertions.assertEquals(3, flight.getCurrentAvailableSeat());
         Assertions.assertEquals(FlightStatusEnum.IN_FLIGHT, flight.getStatus());

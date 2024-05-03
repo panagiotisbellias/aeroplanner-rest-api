@@ -5,12 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.EMAIL;
+import static com.projects.aeroplannerrestapi.util.TestConstants.FULL_NAME;
+import static com.projects.aeroplannerrestapi.util.TestConstants.PASSWORD;
+
 @ExtendWith(MockitoExtension.class)
 class RegisterRequestTest {
 
     @Test
     void testAllArgsConstructor() {
-        RegisterRequest registerRequest = new RegisterRequest("email", "password", "full name");
+        RegisterRequest registerRequest = new RegisterRequest(EMAIL, PASSWORD, FULL_NAME);
         assertEquals(registerRequest);
     }
 
@@ -23,16 +27,16 @@ class RegisterRequestTest {
     @Test
     void testSetters() {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setEmail("email");
-        registerRequest.setPassword("password");
-        registerRequest.setFullName("full name");
+        registerRequest.setEmail(EMAIL);
+        registerRequest.setPassword(PASSWORD);
+        registerRequest.setFullName(FULL_NAME);
         assertEquals(registerRequest);
     }
 
     void assertEquals(RegisterRequest registerRequest) {
-        Assertions.assertEquals("email", registerRequest.getEmail());
-        Assertions.assertEquals("password", registerRequest.getPassword());
-        Assertions.assertEquals("full name", registerRequest.getFullName());
+        Assertions.assertEquals(EMAIL, registerRequest.getEmail());
+        Assertions.assertEquals(PASSWORD, registerRequest.getPassword());
+        Assertions.assertEquals(FULL_NAME, registerRequest.getFullName());
     }
 
 }

@@ -60,17 +60,17 @@ class SuperAdminServiceTest {
     @Test
     void testCreateAdministratorRoleNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> superAdminService.createAdministrator(registerRequest));
-        Assertions.assertEquals(ErrorMessage.ROLE.concat(" not found with Name : ADMIN"), resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.ROLE.concat(" not found with ").concat(ErrorMessage.NAME).concat(" : ADMIN"), resourceNotFoundException.getMessage());
     }
 
     @Test
     void testCreateAdministratorAlreadyExists() {
-        Mockito.when(registerRequest.getEmail()).thenReturn("email");
+        Mockito.when(registerRequest.getEmail()).thenReturn(ErrorMessage.EMAIL);
         Mockito.when(roleRepository.findByName(RoleEnum.ADMIN)).thenReturn(Optional.of(role));
-        Mockito.when(userRepository.existsByEmail("email")).thenReturn(true);
+        Mockito.when(userRepository.existsByEmail(ErrorMessage.EMAIL)).thenReturn(true);
 
         UserAlreadyExistsException userAlreadyExistsException = Assertions.assertThrows(UserAlreadyExistsException.class, () -> superAdminService.createAdministrator(registerRequest));
-        Assertions.assertEquals(ErrorMessage.USER.concat(" already exists with email: email"), userAlreadyExistsException.getMessage());
+        Assertions.assertEquals(ErrorMessage.USER.concat(" already exists with email: ").concat(ErrorMessage.EMAIL), userAlreadyExistsException.getMessage());
     }
 
     @Test

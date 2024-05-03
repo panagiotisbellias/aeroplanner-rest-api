@@ -61,8 +61,8 @@ class ApplicationConfigurationTest {
                 "                 \n" +
                 " We are pleased to inform you that we have received your payment for your flight ticket. Here are the details of your booking:\n" +
                 "                 \n" +
-                " - ").concat(ErrorMessage.PASSENGER).concat(" ID: %s\n" +
-                " - ").concat(ErrorMessage.FLIGHT).concat(" ID: %s\n" +
+                " - Passenger ID: %s\n" +
+                " - Flight ID: %s\n" +
                 " - Seat Number: %s\n" +
                 " - Issue Date: %s\n" +
                 " - Status: %s\n" +

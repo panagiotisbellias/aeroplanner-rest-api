@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.DESCRIPTION;
+
 @ExtendWith(MockitoExtension.class)
 class RoleTest {
 
@@ -17,7 +19,7 @@ class RoleTest {
 
     @Test
     void testAllArgsConstructor() {
-        Role role = new Role(0L, RoleEnum.SUPER_ADMIN, "description", Set.of(user));
+        Role role = new Role(0L, RoleEnum.SUPER_ADMIN, DESCRIPTION, Set.of(user));
         assertEquals(role);
     }
 
@@ -32,7 +34,7 @@ class RoleTest {
         Role role = new Role();
         role.setId(0L);
         role.setName(RoleEnum.SUPER_ADMIN);
-        role.setDescription("description");
+        role.setDescription(DESCRIPTION);
         role.setUsers(Set.of(user));
         assertEquals(role);
     }
@@ -40,7 +42,7 @@ class RoleTest {
     void assertEquals(Role role) {
         Assertions.assertEquals(0L, role.getId());
         Assertions.assertEquals(RoleEnum.SUPER_ADMIN, role.getName());
-        Assertions.assertEquals("description", role.getDescription());
+        Assertions.assertEquals(DESCRIPTION, role.getDescription());
 
         Set<User> users = role.getUsers();
         Assertions.assertEquals(1, users.size());

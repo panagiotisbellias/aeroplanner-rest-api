@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.util.TestConstants.TOKEN;
+
 @ExtendWith(MockitoExtension.class)
 class TokenBlacklistServiceTest {
 
@@ -28,13 +30,13 @@ class TokenBlacklistServiceTest {
 
     @Test
     void testAddToBlacklist() {
-        tokenBlacklistService.addToBlacklist("token");
-        Mockito.verify(blacklist).add("token");
+        tokenBlacklistService.addToBlacklist(TOKEN);
+        Mockito.verify(blacklist).add(TOKEN);
     }
 
     @Test
     void testIsBlacklisted() {
-        Assertions.assertFalse(tokenBlacklistService.isBlacklisted("token"));
+        Assertions.assertFalse(tokenBlacklistService.isBlacklisted(TOKEN));
     }
 
 }

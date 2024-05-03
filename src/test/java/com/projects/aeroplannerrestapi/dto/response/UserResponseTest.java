@@ -8,6 +8,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.EMAIL;
+import static com.projects.aeroplannerrestapi.util.TestConstants.FULL_NAME;
+
 @ExtendWith(MockitoExtension.class)
 class UserResponseTest {
 
@@ -19,7 +22,7 @@ class UserResponseTest {
 
     @Test
     void testAllArgsConstructor() {
-        UserResponse userResponse = new UserResponse(0L, "full name", "email", createdAt, updatedAt);
+        UserResponse userResponse = new UserResponse(0L, FULL_NAME, EMAIL, createdAt, updatedAt);
         assertEquals(userResponse);
     }
 
@@ -33,8 +36,8 @@ class UserResponseTest {
     void testSetters() {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(0L);
-        userResponse.setFullName("full name");
-        userResponse.setEmail("email");
+        userResponse.setFullName(FULL_NAME);
+        userResponse.setEmail(EMAIL);
         userResponse.setCreatedAt(createdAt);
         userResponse.setUpdatedAt(updatedAt);
         assertEquals(userResponse);
@@ -42,8 +45,8 @@ class UserResponseTest {
 
     void assertEquals(UserResponse userResponse) {
         Assertions.assertEquals(0L, userResponse.getId());
-        Assertions.assertEquals("full name", userResponse.getFullName());
-        Assertions.assertEquals("email", userResponse.getEmail());
+        Assertions.assertEquals(FULL_NAME, userResponse.getFullName());
+        Assertions.assertEquals(EMAIL, userResponse.getEmail());
         Assertions.assertEquals(createdAt, userResponse.getCreatedAt());
         Assertions.assertEquals(updatedAt, userResponse.getUpdatedAt());
     }
