@@ -83,7 +83,7 @@ class FlightServiceTest {
     @Test
     void testGetFlightNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.getFlight(0L));
-        Assertions.assertEquals("Flight not found with id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Flight not found with Id : 0", resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -95,7 +95,7 @@ class FlightServiceTest {
     @Test
     void testUpdateFlightNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.updateFlight(0L, flightRequest));
-        Assertions.assertEquals("Flight not found with id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Flight not found with Id : 0", resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -110,7 +110,7 @@ class FlightServiceTest {
     @Test
     void testDeleteFlightNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.deleteFlight(0L));
-        Assertions.assertEquals("Flight not found with id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Flight not found with Id : 0", resourceNotFoundException.getMessage());
     }
 
 }
