@@ -33,13 +33,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationResponse createReservation(ReservationRequest reservationRequest) {
+        Reservation reservation = ReservationMapper.INSTANCE.reservationRequestToReservation(reservationRequest);
         Long flightId = reservationRequest.getFlightId();
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, flightId.toString()));
         int seatDifference = flight.getCurrentAvailableSeat() - reservationRequest.getSeatNumber();
         flight.setCurrentAvailableSeat(seatDifference);
         flightRepository.save(flight);
-        Reservation reservation = ReservationMapper.INSTANCE.reservationRequestToReservation(reservationRequest);
         reservation.setReservationStatus(ReservationStatusEnum.CONFIRMED);
         return ReservationMapper.INSTANCE.reservationToReservationResponse(reservationRepository.save(reservation));
     }
@@ -62,7 +62,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationResponse.setPageSize(page.getSize());
         reservationResponse.setLast(page.isLast());
         return reservationResponse;
-     }
+    }
 
     @Override
     public ReservationResponse getReservation(Long id) {

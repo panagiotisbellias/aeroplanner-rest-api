@@ -61,7 +61,6 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         user.setUpdatedAt(LocalDateTime.now());
         user.setEmail(registerRequest.getEmail());
         user.setFullName(registerRequest.getFullName());
-        user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         User updatedUser = userRepository.save(user);
         return UserMapper.INSTANCE.userToUserResponse(updatedUser);
