@@ -25,6 +25,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.AUTHORIZATION;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.BEARER;
+
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {
 
@@ -108,28 +111,28 @@ class AuthenticationServiceTest {
 
     @Test
     void testLogout() {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn(BEARER.concat("header"));
         authenticationService.logout(request);
 
-        Mockito.verify(request).getHeader("Authorization");
+        Mockito.verify(request).getHeader(AUTHORIZATION);
         Mockito.verify(tokenBlacklistService).addToBlacklist("header");
     }
 
     @Test
     void testExtractTokenFromRequest() {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("Bearer header");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn(BEARER.concat("header"));
         Assertions.assertEquals("header", authenticationService.extractTokenFromRequest(request));
     }
 
     @Test
     void testExtractTokenFromRequestNoBearerHeader() {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("header");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn("header");
         Assertions.assertThrows(TokenNotFoundException.class, () -> authenticationService.extractTokenFromRequest(request));
     }
 
     @Test
     void testExtractTokenFromRequestNoTextInHeader() {
-        Mockito.when(request.getHeader("Authorization")).thenReturn("");
+        Mockito.when(request.getHeader(AUTHORIZATION)).thenReturn("");
         Assertions.assertThrows(TokenNotFoundException.class, () -> authenticationService.extractTokenFromRequest(request));
     }
 
