@@ -2,6 +2,7 @@ package com.projects.aeroplannerrestapi.controller;
 
 import com.projects.aeroplannerrestapi.dto.request.FlightRequest;
 import com.projects.aeroplannerrestapi.dto.response.FlightResponse;
+import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.FlightService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,12 @@ import java.util.List;
 
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_FLIGHTS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.ADMIN_ROLE_AUTHORIZATION;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_OR_ADMIN_ROLE_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize(ADMIN_ROLE_AUTHORIZATION)
 @RequestMapping(API_V1_FLIGHTS)
 public class FlightController {
 
@@ -28,13 +31,13 @@ public class FlightController {
         return new ResponseEntity<>(flightService.createFlight(flightRequest), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
     @GetMapping
     public ResponseEntity<List<FlightResponse>> getAllFlights() {
         return ResponseEntity.ok(flightService.getAllFlights());
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
     @GetMapping(ID)
     public ResponseEntity<FlightResponse> getFlight(@PathVariable Long id) {
         return ResponseEntity.ok(flightService.getFlight(id));

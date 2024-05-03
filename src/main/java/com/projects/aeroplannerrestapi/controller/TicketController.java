@@ -13,11 +13,12 @@ import java.util.List;
 
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_TICKETS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_OR_ADMIN_ROLE_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1_TICKETS)
-@PreAuthorize("hasAnyRole('ADMINS', 'USER')")
+@PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
 public class TicketController {
 
     private final TicketService ticketService;

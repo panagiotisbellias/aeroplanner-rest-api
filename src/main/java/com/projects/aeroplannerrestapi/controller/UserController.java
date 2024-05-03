@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_USERS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ME;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.IS_AUTHENTICATED;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.SUPER_ADMIN_OR_ADMIN_ROLE_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    @PreAuthorize(SUPER_ADMIN_OR_ADMIN_ROLE_AUTHORIZATION)
     public ResponseEntity<PaginatedAndSortedUserResponse> getAllAdministrators(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -32,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping(ME)
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize(IS_AUTHENTICATED)
     public ResponseEntity<UserResponse> getAuthenticatedUser() {
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }

@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_SUPER_ADMINS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.SUPER_ADMIN_ROLE_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1_SUPER_ADMINS)
-@PreAuthorize("hasRole('SUPER_ADMIN')")
+@PreAuthorize(SUPER_ADMIN_ROLE_AUTHORIZATION)
 public class SuperAdminController {
 
     private final SuperAdminService superAdminService;

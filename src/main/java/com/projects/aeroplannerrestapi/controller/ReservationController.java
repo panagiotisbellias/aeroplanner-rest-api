@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_RESERVATIONS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_ROLE_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize(USER_ROLE_AUTHORIZATION)
 @RequestMapping(API_V1_RESERVATIONS)
 public class ReservationController {
 
