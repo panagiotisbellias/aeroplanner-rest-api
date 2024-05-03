@@ -12,16 +12,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_OR_ADMIN_ROLE_AUTHORIZATION;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_ROLE_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+@PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
 @RequestMapping(API_V1_PAYMENTS)
 public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize(USER_ROLE_AUTHORIZATION)
     @PostMapping(PAYMENT)
     public ResponseEntity<PaymentResponse> makePayment(@RequestBody @Valid PaymentRequest paymentRequest) {
         return new ResponseEntity<>(paymentService.processPayment(paymentRequest), HttpStatus.CREATED);

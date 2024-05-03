@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_PASSENGERS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.ADMIN_ROLE_AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1_PASSENGERS)
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize(ADMIN_ROLE_AUTHORIZATION)
 public class PassengerController {
 
     private final PassengerService adminService;
