@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.projects.aeroplannerrestapi.contstants.ErrorMessage.*;
+
 @ExtendWith(MockitoExtension.class)
 class GlobalExceptionHandlerTest {
 
@@ -86,7 +88,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleGlobalException(exception, webRequest);
         ErrorDetailsResponse responseBody = response.getBody();
 
-        Assertions.assertEquals("Unknown internal server error.", Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), Objects.requireNonNull(responseBody).getMessage());
         Assertions.assertNull(responseBody.getPath());
         Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
@@ -97,7 +99,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleGlobalException(exception, webRequest);
         ErrorDetailsResponse responseBody = response.getBody();
 
-        Assertions.assertEquals("The JWT token has expired", Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertEquals(JWT_SIGNATURE_EXPIRED, Objects.requireNonNull(responseBody).getMessage());
         Assertions.assertNull(responseBody.getPath());
         Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
@@ -108,7 +110,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleGlobalException(exception, webRequest);
         ErrorDetailsResponse responseBody = response.getBody();
 
-        Assertions.assertEquals("The JWT signature is invalid", Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertEquals(JWT_SIGNATURE_INVALID, Objects.requireNonNull(responseBody).getMessage());
         Assertions.assertNull(responseBody.getPath());
         Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
@@ -119,7 +121,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleGlobalException(exception, webRequest);
         ErrorDetailsResponse responseBody = response.getBody();
 
-        Assertions.assertEquals("You are not authorized to access this resource", Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertEquals(UNAUTHORIZED_USER, Objects.requireNonNull(responseBody).getMessage());
         Assertions.assertNull(responseBody.getPath());
         Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
@@ -130,7 +132,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleGlobalException(exception, webRequest);
         ErrorDetailsResponse responseBody = response.getBody();
 
-        Assertions.assertEquals("The account is locked", Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertEquals(ACCOUNT_LOCKED, Objects.requireNonNull(responseBody).getMessage());
         Assertions.assertNull(responseBody.getPath());
         Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
@@ -141,7 +143,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleGlobalException(exception, webRequest);
         ErrorDetailsResponse responseBody = response.getBody();
 
-        Assertions.assertEquals("The username or password is incorrect", Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertEquals(USERNAME_PASSWORD_INCORRECT, Objects.requireNonNull(responseBody).getMessage());
         Assertions.assertNull(responseBody.getPath());
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }

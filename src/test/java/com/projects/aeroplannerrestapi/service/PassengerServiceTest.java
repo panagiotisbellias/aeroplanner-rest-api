@@ -76,7 +76,7 @@ class PassengerServiceTest {
     @Test
     void testGetPassengerNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> passengerService.getPassenger(0L));
-        Assertions.assertEquals("Passenger not found with id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Passenger not found with Id : 0", resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -91,7 +91,7 @@ class PassengerServiceTest {
     @Test
     void testDeletePassengerNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> passengerService.deletePassenger(0L));
-        Assertions.assertEquals("Passenger not found with id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Passenger not found with Id : 0", resourceNotFoundException.getMessage());
     }
 
 }

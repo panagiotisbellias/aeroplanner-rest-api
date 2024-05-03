@@ -76,7 +76,7 @@ class AuthenticationServiceTest {
     @Test
     void testRegisterRoleAbsent() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> authenticationService.register(registerRequest));
-        Assertions.assertEquals("Role not found with name : USER", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Role not found with Name : USER", resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -103,7 +103,7 @@ class AuthenticationServiceTest {
     @Test
     void testAuthenticateUserNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> authenticationService.authenticate(loginRequest));
-        Assertions.assertEquals("User not found with email : null", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("User not found with Email : null", resourceNotFoundException.getMessage());
     }
 
     @Test
