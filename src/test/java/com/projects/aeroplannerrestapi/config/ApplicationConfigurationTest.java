@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.config;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -55,17 +56,18 @@ class ApplicationConfigurationTest {
 
     @Test
     void testTemplateSimpleMessage() {
-        Assertions.assertEquals("SimpleMailMessage: from=null; replyTo=null; to=; cc=; bcc=; sentDate=null; subject=Confirmation of Successful Payment for Your Ticket; text= Dear %s,\n" +
+        Assertions.assertEquals("SimpleMailMessage: from=null; replyTo=null; to=; cc=; bcc=; sentDate=null; subject=Confirmation of Successful "
+                .concat(ErrorMessage.PAYMENT).concat(" for Your ").concat(ErrorMessage.TICKET).concat("; text= Dear %s,\n" +
                 "                 \n" +
                 " We are pleased to inform you that we have received your payment for your flight ticket. Here are the details of your booking:\n" +
                 "                 \n" +
-                " - Passenger ID: %s\n" +
-                " - Flight ID: %s\n" +
+                " - ").concat(ErrorMessage.PASSENGER).concat(" ID: %s\n" +
+                " - ").concat(ErrorMessage.FLIGHT).concat(" ID: %s\n" +
                 " - Seat Number: %s\n" +
                 " - Issue Date: %s\n" +
                 " - Status: %s\n" +
                 "                 \n" +
-                " Thank you for choosing our airline. We look forward to serving you on your journey.\n" +
+                " Thank you for choosing our airline. We look forward to serving you on your journey.\n") +
                 " ", applicationConfiguration.templateSimpleMessage().toString());
     }
 

@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.exception;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,7 @@ class UserAlreadyExistsExceptionTest {
     @Test
     void testUserAlreadyExistsException() {
         UserAlreadyExistsException userAlreadyExistsException = new UserAlreadyExistsException("email");
-        Assertions.assertEquals("User already exists with email: email", userAlreadyExistsException.getMessage());
+        Assertions.assertEquals(String.format(ErrorMessage.USER_ALREADY_EXISTS, "email"), userAlreadyExistsException.getMessage());
     }
 
 }

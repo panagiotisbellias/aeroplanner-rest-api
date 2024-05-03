@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.request.LoginRequest;
 import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
 import com.projects.aeroplannerrestapi.dto.response.LoginResponse;
@@ -79,7 +80,7 @@ class AuthenticationServiceTest {
     @Test
     void testRegisterRoleAbsent() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> authenticationService.register(registerRequest));
-        Assertions.assertEquals("Role not found with Name : USER", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(String.format(ErrorMessage.RESOURCE_NOT_FOUND, ErrorMessage.ROLE, "Name", "USER"), resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -89,7 +90,7 @@ class AuthenticationServiceTest {
         Mockito.when(userRepository.existsByEmail("email")).thenReturn(true);
 
         UserAlreadyExistsException userAlreadyExistsException = Assertions.assertThrows(UserAlreadyExistsException.class, () -> authenticationService.register(registerRequest));
-        Assertions.assertEquals("User already exists with email: email", userAlreadyExistsException.getMessage());
+        Assertions.assertEquals(String.format(ErrorMessage.USER_ALREADY_EXISTS, "email"), userAlreadyExistsException.getMessage());
     }
 
     @Test
@@ -106,7 +107,7 @@ class AuthenticationServiceTest {
     @Test
     void testAuthenticateUserNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> authenticationService.authenticate(loginRequest));
-        Assertions.assertEquals("User not found with Email : null", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.USER_NOT_FOUND.concat(" with ").concat(ErrorMessage.EMAIL).concat(" : null"), resourceNotFoundException.getMessage());
     }
 
     @Test

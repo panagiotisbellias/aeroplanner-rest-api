@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
 import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.dto.response.PaymentResponse;
@@ -109,7 +110,7 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> paymentService.processPayment(paymentRequest));
-        Assertions.assertEquals("Reservation not found with Flight Id and Passenger Id : 0 : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 0 : 0"), resourceNotFoundException.getMessage());
     }
 
     @Test

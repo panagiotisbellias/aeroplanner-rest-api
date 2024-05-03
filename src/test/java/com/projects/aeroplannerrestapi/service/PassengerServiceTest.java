@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedPassengerResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.entity.User;
@@ -76,7 +77,7 @@ class PassengerServiceTest {
     @Test
     void testGetPassengerNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> passengerService.getPassenger(0L));
-        Assertions.assertEquals("Passenger not found with Id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.PASSENGER.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 0"), resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -91,7 +92,7 @@ class PassengerServiceTest {
     @Test
     void testDeletePassengerNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> passengerService.deletePassenger(0L));
-        Assertions.assertEquals("Passenger not found with Id : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.PASSENGER.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 0"), resourceNotFoundException.getMessage());
     }
 
 }

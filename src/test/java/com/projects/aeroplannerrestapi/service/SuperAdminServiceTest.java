@@ -1,5 +1,6 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
@@ -59,7 +60,7 @@ class SuperAdminServiceTest {
     @Test
     void testCreateAdministratorRoleNotFound() {
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> superAdminService.createAdministrator(registerRequest));
-        Assertions.assertEquals("Role not found with Name : ADMIN", resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.ROLE.concat(" not found with Name : ADMIN"), resourceNotFoundException.getMessage());
     }
 
     @Test
@@ -69,7 +70,7 @@ class SuperAdminServiceTest {
         Mockito.when(userRepository.existsByEmail("email")).thenReturn(true);
 
         UserAlreadyExistsException userAlreadyExistsException = Assertions.assertThrows(UserAlreadyExistsException.class, () -> superAdminService.createAdministrator(registerRequest));
-        Assertions.assertEquals("User already exists with email: email", userAlreadyExistsException.getMessage());
+        Assertions.assertEquals(ErrorMessage.USER.concat(" already exists with email: email"), userAlreadyExistsException.getMessage());
     }
 
     @Test
