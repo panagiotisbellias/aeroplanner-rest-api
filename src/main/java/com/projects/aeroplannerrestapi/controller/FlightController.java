@@ -2,7 +2,6 @@ package com.projects.aeroplannerrestapi.controller;
 
 import com.projects.aeroplannerrestapi.dto.request.FlightRequest;
 import com.projects.aeroplannerrestapi.dto.response.FlightResponse;
-import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.FlightService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
