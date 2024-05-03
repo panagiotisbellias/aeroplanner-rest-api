@@ -109,7 +109,7 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> paymentService.processPayment(paymentRequest));
-        Assertions.assertEquals("Reservation not found with Fight Id and Passenger Id : 0 : 0", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Reservation not found with Flight Id and Passenger Id : 0 : 0", resourceNotFoundException.getMessage());
     }
 
     @Test

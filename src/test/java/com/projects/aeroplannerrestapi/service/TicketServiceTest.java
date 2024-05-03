@@ -95,7 +95,7 @@ class TicketServiceTest {
         Mockito.when(ticketRepository.findById(0L)).thenReturn(Optional.of(ticket));
 
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> ticketService.cancelTicket(0L));
-        Assertions.assertEquals("Reservation not found with Fight Id and Passenger Id : 0 : 1", resourceNotFoundException.getMessage());
+        Assertions.assertEquals("Reservation not found with Flight Id and Passenger Id : 0 : 1", resourceNotFoundException.getMessage());
     }
 
 }
