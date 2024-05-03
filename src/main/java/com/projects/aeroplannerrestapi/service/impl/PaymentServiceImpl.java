@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
@@ -46,10 +48,10 @@ public class PaymentServiceImpl implements PaymentService {
         Long flightId = savedPayment.getFlightId();
         Long passengerId = savedPayment.getPassengerId();
         Flight flight = flightRepository.findById(flightId)
-                .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, flightId.toString()));
         Reservation reservation = reservationRepository.findByFlightIdAndPassengerId(flightId, passengerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation",
-                        "flight id and passenger id",
+                .orElseThrow(() -> new ResourceNotFoundException(RESERVATION,
+                        FLIGHT_ID_PASSENGER_ID,
                         String.format("%s : %s", flightId, passengerId)));
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setReservationId(reservation.getId());
@@ -75,6 +77,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional(readOnly = true)
     public Payment getPaymentDetails(Long id) {
         return paymentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Payment", "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(PAYMENT, ID, id.toString()));
     }
 }

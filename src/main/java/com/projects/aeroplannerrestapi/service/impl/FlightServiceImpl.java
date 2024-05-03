@@ -15,13 +15,14 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.FLIGHT;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ID;
+
 @Service
 @RequiredArgsConstructor
 public class FlightServiceImpl implements FlightService {
 
     private final FlightRepository flightRepository;
-
-    private static final String RESOURCE_NAME = "Flight";
 
     @Override
     public FlightResponse createFlight(FlightRequest flightRequest) {
@@ -43,7 +44,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightResponse getFlight(Long id) {
         Flight flight = flightRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
         return FlightMapper.INSTANCE.flightToFlightResponse(flight);
     }
 
@@ -51,7 +52,7 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     public FlightResponse updateFlight(Long id, FlightRequest flightRequest) {
         Flight flight = flightRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
         flight.setFlightNumber(flightRequest.getFlightNumber());
         flight.setAirline(flightRequest.getAirline());
         flight.setAircraftType(flightRequest.getAircraftType());
@@ -69,7 +70,7 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     public void deleteFlight(Long id) {
         Flight flight = flightRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, "id", id.toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
         flightRepository.delete(flight);
     }
 }

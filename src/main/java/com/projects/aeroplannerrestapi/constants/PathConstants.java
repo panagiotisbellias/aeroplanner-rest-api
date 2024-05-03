@@ -1,9 +1,8 @@
-package com.projects.aeroplannerrestapi.contstants;
+package com.projects.aeroplannerrestapi.constants;
 
 public class PathConstants {
 
     private PathConstants() {
-        // empty constructor
     }
 
     public static final String API_V1 = "/api/v1";
@@ -29,4 +28,9 @@ public class PathConstants {
 
     public static final String API_V1_USERS = API_V1 + "/users";
     public static final String ME = "/me";
+
+    public static final String ALL = "/**";
+    public static final String API_V1_AUTH_ALL = "/api/v1/auth" + ALL;
+    public static final String V3_API_DOCS_ALL = "/v3/api-docs" + ALL;
+    public static final String SWAGGER_UI_ALL = "/swagger-ui" + ALL;
 }

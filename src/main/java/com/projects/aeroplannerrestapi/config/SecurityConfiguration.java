@@ -16,6 +16,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -35,9 +37,9 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/v1/auth/**")
+                        .requestMatchers(API_V1_AUTH_ALL)
                         .permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**")
+                        .requestMatchers(V3_API_DOCS_ALL, SWAGGER_UI_ALL)
                         .hasRole("SUPER_ADMIN")
                         .anyRequest()
                         .authenticated())
@@ -55,7 +57,7 @@ public class SecurityConfiguration {
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration(ALL, configuration);
         return source;
     }
 }

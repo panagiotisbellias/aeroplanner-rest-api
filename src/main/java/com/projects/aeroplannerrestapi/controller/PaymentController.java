@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import static com.projects.aeroplannerrestapi.contstants.PathConstants.*;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
 
 @RestController
 @RequiredArgsConstructor

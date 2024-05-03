@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.NAME;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ROLE;
+
 @Component
 @RequiredArgsConstructor
 @Order(2)
@@ -44,7 +47,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
             throw new UserAlreadyExistsException(superAdminEmail);
         }
         Optional<Role> role = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
-        if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.SUPER_ADMIN.name());
+        if (role.isEmpty()) throw new ResourceNotFoundException(ROLE, NAME, RoleEnum.SUPER_ADMIN.name());
         User user = new User();
         user.setFullName(superAdminName);
         user.setEmail(superAdminEmail);

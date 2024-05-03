@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -44,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String email = registerRequest.getEmail();
         boolean isUserExists = userRepository.existsByEmail(email);
         Optional<Role> role = roleRepository.findByName(RoleEnum.USER);
-        if (role.isEmpty()) throw new ResourceNotFoundException("Role", "name", RoleEnum.USER.name());
+        if (role.isEmpty()) throw new ResourceNotFoundException(ROLE, NAME, RoleEnum.USER.name());
         if (isUserExists) throw new UserAlreadyExistsException(email);
         User user = new User();
         user.setFullName(registerRequest.getFullName());
@@ -63,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String password = loginRequest.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
+                .orElseThrow(() -> new ResourceNotFoundException(USER, EMAIL, email));
         String token = jwtService.generateToken(user);
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(token);

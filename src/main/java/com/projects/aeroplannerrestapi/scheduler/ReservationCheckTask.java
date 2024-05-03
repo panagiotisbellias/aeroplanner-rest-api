@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
+
 
 @Component
 @RequiredArgsConstructor
@@ -31,10 +33,10 @@ public class ReservationCheckTask {
     @Scheduled(cron = "0 * * * * ?")
     public void checkReservations() {
         List<Reservation> reservations = reservationRepository.findByReservationStatus(ReservationStatusEnum.CONFIRMED);
-        reservations.stream().forEach(reservation -> {
+        reservations.forEach(reservation -> {
             String reservationId = reservation.getId().toString();
             Ticket ticket = ticketRepository.findByReservationId(reservationId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Ticket", "reservation id", reservationId));
+                    .orElseThrow(() -> new ResourceNotFoundException(TICKET, RESERVATION_ID, reservationId));
             if (!ticket.getTicketStatusEnum().toString().equals(TicketStatusEnum.ISSUED.name())) {
                 String reservationDate = reservation.getReservationDate();
                 LocalDateTime givenDateTime = LocalDateTime.parse(reservationDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -45,7 +47,7 @@ public class ReservationCheckTask {
                     reservation.setReservationStatus(ReservationStatusEnum.CANCELLED);
                     Reservation updatedReservation = reservationRepository.save(reservation);
                     Flight flight = flightRepository.findById(flightId)
-                            .orElseThrow(() -> new ResourceNotFoundException("Flight", "id", flightId.toString()));
+                            .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, flightId.toString()));
                     flight.setCurrentAvailableSeat(flight.getCurrentAvailableSeat() + updatedReservation.getSeatNumber());
                     flightRepository.save(flight);
                 }
