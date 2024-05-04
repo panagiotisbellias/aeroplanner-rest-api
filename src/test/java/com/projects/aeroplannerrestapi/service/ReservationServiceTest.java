@@ -59,6 +59,12 @@ class ReservationServiceTest {
     }
 
     @Test
+    void testCreateReservationNullRequest() {
+        NullPointerException nullPointerException = Assertions.assertThrows(NullPointerException.class, () -> reservationService.createReservation(null));
+        Assertions.assertEquals("Cannot invoke \"com.projects.aeroplannerrestapi.dto.request.ReservationRequest.getFlightId()\" because \"reservationRequest\" is null", nullPointerException.getMessage());
+    }
+
+    @Test
     void testGetAllReservationsAsc() {
         Mockito.when(reservationRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
         PaginatedAndSortedReservationResponse response = reservationService.getAllReservations(1, 2, "sort by", "asc");
