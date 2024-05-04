@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.*;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_TICKETS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_OR_ADMIN_ROLE_AUTHORIZATION;
@@ -27,29 +28,29 @@ public class TicketController {
     private final TicketService ticketService;
 
     @GetMapping
-    @Operation(summary = "Get all tickets")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found all the tickets"))
+    @Operation(summary = GET_ALL_TICKETS)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_ALL_THE_TICKETS))
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
     @GetMapping(ID)
-    @Operation(summary = "Get ticket")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found the ticket"))
+    @Operation(summary = GET_TICKET)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_TICKET))
     public ResponseEntity<TicketResponse> getTicket(@PathVariable Long id) {
         return ResponseEntity.ok(ticketService.getTicket(id));
     }
 
     @PutMapping(ID)
-    @Operation(summary = "Update ticket")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Ticket updated"))
+    @Operation(summary = UPDATE_TICKET)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = TICKET_UPDATED))
     public ResponseEntity<TicketResponse> updateTicket(@PathVariable Long id, @RequestBody @Valid TicketRequest ticketRequest) {
         return ResponseEntity.ok(ticketService.updateTicket(id, ticketRequest));
     }
 
     @DeleteMapping(ID)
-    @Operation(summary = "Cancel ticket")
-    @ApiResponses(@ApiResponse(responseCode = "204", description = "Ticket cancelled"))
+    @Operation(summary = CANCEL_TICKET)
+    @ApiResponses(@ApiResponse(responseCode = NO_CONTENT, description = TICKET_CANCELLED))
     public ResponseEntity<Void> cancelTicket(@PathVariable Long id) {
         ticketService.cancelTicket(id);
         return ResponseEntity.noContent().build();

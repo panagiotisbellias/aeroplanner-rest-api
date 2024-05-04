@@ -17,6 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.LOGGED_OUT_SUCCESSFULLY;
+
 @ExtendWith(MockitoExtension.class)
 class AuthenticationControllerTest {
 
@@ -51,7 +53,7 @@ class AuthenticationControllerTest {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         ResponseEntity<String> response = authenticationController.logout(request);
 
-        Assertions.assertEquals("Logged out successfully", response.getBody());
+        Assertions.assertEquals(LOGGED_OUT_SUCCESSFULLY, response.getBody());
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
