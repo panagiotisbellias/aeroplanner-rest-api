@@ -5,6 +5,9 @@ import com.projects.aeroplannerrestapi.dto.request.LoginRequest;
 import com.projects.aeroplannerrestapi.dto.request.RegisterRequest;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +28,22 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(REGISTER)
+    @Operation(summary = "Register user")
+    @ApiResponses(@ApiResponse(responseCode = "201", description = "User created"))
     public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         return new ResponseEntity<>(authenticationService.register(registerRequest), HttpStatus.CREATED);
     }
 
     @PostMapping(LOGIN)
+    @Operation(summary = "Authenticate user")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "User authenticated"))
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(loginRequest));
     }
 
     @PostMapping(LOGOUT)
+    @Operation(summary = "Logout user")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Logged out successfully"))
     public ResponseEntity<String> logout (HttpServletRequest request) {
         authenticationService.logout(request);
         return ResponseEntity.ok("Logged out successfully");

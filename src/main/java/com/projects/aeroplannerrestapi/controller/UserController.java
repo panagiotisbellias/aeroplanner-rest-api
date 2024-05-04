@@ -3,6 +3,9 @@ package com.projects.aeroplannerrestapi.controller;
 import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +28,8 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize(SUPER_ADMIN_OR_ADMIN_ROLE_AUTHORIZATION)
+    @Operation(summary = "Get all administrators")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found all the administrators"))
     public ResponseEntity<PaginatedAndSortedUserResponse> getAllAdministrators(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -35,6 +40,8 @@ public class UserController {
 
     @GetMapping(ME)
     @PreAuthorize(IS_AUTHENTICATED)
+    @Operation(summary = "Get authenticated user")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found the authenticated user"))
     public ResponseEntity<UserResponse> getAuthenticatedUser() {
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }

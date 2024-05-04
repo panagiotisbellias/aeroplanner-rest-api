@@ -3,6 +3,9 @@ package com.projects.aeroplannerrestapi.controller;
 import com.projects.aeroplannerrestapi.dto.request.FlightRequest;
 import com.projects.aeroplannerrestapi.dto.response.FlightResponse;
 import com.projects.aeroplannerrestapi.service.FlightService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,28 +29,38 @@ public class FlightController {
     private final FlightService flightService;
 
     @PostMapping
+    @Operation(summary = "Create flight")
+    @ApiResponses(@ApiResponse(responseCode = "201", description = "Flight Created"))
     public ResponseEntity<FlightResponse> createFlight(@RequestBody @Valid FlightRequest flightRequest) {
         return new ResponseEntity<>(flightService.createFlight(flightRequest), HttpStatus.CREATED);
     }
 
-    @PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
     @GetMapping
+    @PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
+    @Operation(summary = "Get all flights")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found the flights"))
     public ResponseEntity<List<FlightResponse>> getAllFlights() {
         return ResponseEntity.ok(flightService.getAllFlights());
     }
 
-    @PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
     @GetMapping(ID)
+    @PreAuthorize(USER_OR_ADMIN_ROLE_AUTHORIZATION)
+    @Operation(summary = "Get flight")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found the flight"))
     public ResponseEntity<FlightResponse> getFlight(@PathVariable Long id) {
         return ResponseEntity.ok(flightService.getFlight(id));
     }
 
     @PutMapping(ID)
+    @Operation(summary = "Update flight")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Flight updated"))
     public ResponseEntity<FlightResponse> updateFlight(@PathVariable Long id, @RequestBody @Valid FlightRequest flightRequest) {
         return ResponseEntity.ok(flightService.updateFlight(id, flightRequest));
     }
 
     @DeleteMapping(ID)
+    @Operation(summary = "Delete flight")
+    @ApiResponses(@ApiResponse(responseCode = "204", description = "Flight deleted"))
     public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
         flightService.deleteFlight(id);
         return ResponseEntity.noContent().build();

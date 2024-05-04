@@ -4,6 +4,9 @@ import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
 import com.projects.aeroplannerrestapi.dto.response.PaymentResponse;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import com.projects.aeroplannerrestapi.service.PaymentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,13 +26,17 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PreAuthorize(USER_ROLE_AUTHORIZATION)
     @PostMapping(PAYMENT)
+    @PreAuthorize(USER_ROLE_AUTHORIZATION)
+    @Operation(summary = "Make payment")
+    @ApiResponses(@ApiResponse(responseCode = "201", description = "Made payment"))
     public ResponseEntity<PaymentResponse> makePayment(@RequestBody @Valid PaymentRequest paymentRequest) {
         return new ResponseEntity<>(paymentService.processPayment(paymentRequest), HttpStatus.CREATED);
     }
 
     @GetMapping(ID)
+    @Operation(summary = "Get payment details")
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found payment details"))
     public ResponseEntity<Payment> getPaymentDetails(@PathVariable Long id) {
         return ResponseEntity.ok(paymentService.getPaymentDetails(id));
     }
