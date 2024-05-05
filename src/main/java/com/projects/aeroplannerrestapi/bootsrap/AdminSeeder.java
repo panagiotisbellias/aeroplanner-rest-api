@@ -4,7 +4,6 @@ import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
-import com.projects.aeroplannerrestapi.exception.UserAlreadyExistsException;
 import com.projects.aeroplannerrestapi.repository.RoleRepository;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,18 +42,17 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void createSuperAdministrator() {
-        if (userRepository.existsByEmail(superAdminEmail)) {
-            throw new UserAlreadyExistsException(superAdminEmail);
+        if (!userRepository.existsByEmail(superAdminEmail)) {
+            Optional<Role> role = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
+            if (role.isEmpty()) throw new ResourceNotFoundException(ROLE, NAME, RoleEnum.SUPER_ADMIN.name());
+            User user = new User();
+            user.setFullName(superAdminName);
+            user.setEmail(superAdminEmail);
+            user.setPassword(passwordEncoder.encode(superAdminPassword));
+            Set<Role> set = new HashSet<>();
+            set.add(role.get());
+            user.setRoles(set);
+            userRepository.save(user);
         }
-        Optional<Role> role = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
-        if (role.isEmpty()) throw new ResourceNotFoundException(ROLE, NAME, RoleEnum.SUPER_ADMIN.name());
-        User user = new User();
-        user.setFullName(superAdminName);
-        user.setEmail(superAdminEmail);
-        user.setPassword(passwordEncoder.encode(superAdminPassword));
-        Set<Role> set = new HashSet<>();
-        set.add(role.get());
-        user.setRoles(set);
-        userRepository.save(user);
     }
 }

@@ -15,6 +15,7 @@ import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.*;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_PASSENGERS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.ADMIN_ROLE_AUTHORIZATION;
+import static com.projects.aeroplannerrestapi.constants.SortingAndPaginationConstants.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +29,10 @@ public class PassengerController {
     @Operation(summary = GET_PASSENGERS)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_PASSENGERS))
     public ResponseEntity<PaginatedAndSortedPassengerResponse> getPassengers(
-            @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(name = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+            @RequestParam(name = PAGE_NUM, defaultValue = DEFAULT_PAGE_NUM, required = false) int pageNumber,
+            @RequestParam(name = PAGE_SIZE, defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(name = SORT_BY, defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
+            @RequestParam(name = SORT_DIR, defaultValue = DEFAULT_SORT_DIR, required = false) String sortDir) {
         return ResponseEntity.ok(adminService.getPassengers(pageNumber, pageSize, sortBy, sortDir));
     }
 
