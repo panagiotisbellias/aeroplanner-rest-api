@@ -19,6 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import static com.projects.aeroplannerrestapi.constants.SortingAndPaginationConstants.DEFAULT_SORT_DIR;
+
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
@@ -50,7 +52,7 @@ class UserServiceTest {
     @Test
     void testGetAllUsersAsc() {
         Mockito.when(userRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
-        PaginatedAndSortedUserResponse response = userService.getAllUsers(1, 2, "sort by", "asc");
+        PaginatedAndSortedUserResponse response = userService.getAllUsers(1, 2, "sort by", DEFAULT_SORT_DIR);
 
         Assertions.assertEquals(1, response.getContent().size());
         Assertions.assertEquals(0, response.getPageNumber());

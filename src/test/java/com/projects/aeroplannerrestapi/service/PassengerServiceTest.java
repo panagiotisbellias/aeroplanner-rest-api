@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.Optional;
 
+import static com.projects.aeroplannerrestapi.constants.SortingAndPaginationConstants.DEFAULT_SORT_DIR;
+
 @ExtendWith(MockitoExtension.class)
 class PassengerServiceTest {
 
@@ -42,7 +44,7 @@ class PassengerServiceTest {
     @Test
     void testGetPassengersAsc() {
         Mockito.when(userRepository.findByRole(ArgumentMatchers.eq(RoleEnum.USER), ArgumentMatchers.any(PageRequest.class))).thenReturn(page);
-        PaginatedAndSortedPassengerResponse response = passengerService.getPassengers(1, 2, "asc", "sort dir");
+        PaginatedAndSortedPassengerResponse response = passengerService.getPassengers(1, 2, DEFAULT_SORT_DIR, "sort dir");
 
         Assertions.assertEquals(1, response.getContent().size());
         Assertions.assertEquals(0, response.getPageNumber());
