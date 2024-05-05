@@ -26,9 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.AUTHORIZATION;
-import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.BEARER;
-import static com.projects.aeroplannerrestapi.util.TestConstants.HEADER;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {

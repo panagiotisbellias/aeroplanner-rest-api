@@ -19,9 +19,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
-import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.AUTHORIZATION;
-import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.BEARER;
-import static com.projects.aeroplannerrestapi.util.TestConstants.HEADER;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.*;
 import static com.projects.aeroplannerrestapi.util.TestConstants.USER_EMAIL;
 
 @ExtendWith(MockitoExtension.class)

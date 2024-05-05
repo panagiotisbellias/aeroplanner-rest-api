@@ -7,6 +7,7 @@ public class SecurityRoleConstants {
 
     public static final int SEVEN = 7;
     public static final String BEARER = "Bearer ";
+    public static final String HEADER = "header";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String AUTHORIZATION = "Authorization";
 
