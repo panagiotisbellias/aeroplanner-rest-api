@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.*;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_OR_ADMIN_ROLE_AUTHORIZATION;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER_ROLE_AUTHORIZATION;
@@ -28,15 +29,15 @@ public class PaymentController {
 
     @PostMapping(PAYMENT)
     @PreAuthorize(USER_ROLE_AUTHORIZATION)
-    @Operation(summary = "Make payment")
-    @ApiResponses(@ApiResponse(responseCode = "201", description = "Made payment"))
+    @Operation(summary = MAKE_PAYMENT)
+    @ApiResponses(@ApiResponse(responseCode = CREATED, description = MADE_PAYMENT))
     public ResponseEntity<PaymentResponse> makePayment(@RequestBody @Valid PaymentRequest paymentRequest) {
         return new ResponseEntity<>(paymentService.processPayment(paymentRequest), HttpStatus.CREATED);
     }
 
     @GetMapping(ID)
-    @Operation(summary = "Get payment details")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found payment details"))
+    @Operation(summary = GET_PAYMENT_DETAILS)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_PAYMENT_DETAILS))
     public ResponseEntity<Payment> getPaymentDetails(@PathVariable Long id) {
         return ResponseEntity.ok(paymentService.getPaymentDetails(id));
     }

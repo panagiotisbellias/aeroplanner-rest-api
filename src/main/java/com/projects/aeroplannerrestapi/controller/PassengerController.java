@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.*;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_PASSENGERS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.ADMIN_ROLE_AUTHORIZATION;
@@ -24,8 +25,8 @@ public class PassengerController {
     private final PassengerService adminService;
 
     @GetMapping
-    @Operation(summary = "Get passengers")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found the passengers"))
+    @Operation(summary = GET_PASSENGERS)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_PASSENGERS))
     public ResponseEntity<PaginatedAndSortedPassengerResponse> getPassengers(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -35,15 +36,15 @@ public class PassengerController {
     }
 
     @GetMapping(ID)
-    @Operation(summary = "Get passenger")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found the passenger"))
+    @Operation(summary = GET_PASSENGER)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_PASSENGER))
     public ResponseEntity<UserResponse> getPassenger(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.getPassenger(id));
     }
 
     @DeleteMapping(ID)
-    @Operation(summary = "Delete passenger")
-    @ApiResponses(@ApiResponse(responseCode = "204", description = "Passenger deleted"))
+    @Operation(summary = DELETE_PASSENGER)
+    @ApiResponses(@ApiResponse(responseCode = NO_CONTENT, description = PASSENGER_DELETED))
     public ResponseEntity<Void> deletePassenger(@PathVariable Long id) {
         adminService.deletePassenger(id);
         return ResponseEntity.noContent().build();

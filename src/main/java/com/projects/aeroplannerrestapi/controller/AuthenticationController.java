@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.*;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
 
 @RestController
@@ -28,24 +29,24 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(REGISTER)
-    @Operation(summary = "Register user")
-    @ApiResponses(@ApiResponse(responseCode = "201", description = "User created"))
+    @Operation(summary = REGISTER_USER)
+    @ApiResponses(@ApiResponse(responseCode = CREATED, description = USER_CREATED))
     public ResponseEntity<UserResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         return new ResponseEntity<>(authenticationService.register(registerRequest), HttpStatus.CREATED);
     }
 
     @PostMapping(LOGIN)
-    @Operation(summary = "Authenticate user")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "User authenticated"))
+    @Operation(summary = AUTHENTICATE_USER)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = USER_AUTHENTICATED))
     public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginRequest loginRequest) {
         return ResponseEntity.ok(authenticationService.authenticate(loginRequest));
     }
 
     @PostMapping(LOGOUT)
-    @Operation(summary = "Logout user")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Logged out successfully"))
+    @Operation(summary = LOGOUT_USER)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = LOGGED_OUT_SUCCESSFULLY))
     public ResponseEntity<String> logout (HttpServletRequest request) {
         authenticationService.logout(request);
-        return ResponseEntity.ok("Logged out successfully");
+        return ResponseEntity.ok(LOGGED_OUT_SUCCESSFULLY);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.*;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_USERS;
 import static com.projects.aeroplannerrestapi.constants.PathConstants.ME;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.IS_AUTHENTICATED;
@@ -28,8 +29,8 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize(SUPER_ADMIN_OR_ADMIN_ROLE_AUTHORIZATION)
-    @Operation(summary = "Get all administrators")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found all the administrators"))
+    @Operation(summary = GET_ALL_ADMINISTRATORS)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_ALL_THE_ADMINISTRATORS))
     public ResponseEntity<PaginatedAndSortedUserResponse> getAllAdministrators(
             @RequestParam(name = "pageNum", defaultValue = "1", required = false) int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
@@ -40,8 +41,8 @@ public class UserController {
 
     @GetMapping(ME)
     @PreAuthorize(IS_AUTHENTICATED)
-    @Operation(summary = "Get authenticated user")
-    @ApiResponses(@ApiResponse(responseCode = "200", description = "Found the authenticated user"))
+    @Operation(summary = GET_AUTHENTICATED_USER)
+    @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_AUTHENTICATED_USER))
     public ResponseEntity<UserResponse> getAuthenticatedUser() {
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }
