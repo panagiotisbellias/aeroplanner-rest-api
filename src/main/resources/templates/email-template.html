@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            font-size: 24px; /* Increased font size */
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Changed font family */
+        }
+        p {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 16px; /* Increased font size */
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Changed font family */
+        }
+        .details {
+            margin-bottom: 20px;
+        }
+        .details p {
+            margin: 5px 0;
+            font-weight: bold; /* Make text bold */
+            font-size: 14px; /* Increased font size */
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Changed font family */
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #888;
+            font-size: 12px; /* Increased font size */
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Changed font family */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <img th:src="|cid:${header}|"/>
+    <h1>Dear, <span th:text="${to}" style="color: #007bff;"></span></h1>
+    <p>We are pleased to inform you that we have received your payment for your flight ticket. Here are the details of your booking:</p>
+    <div class="details">
+        <p th:text="'Passenger ID: ' + ${passenger_id}"></p>
+        <p th:text="'Flight ID: ' + ${flight_id}"></p>
+        <p th:text="'Seat Number: ' + ${seat_number}"></p>
+        <p th:text="'Issue Date: ' + ${issue_dte}"></p>
+        <p th:text="'Status: ' + ${status}"></p>
+    </div>
+    <p>Thank you for choosing our airline. We look forward to serving you on your journey.</p>
+    <p class="footer">This is an automated email, please do not reply.</p>
+</div>
+</body>
+</html>

@@ -13,6 +13,7 @@ import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.repository.PaymentRepository;
 import com.projects.aeroplannerrestapi.repository.ReservationRepository;
+import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.impl.PaymentServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +45,9 @@ class PaymentServiceTest {
     ReservationRepository reservationRepository;
 
     @Mock
+    UserRepository userRepository;
+
+    @Mock
     FlightRepository flightRepository;
 
     @Mock
@@ -52,9 +55,6 @@ class PaymentServiceTest {
 
     @Mock
     EmailService emailService;
-
-    @Mock
-    SimpleMailMessage template;
 
     @Mock
     Payment payment;
@@ -67,7 +67,7 @@ class PaymentServiceTest {
 
     @Test
     void testConstructor() {
-        PaymentService paymentService = new PaymentServiceImpl(paymentRepository, reservationRepository, flightRepository, ticketService, emailService, template);
+        PaymentService paymentService = new PaymentServiceImpl(paymentRepository, reservationRepository, userRepository, flightRepository, ticketService, emailService);
         Assertions.assertInstanceOf(PaymentService.class, paymentService);
     }
 
@@ -88,7 +88,6 @@ class PaymentServiceTest {
         Mockito.when(ticketResponse.getIssueDate()).thenReturn(ISSUE_DATE);
         Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
         Mockito.when(ticketService.createTicket(ArgumentMatchers.any(TicketRequest.class))).thenReturn(ticketResponse);
-        Mockito.when(template.getText()).thenReturn("text");
         Mockito.when(authentication.getName()).thenReturn(NAME);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
 

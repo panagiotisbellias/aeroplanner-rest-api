@@ -7,22 +7,25 @@ import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import com.projects.aeroplannerrestapi.entity.Reservation;
+import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.PaymentStatusEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.mapper.PaymentMapper;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.repository.PaymentRepository;
 import com.projects.aeroplannerrestapi.repository.ReservationRepository;
+import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.EmailService;
 import com.projects.aeroplannerrestapi.service.PaymentService;
 import com.projects.aeroplannerrestapi.service.TicketService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
 
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
@@ -33,10 +36,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
     private final FlightRepository flightRepository;
     private final TicketService ticketService;
     private final EmailService emailService;
-    private final SimpleMailMessage template;
 
     @Override
     @Transactional
@@ -56,15 +59,21 @@ public class PaymentServiceImpl implements PaymentService {
         TicketRequest ticketRequest = new TicketRequest();
         ticketRequest.setReservationId(reservation.getId());
         TicketResponse ticketResponse = ticketService.createTicket(ticketRequest);
+        User passenger = userRepository.findById(passengerId)
+                .orElseThrow(() -> new ResourceNotFoundException(USER, ID, passengerId.toString()));
+        String passengerName = passenger.getFullName();
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("to", passengerName);
+        variables.put("passenger_id", ticketResponse.getPassengerId());
+        variables.put("flight_id", ticketResponse.getFlightId());
+        variables.put("seat_number", ticketResponse.getSeatNumber());
+        variables.put("issue_date", ticketResponse.getIssueDate());
+        variables.put("status", ticketResponse.getTicketStatusEnum().toString());
+        Context context = new Context();
+        context.setVariables(variables);
         String to = SecurityContextHolder.getContext().getAuthentication().getName();
-        String subject = template.getSubject();
-        String text = String.format(Objects.requireNonNull(template.getText()), to,
-                ticketResponse.getPassengerId(),
-                ticketResponse.getFlightId(),
-                ticketResponse.getSeatNumber(),
-                ticketResponse.getIssueDate(),
-                ticketResponse.getTicketStatusEnum().toString());
-        emailService.emailUser(to, subject, text);
+        String subject = "Confirmation of Successful Payment for Your Ticket";
+        emailService.sendEmail(to, subject, "email-template", context);
         return PaymentResponse.builder()
                 .transactionId(savedPayment.getTransactionId())
                 .amount(flight.getPrice())
