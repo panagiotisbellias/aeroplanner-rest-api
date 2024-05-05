@@ -43,6 +43,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetailsResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<ErrorDetailsResponse> handleEmailSendingException(EmailSendingException exception,
+                                                                            WebRequest webRequest) {
+        ErrorDetailsResponse errorDetailsResponse = new ErrorDetailsResponse();
+        errorDetailsResponse.setTimestamp(LocalDateTime.now());
+        errorDetailsResponse.setMessage(exception.getMessage());
+        errorDetailsResponse.setPath(webRequest.getDescription(false));
+        return new ResponseEntity<>(errorDetailsResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();

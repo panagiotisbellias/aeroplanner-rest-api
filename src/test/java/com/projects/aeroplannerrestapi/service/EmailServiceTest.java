@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.thymeleaf.TemplateEngine;
 
 @ExtendWith(MockitoExtension.class)
 class EmailServiceTest {
@@ -21,9 +22,13 @@ class EmailServiceTest {
     @Mock
     JavaMailSender emailSender;
 
+    @Mock
+    TemplateEngine templateEngine;
+
+
     @Test
     void testConstructor() {
-        EmailService emailService = new EmailServiceImpl(emailSender);
+        EmailService emailService = new EmailServiceImpl(emailSender, templateEngine);
         Assertions.assertInstanceOf(EmailService.class, emailService);
     }
 
