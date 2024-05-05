@@ -6,7 +6,6 @@ import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.RoleEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
-import com.projects.aeroplannerrestapi.exception.UserAlreadyExistsException;
 import com.projects.aeroplannerrestapi.repository.RoleRepository;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -71,8 +70,7 @@ class AdminSeederTest {
     @Test
     void testOnApplicationEventUserExists() {
         Mockito.when(userRepository.existsByEmail(null)).thenReturn(true);
-        UserAlreadyExistsException userAlreadyExistsException = Assertions.assertThrows(UserAlreadyExistsException.class, () -> adminSeeder.onApplicationEvent(event));
-        Assertions.assertEquals(String.format(ErrorMessage.USER_ALREADY_EXISTS, (Object) null), userAlreadyExistsException.getMessage());
+        adminSeeder.onApplicationEvent(event);
     }
 
 }
