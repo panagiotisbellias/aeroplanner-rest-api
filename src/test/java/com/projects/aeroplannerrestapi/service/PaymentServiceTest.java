@@ -65,7 +65,7 @@ class PaymentServiceTest {
 
     @Test
     void testConstructor() {
-        PaymentService paymentService = new PaymentServiceImpl(paymentRepository, reservationRepository, userRepository, flightRepository, ticketService, emailService);
+        PaymentService paymentService = new PaymentServiceImpl(paymentRepository, reservationRepository, flightRepository, ticketService, emailService);
         Assertions.assertInstanceOf(PaymentService.class, paymentService);
     }
 

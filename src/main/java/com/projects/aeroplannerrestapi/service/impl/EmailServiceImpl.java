@@ -1,6 +1,10 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
+import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
+import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.exception.EmailSendingException;
+import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
+import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -15,12 +19,18 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.projects.aeroplannerrestapi.constants.EmailConstants.*;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.HEADER;
 
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
+    private final UserRepository userRepository;
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
     @Value("${GMAIL_USERNAME}")
@@ -39,15 +49,28 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendEmail(String to, String subject, String templateName, Context context) {
+    public void sendEmail(TicketResponse ticketResponse) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
-            context.setVariable(HEADER, HEADER);
-            helper = new MimeMessageHelper(mimeMessage, true,"UTF-8");
-            helper.setTo(to);
-            helper.setSubject(subject);
-            String htmlContent = templateEngine.process(templateName, context);
+            String passengerId = ticketResponse.getPassengerId();
+            User passenger = userRepository.findById(Long.valueOf(passengerId))
+                    .orElseThrow(() -> new ResourceNotFoundException(USER, ID, passengerId));
+            String passengerName = passenger.getFullName();
+            Context context = new Context();
+            Map<String, Object> variables = new HashMap<>();
+            variables.put(TO, passengerName);
+            variables.put(PASSENGER_ID, ticketResponse.getPassengerId());
+            variables.put(FLIGHT_ID, ticketResponse.getFlightId());
+            variables.put(SEAT_NUMBER, ticketResponse.getSeatNumber());
+            variables.put(ISSUE_DATE, ticketResponse.getIssueDate());
+            variables.put(STATUS, ticketResponse.getTicketStatusEnum().toString());
+            variables.put(HEADER, HEADER);
+            context.setVariables(variables);
+            helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setTo("johnchristopherilacad27@gmail.com");
+            helper.setSubject(SUBJECT);
+            String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
             helper.setText(htmlContent, true);
             helper.addInline(HEADER, new ClassPathResource("static/images/header.jpg"), "image/jpeg");
             emailSender.send(mimeMessage);

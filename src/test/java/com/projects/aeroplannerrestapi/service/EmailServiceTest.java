@@ -1,5 +1,7 @@
 package com.projects.aeroplannerrestapi.service;
 
+import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
+import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.impl.EmailServiceImpl;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.Assertions;
@@ -28,6 +30,9 @@ class EmailServiceTest {
     JavaMailSender emailSender;
 
     @Mock
+    UserRepository userRepository;
+
+    @Mock
     TemplateEngine templateEngine;
 
     @Mock
@@ -38,7 +43,8 @@ class EmailServiceTest {
 
     @Test
     void testConstructor() {
-        EmailService emailService = new EmailServiceImpl(emailSender, templateEngine);
+
+        EmailService emailService = new EmailServiceImpl(userRepository, emailSender, templateEngine);
         Assertions.assertInstanceOf(EmailService.class, emailService);
     }
 
@@ -52,7 +58,7 @@ class EmailServiceTest {
     void testSendEmail() {
         Mockito.when(emailSender.createMimeMessage()).thenReturn(mimeMessage);
         Mockito.when(templateEngine.process("template name", context)).thenReturn("html content");
-        emailService.sendEmail("to", "subject", "template name", context);
+        emailService.sendEmail(ArgumentMatchers.any(TicketResponse.class));
 
         Mockito.verify(emailSender).createMimeMessage();
         Mockito.verify(context).setVariable("header", "header");
