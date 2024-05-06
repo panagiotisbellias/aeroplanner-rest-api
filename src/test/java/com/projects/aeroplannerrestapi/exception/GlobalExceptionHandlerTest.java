@@ -58,6 +58,17 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void testHandleEmailSendingException() {
+        EmailSendingException emailSendingException = Mockito.mock(EmailSendingException.class);
+        ResponseEntity<ErrorDetailsResponse> response = globalExceptionHandler.handleEmailSendingException(emailSendingException, webRequest);
+        ErrorDetailsResponse responseBody = response.getBody();
+
+        Assertions.assertNull(Objects.requireNonNull(responseBody).getMessage());
+        Assertions.assertNull(responseBody.getPath());
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    @Test
     void testHandleMethodArgumentNotValidException() {
         MethodArgumentNotValidException methodArgumentNotValidException = Mockito.mock(MethodArgumentNotValidException.class);
         BindingResult bindingResult = Mockito.mock(BindingResult.class);

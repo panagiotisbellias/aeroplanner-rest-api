@@ -8,6 +8,7 @@ import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import com.projects.aeroplannerrestapi.entity.Reservation;
+import com.projects.aeroplannerrestapi.entity.User;
 import com.projects.aeroplannerrestapi.enums.TicketStatusEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
@@ -28,9 +29,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
-
-import static com.projects.aeroplannerrestapi.constants.ErrorMessage.NAME;
-import static com.projects.aeroplannerrestapi.util.TestConstants.*;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
@@ -74,8 +72,9 @@ class PaymentServiceTest {
     @Test
     void testProcessPayment() {
         Reservation reservation = Mockito.mock(Reservation.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        User user = Mockito.mock(User.class);
         TicketResponse ticketResponse = Mockito.mock(TicketResponse.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         Authentication authentication = Mockito.mock(Authentication.class);
 
         Mockito.when(payment.getFlightId()).thenReturn(0L);
@@ -83,12 +82,9 @@ class PaymentServiceTest {
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
-        Mockito.when(ticketResponse.getPassengerId()).thenReturn(PASSENGER_ID);
-        Mockito.when(ticketResponse.getFlightId()).thenReturn(FLIGHT_ID);
-        Mockito.when(ticketResponse.getIssueDate()).thenReturn(ISSUE_DATE);
         Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         Mockito.when(ticketService.createTicket(ArgumentMatchers.any(TicketRequest.class))).thenReturn(ticketResponse);
-        Mockito.when(authentication.getName()).thenReturn(NAME);
         Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
 
         SecurityContextHolder.setContext(securityContext);
