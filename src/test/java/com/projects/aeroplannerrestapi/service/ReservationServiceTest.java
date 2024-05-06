@@ -21,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
+import static com.projects.aeroplannerrestapi.constants.SortingAndPaginationConstants.DEFAULT_SORT_DIR;
+
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
 
@@ -67,7 +69,7 @@ class ReservationServiceTest {
     @Test
     void testGetAllReservationsAsc() {
         Mockito.when(reservationRepository.findAll(ArgumentMatchers.any(Pageable.class))).thenReturn(page);
-        PaginatedAndSortedReservationResponse response = reservationService.getAllReservations(1, 2, "sort by", "asc");
+        PaginatedAndSortedReservationResponse response = reservationService.getAllReservations(1, 2, "sort by", DEFAULT_SORT_DIR);
 
         Assertions.assertEquals(1, response.getContent().size());
         Assertions.assertEquals(0, response.getTotalPages());

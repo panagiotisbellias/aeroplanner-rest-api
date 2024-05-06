@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.HEADER;
+
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -41,13 +43,13 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
-            context.setVariable("header", "header");
+            context.setVariable(HEADER, HEADER);
             helper = new MimeMessageHelper(mimeMessage, true,"UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
             String htmlContent = templateEngine.process(templateName, context);
             helper.setText(htmlContent, true);
-            helper.addInline("header", new ClassPathResource("static/images/header.jpg"), "image/jpeg");
+            helper.addInline(HEADER, new ClassPathResource("static/images/header.jpg"), "image/jpeg");
             emailSender.send(mimeMessage);
         } catch (MessagingException e) {
             try {

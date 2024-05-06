@@ -7,7 +7,6 @@ public class TestConstants {
     private TestConstants(){
     }
 
-    public static final String HEADER = "header";
     public static final String USER_EMAIL = USER.concat(EMAIL);
     public static final String AIRLINE = "airline";
     public static final String FLIGHT_NUMBER = FLIGHT.concat("number");
