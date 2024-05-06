@@ -68,7 +68,7 @@ public class EmailServiceImpl implements EmailService {
             variables.put(HEADER, HEADER);
             context.setVariables(variables);
             helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            helper.setTo("johnchristopherilacad27@gmail.com");
+            helper.setTo(passenger.getEmail());
             helper.setSubject(SUBJECT);
             String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
             helper.setText(htmlContent, true);
