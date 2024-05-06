@@ -24,9 +24,6 @@ public class TestConstants {
     public static final String PATH = "path";
     public static final String TOKEN = "token";
     public static final String TRANSACTION_ID = "transaction id";
-    public static final String PASSENGER_ID = PASSENGER.concat(ID);
-    public static final String FLIGHT_ID = FLIGHT.concat(ID);
-    public static final String ISSUE_DATE = "issue date";
     public static final String DESCRIPTION = "description";
 
 }

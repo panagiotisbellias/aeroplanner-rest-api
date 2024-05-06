@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.projects.aeroplannerrestapi.constants.EmailConstants.*;
 import static com.projects.aeroplannerrestapi.constants.ErrorMessage.RESERVATION_ID;
-import static com.projects.aeroplannerrestapi.util.TestConstants.*;
 
 @ExtendWith(MockitoExtension.class)
 class TicketTest {

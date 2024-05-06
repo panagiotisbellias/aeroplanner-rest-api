@@ -2,19 +2,14 @@ package com.projects.aeroplannerrestapi.service;
 
 import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
-import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.dto.response.PaymentResponse;
-import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
 import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.entity.Payment;
 import com.projects.aeroplannerrestapi.entity.Reservation;
-import com.projects.aeroplannerrestapi.entity.User;
-import com.projects.aeroplannerrestapi.enums.TicketStatusEnum;
 import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.repository.PaymentRepository;
 import com.projects.aeroplannerrestapi.repository.ReservationRepository;
-import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.impl.PaymentServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,9 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
@@ -41,9 +33,6 @@ class PaymentServiceTest {
 
     @Mock
     ReservationRepository reservationRepository;
-
-    @Mock
-    UserRepository userRepository;
 
     @Mock
     FlightRepository flightRepository;
@@ -72,28 +61,17 @@ class PaymentServiceTest {
     @Test
     void testProcessPayment() {
         Reservation reservation = Mockito.mock(Reservation.class);
-        User user = Mockito.mock(User.class);
-        TicketResponse ticketResponse = Mockito.mock(TicketResponse.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Authentication authentication = Mockito.mock(Authentication.class);
-
         Mockito.when(payment.getFlightId()).thenReturn(0L);
         Mockito.when(payment.getPassengerId()).thenReturn(1L);
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
-        Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        Mockito.when(ticketService.createTicket(ArgumentMatchers.any(TicketRequest.class))).thenReturn(ticketResponse);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
 
-        SecurityContextHolder.setContext(securityContext);
         PaymentResponse response = paymentService.processPayment(paymentRequest);
-
         Assertions.assertNull(response.getTransactionId());
         Assertions.assertNull(response.getAmount());
         Assertions.assertNull(response.getStatus());
-        Assertions.assertEquals("Paid", response.getMessage());
+        Assertions.assertEquals("PAID", response.getMessage());
     }
 
     @Test
