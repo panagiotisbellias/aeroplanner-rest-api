@@ -83,7 +83,6 @@ class SuperAdminServiceTest {
     void testUpdateAdministrator() {
         Mockito.when(userRepository.findByIdAndRolesName(0L, RoleEnum.ADMIN)).thenReturn(Optional.of(user));
         Assertions.assertNull(superAdminService.updateAdministrator(0L, registerRequest));
-        // TODO In actual code the email setting is happening twice, remove the one occurrence
     }
 
     @Test

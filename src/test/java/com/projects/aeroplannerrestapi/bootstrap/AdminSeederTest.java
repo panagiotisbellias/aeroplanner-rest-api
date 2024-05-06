@@ -71,6 +71,11 @@ class AdminSeederTest {
     void testOnApplicationEventUserExists() {
         Mockito.when(userRepository.existsByEmail(null)).thenReturn(true);
         adminSeeder.onApplicationEvent(event);
+
+        Mockito.verify(userRepository).existsByEmail(null);
+        Mockito.verifyNoInteractions(roleRepository);
+        Mockito.verifyNoInteractions(passwordEncoder);
+        Mockito.verifyNoMoreInteractions(userRepository);
     }
 
 }
