@@ -23,7 +23,8 @@ import org.thymeleaf.context.Context;
 
 import java.util.Optional;
 
-import static com.projects.aeroplannerrestapi.constants.EmailConstants.EMAIL_TEMPLATE;
+import static com.projects.aeroplannerrestapi.constants.EmailConstants.*;
+import static com.projects.aeroplannerrestapi.constants.ErrorMessage.EMAIL;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -53,7 +54,7 @@ class EmailServiceTest {
 
     @Test
     void testEmailUser() {
-        emailService.emailUser("to", "subject", "text");
+        emailService.emailUser(TO, SUBJECT, "text");
         Mockito.verify(emailSender).send(ArgumentMatchers.any(SimpleMailMessage.class));
     }
 
@@ -64,10 +65,10 @@ class EmailServiceTest {
 
         Mockito.when(ticketResponse.getPassengerId()).thenReturn("0");
         Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
-        Mockito.when(passenger.getEmail()).thenReturn("email");
+        Mockito.when(passenger.getEmail()).thenReturn(EMAIL);
         Mockito.when(userRepository.findById(0L)).thenReturn(Optional.of(passenger));
         Mockito.when(emailSender.createMimeMessage()).thenReturn(mimeMessage);
-        Mockito.when(templateEngine.process(ArgumentMatchers.eq(EMAIL_TEMPLATE), ArgumentMatchers.any(Context.class))).thenReturn("html content");
+        Mockito.when(templateEngine.process(ArgumentMatchers.eq(EMAIL_TEMPLATE), ArgumentMatchers.any(Context.class))).thenReturn(EMAIL_TEMPLATE);
         emailService.sendEmail(ticketResponse);
 
         Mockito.verify(emailSender).createMimeMessage();
