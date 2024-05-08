@@ -31,9 +31,7 @@ public class RoleSeeder implements ApplicationListener<ContextRefreshedEvent> {
                 RoleEnum.ADMIN, "Administrator role",
                 RoleEnum.SUPER_ADMIN, "Super administrator role");
         Arrays.stream(roleEnums).forEach(roleEnum -> {
-            boolean isRoleExists = roleRepository.existsByName(roleEnum);
-
-            if (!isRoleExists) {
+            if (!roleRepository.existsByName(roleEnum)) {
                 Role role = new Role();
                 role.setName(roleEnum);
                 role.setDescription(roleNameDescriptionMap.get(roleEnum));
