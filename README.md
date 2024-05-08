@@ -19,7 +19,7 @@ Follow these steps to get the application running on your machine:
 
 Use the following command to clone the application:
 ```
-git clone git@github.com:jcilacad/aeroplanner-rest-api.git
+git clone https://github.com/jcilacad/aeroplanner-rest-api.git
 ```
 
 
