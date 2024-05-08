@@ -36,6 +36,9 @@ CREATE DATABASE aeroplanner_db
 4. **Create a Gmail App Password**
 
 Follow the instructions here to create a Gmail App Password.
+```
+https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237
+```
 
 5. **Create a "env.properties" file in the root directory**
 
