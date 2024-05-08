@@ -81,3 +81,21 @@ Use the following command to run the application:
 ```
 mvn clean spring-boot:run
 ```
+
+## Run unit tests
+
+Use the following command to run the unit tests:
+```
+mvn verify
+```
+This way, unit tests are executed along JaCoCo tool to gather the code coverage which can be read from Sonarqube
+
+## Analyze code quality using SonarQube
+
+- Have a **Sonarqube server** running
+- Generate an authentication token
+- Use the following command to analyze the application's code
+```
+mvn sonar:sonar -D"sonar.token=<SONAR_AUTH_TOKEN>" -D"sonar.host.url=<SONAR_HOST>"
+```
+- The `sonar.host.url` property can be omitted if using the default, which is `http://localhost:9000`
