@@ -6,7 +6,7 @@ This project is a Flight Booking Application RESTful API built with Spring Boot.
 
 Before you begin, ensure you have met the following requirements:
 
-- You have installed **Java**
+- You have installed **Java v17**
 - You have installed **Maven (mvn)**
 - You have a **Postgres server** running
 
@@ -29,7 +29,7 @@ Create a database named "aeroplanner_db" using the following command:
 ```sql
 CREATE DATABASE aeroplanner_db
 ```
-
+Tip: this can also be done using `pgAdmin`
 
 3. **Generate a secret key and JWT expiration time**
 
@@ -41,11 +41,7 @@ CREATE DATABASE aeroplanner_db
 
 4. **Create a Gmail App Password**
 
-Follow the instructions here to create a Gmail App Password.
-```
-https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237
-```
-
+Follow the instructions [here](https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237) to create a Gmail App Password.
 
 5. **Create a "env.properties" file in the root directory**
 
