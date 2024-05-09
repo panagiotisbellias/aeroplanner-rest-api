@@ -6,7 +6,7 @@ This project is a Flight Booking Application RESTful API built with Spring Boot.
 
 Before you begin, ensure you have met the following requirements:
 
-- You have installed **Java**
+- You have installed **Java v17**
 - You have installed **Maven (mvn)**
 - You have a **Postgres server** running
 
@@ -19,7 +19,7 @@ Follow these steps to get the application running on your machine:
 
 Use the following command to clone the application:
 ```
-git clone git@github.com:jcilacad/aeroplanner-rest-api.git
+git clone https://github.com/jcilacad/aeroplanner-rest-api.git
 ```
 
 
@@ -29,7 +29,7 @@ Create a database named "aeroplanner_db" using the following command:
 ```sql
 CREATE DATABASE aeroplanner_db
 ```
-
+Tip: this can also be done using `pgAdmin`
 
 3. **Generate a secret key and JWT expiration time**
 
@@ -41,11 +41,7 @@ CREATE DATABASE aeroplanner_db
 
 4. **Create a Gmail App Password**
 
-Follow the instructions here to create a Gmail App Password.
-```
-https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237
-```
-
+Follow the instructions [here](https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237) to create a Gmail App Password.
 
 5. **Create a "env.properties" file in the root directory**
 
@@ -81,3 +77,21 @@ Use the following command to run the application:
 ```
 mvn clean spring-boot:run
 ```
+
+## Run unit tests
+
+Use the following command to run the unit tests:
+```
+mvn verify
+```
+This way, unit tests are executed along JaCoCo tool to gather the code coverage which can be read from Sonarqube
+
+## Analyze code quality using SonarQube
+
+- Have a **Sonarqube server** running
+- Generate an authentication token
+- Use the following command to analyze the application's code
+```
+mvn sonar:sonar -D"sonar.token=<SONAR_AUTH_TOKEN>" -D"sonar.host.url=<SONAR_HOST>"
+```
+- The `sonar.host.url` property can be omitted if using the default, which is `http://localhost:9000`
