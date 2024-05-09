@@ -22,7 +22,7 @@
         <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.projectKey>aeroplanner-rest-api</sonar.projectKey>
         <sonar.projectName>Aeroplanner REST API</sonar.projectName>
-        <sonar.projectVersion>${version}</sonar.projectVersion>
+        <sonar.projectVersion>${project.version}</sonar.projectVersion>
     </properties>
     <dependencies>
         <dependency>
