@@ -10,35 +10,51 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.projects.aeroplannerrestapi.constants.ErrorMessage.NAME;
 import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ROLE;
 
 @Component
 @RequiredArgsConstructor
-@Order(2)
-public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
+public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEvent> {
+
+    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${super.admin.name}")
     private String superAdminName;
+
     @Value("${super.admin.email}")
     private String superAdminEmail;
+
     @Value("${super.admin.password}")
     private String superAdminPassword;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        this.loadRoles();
         this.createSuperAdministrator();
+    }
+
+    private void loadRoles() {
+        RoleEnum[] roleEnums = new RoleEnum[]{RoleEnum.USER, RoleEnum.ADMIN, RoleEnum.SUPER_ADMIN};
+        Map<RoleEnum, String> roleNameDescriptionMap = Map.of(
+                RoleEnum.USER, "Default user role",
+                RoleEnum.ADMIN, "Administrator role",
+                RoleEnum.SUPER_ADMIN, "Super administrator role");
+        Arrays.stream(roleEnums).forEach(roleEnum -> {
+            if (!roleRepository.existsByName(roleEnum)) {
+                Role role = new Role();
+                role.setName(roleEnum);
+                role.setDescription(roleNameDescriptionMap.get(roleEnum));
+                roleRepository.save(role);
+            }
+        });
     }
 
     private void createSuperAdministrator() {
@@ -55,4 +71,5 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
             userRepository.save(user);
         }
     }
+
 }

@@ -3,6 +3,7 @@ package com.projects.aeroplannerrestapi.exception;
 import com.projects.aeroplannerrestapi.dto.response.ErrorDetailsResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,31 +27,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorDetailsResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception,
                                                                                  WebRequest webRequest) {
-        ErrorDetailsResponse errorDetailsResponse = new ErrorDetailsResponse();
-        errorDetailsResponse.setTimestamp(LocalDateTime.now());
-        errorDetailsResponse.setMessage(exception.getMessage());
-        errorDetailsResponse.setPath(webRequest.getDescription(false));
-        return new ResponseEntity<>(errorDetailsResponse, HttpStatus.BAD_REQUEST);
+        return buildErrorDetailsResponse(exception.getMessage(), webRequest.getDescription(false), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetailsResponse> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                                 WebRequest webRequest) {
-        ErrorDetailsResponse errorDetailsResponse = new ErrorDetailsResponse();
-        errorDetailsResponse.setTimestamp(LocalDateTime.now());
-        errorDetailsResponse.setMessage(exception.getMessage());
-        errorDetailsResponse.setPath(webRequest.getDescription(false));
-        return new ResponseEntity<>(errorDetailsResponse, HttpStatus.NOT_FOUND);
+        return buildErrorDetailsResponse(exception.getMessage(), webRequest.getDescription(false), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EmailSendingException.class)
     public ResponseEntity<ErrorDetailsResponse> handleEmailSendingException(EmailSendingException exception,
                                                                             WebRequest webRequest) {
-        ErrorDetailsResponse errorDetailsResponse = new ErrorDetailsResponse();
-        errorDetailsResponse.setTimestamp(LocalDateTime.now());
-        errorDetailsResponse.setMessage(exception.getMessage());
-        errorDetailsResponse.setPath(webRequest.getDescription(false));
-        return new ResponseEntity<>(errorDetailsResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return buildErrorDetailsResponse(exception.getMessage(), webRequest.getDescription(false), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -69,18 +58,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenNotFoundException.class)
     public ResponseEntity<ErrorDetailsResponse> handleTokenNotFoundException(TokenNotFoundException exception,
                                                                              WebRequest webRequest) {
-        ErrorDetailsResponse errorDetailsResponse = new ErrorDetailsResponse();
-        errorDetailsResponse.setTimestamp(LocalDateTime.now());
-        errorDetailsResponse.setMessage(exception.getMessage());
-        errorDetailsResponse.setPath(webRequest.getDescription(false));
-        return new ResponseEntity<>(errorDetailsResponse, HttpStatus.UNAUTHORIZED);
+        return buildErrorDetailsResponse(exception.getMessage(), webRequest.getDescription(false), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetailsResponse> handleGlobalException(Exception exception, WebRequest webRequest) {
-        ErrorDetailsResponse errorDetailsResponse = new ErrorDetailsResponse();
-        errorDetailsResponse.setTimestamp(LocalDateTime.now());
-        errorDetailsResponse.setPath(webRequest.getDescription(false));
         StringBuilder errorMessage = new StringBuilder();
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -102,7 +84,15 @@ public class GlobalExceptionHandler {
         } else if (exception != null){
             errorMessage.append(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         }
-        errorDetailsResponse.setMessage(errorMessage.toString());
-        return new ResponseEntity<>(errorDetailsResponse, httpStatus);
+        return buildErrorDetailsResponse(errorMessage.toString(), webRequest.getDescription(false), httpStatus);
     }
+
+    private ResponseEntity<ErrorDetailsResponse> buildErrorDetailsResponse(String message, String path, HttpStatusCode statusCode) {
+        ErrorDetailsResponse errorDetailsResponse = new ErrorDetailsResponse();
+        errorDetailsResponse.setTimestamp(LocalDateTime.now());
+        errorDetailsResponse.setMessage(message);
+        errorDetailsResponse.setPath(path);
+        return new ResponseEntity<>(errorDetailsResponse, statusCode);
+    }
+
 }

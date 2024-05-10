@@ -1,6 +1,6 @@
 package com.projects.aeroplannerrestapi.bootstrap;
 
-import com.projects.aeroplannerrestapi.bootsrap.AdminSeeder;
+import com.projects.aeroplannerrestapi.bootsrap.BootstrapSeeder;
 import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
@@ -24,16 +24,16 @@ import java.util.Optional;
 import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.SUPER_ADMIN;
 
 @ExtendWith(MockitoExtension.class)
-class AdminSeederTest {
+class BootstrapSeederTest {
 
     @InjectMocks
-    AdminSeeder adminSeeder;
-
-    @Mock
-    UserRepository userRepository;
+    BootstrapSeeder bootstrapSeeder;
 
     @Mock
     RoleRepository roleRepository;
+
+    @Mock
+    UserRepository userRepository;
 
     @Mock
     PasswordEncoder passwordEncoder;
@@ -46,15 +46,19 @@ class AdminSeederTest {
 
     @Test
     void testConstructor() {
-        AdminSeeder adminSeeder = new AdminSeeder(userRepository, roleRepository, passwordEncoder);
-        Assertions.assertInstanceOf(AdminSeeder.class, adminSeeder);
+        BootstrapSeeder bootstrapSeeder = new BootstrapSeeder(roleRepository, userRepository, passwordEncoder);
+        Assertions.assertInstanceOf(BootstrapSeeder.class, bootstrapSeeder);
     }
 
     @Test
     void testOnApplicationEvent() {
+        ContextRefreshedEvent event = Mockito.mock(ContextRefreshedEvent.class);
+        Mockito.when(roleRepository.existsByName(RoleEnum.USER)).thenReturn(true);
         Mockito.when(roleRepository.findByName(RoleEnum.SUPER_ADMIN)).thenReturn(Optional.of(role));
-        adminSeeder.onApplicationEvent(event);
 
+        bootstrapSeeder.onApplicationEvent(event);
+        Mockito.verify(roleRepository, Mockito.times(3)).existsByName(ArgumentMatchers.any(RoleEnum.class));
+        Mockito.verify(roleRepository, Mockito.times(2)).save(ArgumentMatchers.any(Role.class));
         Mockito.verify(userRepository).existsByEmail(null);
         Mockito.verify(roleRepository).findByName(RoleEnum.SUPER_ADMIN);
         Mockito.verify(passwordEncoder).encode(null);
@@ -63,17 +67,21 @@ class AdminSeederTest {
 
     @Test
     void testOnApplicationEventRoleNotFound() {
-        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class, () -> adminSeeder.onApplicationEvent(event));
+        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class, () -> bootstrapSeeder.onApplicationEvent(event));
         Assertions.assertEquals(String.format(ErrorMessage.RESOURCE_NOT_FOUND, ErrorMessage.ROLE, ErrorMessage.NAME, SUPER_ADMIN), exception.getMessage());
     }
 
     @Test
     void testOnApplicationEventUserExists() {
         Mockito.when(userRepository.existsByEmail(null)).thenReturn(true);
-        adminSeeder.onApplicationEvent(event);
+        bootstrapSeeder.onApplicationEvent(event);
 
+        Mockito.verify(roleRepository).existsByName(RoleEnum.USER);
+        Mockito.verify(roleRepository).existsByName(RoleEnum.ADMIN);
+        Mockito.verify(roleRepository).existsByName(RoleEnum.SUPER_ADMIN);
+        Mockito.verify(roleRepository, Mockito.times(3)).save(ArgumentMatchers.any(Role.class));
         Mockito.verify(userRepository).existsByEmail(null);
-        Mockito.verifyNoInteractions(roleRepository);
+        Mockito.verifyNoMoreInteractions(roleRepository);
         Mockito.verifyNoInteractions(passwordEncoder);
         Mockito.verifyNoMoreInteractions(userRepository);
     }
