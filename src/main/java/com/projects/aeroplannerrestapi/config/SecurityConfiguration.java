@@ -1,5 +1,7 @@
 package com.projects.aeroplannerrestapi.config;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -24,17 +26,21 @@ import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+    private static final Log LOG = LogFactory.getLog(SecurityConfiguration.class);
+
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
                                  AuthenticationProvider authenticationProvider) {
+        LOG.debug("Security Configuration instantiated");
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        LOG.debug(String.format("securityFilterChain(%s)", http));
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeRequests -> authorizeRequests
@@ -53,6 +59,7 @@ public class SecurityConfiguration {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        LOG.debug("corsConfigurationSource()");
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:8005"));
         configuration.setAllowedMethods(List.of("*"));

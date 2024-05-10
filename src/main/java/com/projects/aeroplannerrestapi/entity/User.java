@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,8 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntityAudit implements UserDetails {
+
+    private static final Log LOG = LogFactory.getLog(User.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
@@ -46,36 +50,45 @@ public class User extends BaseEntityAudit implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        LOG.debug("getAuthorities()");
         List<SimpleGrantedAuthority> list = new ArrayList<>();
         for (Role r : roles) {
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + r.getName().toString());
+            String role = "ROLE_".concat(r.getName().toString());
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
             list.add(authority);
+            LOG.info(String.format("Retrieved role: %s and authority: %s", role, authority));
         }
+        LOG.info(String.format("Retrieved %d authorities/roles", list.size()));
         return list;
     }
 
     @Override
     public String getUsername() {
+        LOG.debug("getUsername()");
         return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
+        LOG.debug("isAccountNonExpired()");
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
+        LOG.debug("isAccountNonLocked()");
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
+        LOG.debug("isCredentialsNonExpired()");
         return true;
     }
 
     @Override
     public boolean isEnabled() {
+        LOG.debug("isEnabled()");
         return true;
     }
 }
