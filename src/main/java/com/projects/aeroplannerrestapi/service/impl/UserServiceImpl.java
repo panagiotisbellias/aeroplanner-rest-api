@@ -7,6 +7,8 @@ import com.projects.aeroplannerrestapi.mapper.UserMapper;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,19 +25,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final Log LOG = LogFactory.getLog(UserServiceImpl.class);
+
     private final UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserResponse getAuthenticatedUser() {
+        LOG.debug("getAuthenticatedUser()");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
+        LOG.info(String.format("Current authenticated user : %s", currentUser));
         return UserMapper.INSTANCE.userToUserResponse(currentUser);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PaginatedAndSortedUserResponse getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDirection) {
+        LOG.debug(String.format("getAllUsers(%d, %d, %s, %s)", pageNumber, pageSize, sortBy, sortDirection));
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
@@ -50,6 +57,7 @@ public class UserServiceImpl implements UserService {
         userResponse.setTotalElements(page.getTotalElements());
         userResponse.setTotalPages(page.getTotalPages());
         userResponse.setLast(page.isLast());
+        LOG.info(String.format("All users : %s", userResponse));
         return userResponse;
     }
 }

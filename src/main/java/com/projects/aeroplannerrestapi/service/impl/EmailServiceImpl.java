@@ -9,6 +9,8 @@ import com.projects.aeroplannerrestapi.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -30,6 +32,8 @@ import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.HE
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
+    private static final Log LOG = LogFactory.getLog(EmailServiceImpl.class);
+
     private final UserRepository userRepository;
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
@@ -39,17 +43,20 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void emailUser(String to, String subject, String text) {
+        LOG.debug(String.format("emailUser(%s, %s, %s)", to, subject, text));
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(gmailUsername);
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
         emailSender.send(message);
+        LOG.info(String.format("Email sent to %s", to));
     }
 
     @Async
     @Override
     public void sendEmail(TicketResponse ticketResponse) {
+        LOG.debug(String.format("sendEmail(%s)", ticketResponse));
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
@@ -73,11 +80,14 @@ public class EmailServiceImpl implements EmailService {
             String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
             helper.setText(htmlContent, true);
             helper.addInline(HEADER, new ClassPathResource("static/images/header.jpg"), "image/jpeg");
+            LOG.debug(String.format("mime message helper : %s", helper));
             emailSender.send(mimeMessage);
+            LOG.info(String.format("Email sent to %s : %s", passenger.getEmail(), mimeMessage));
         } catch (MessagingException e) {
             try {
                 throw new EmailSendingException(e.getMessage());
             } catch (EmailSendingException ex) {
+                LOG.error(ex.getMessage());
                 throw new RuntimeException(ex);
             }
         }

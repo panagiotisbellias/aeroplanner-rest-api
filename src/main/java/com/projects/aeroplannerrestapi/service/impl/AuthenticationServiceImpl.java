@@ -18,6 +18,8 @@ import com.projects.aeroplannerrestapi.service.JwtService;
 import com.projects.aeroplannerrestapi.service.TokenBlacklistService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +36,8 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+    private static final Log LOG = LogFactory.getLog(AuthenticationServiceImpl.class);
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
@@ -43,6 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public UserResponse register(RegisterRequest registerRequest) {
+        LOG.debug(String.format("register(%s)", registerRequest));
         String email = registerRequest.getEmail();
         boolean isUserExists = userRepository.existsByEmail(email);
         Optional<Role> role = roleRepository.findByName(RoleEnum.USER);
@@ -56,34 +61,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         roles.add(role.get());
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
+        LOG.info(String.format("User %s registered", user));
         return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
 
     @Override
     public LoginResponse authenticate(LoginRequest loginRequest) {
+        LOG.debug(String.format("authenticate(%s)", loginRequest));
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(USER, EMAIL, email));
         String token = jwtService.generateToken(user);
+        LOG.debug(String.format("Token : %s", token));
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(token);
         loginResponse.setExpiredIn(jwtService.getExpirationTime());
+        LOG.info(String.format("Login response : %s", loginResponse));
         return loginResponse;
     }
 
     @Override
     public void logout(HttpServletRequest request) {
+        LOG.debug(String.format("logout(%s)", request));
         String token = this.extractTokenFromRequest(request);
         tokenBlacklistService.addToBlacklist(token);
     }
 
     @Override
     public String extractTokenFromRequest(HttpServletRequest request) {
+        LOG.debug(String.format("extractTokenFromRequest(%s)", request));
         String authorizationHeader = request.getHeader("Authorization");
 
         if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            LOG.debug(String.format("Authentication header '%s' is valid", authorizationHeader));
             return authorizationHeader.substring(7);
         }
         throw new TokenNotFoundException();
