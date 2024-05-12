@@ -33,6 +33,7 @@ public class EmailServiceImpl implements EmailService {
     private final UserRepository userRepository;
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
+
     @Value("${GMAIL_USERNAME}")
     private String gmailUsername;
 
