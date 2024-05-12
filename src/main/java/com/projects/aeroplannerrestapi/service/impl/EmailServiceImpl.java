@@ -74,15 +74,16 @@ public class EmailServiceImpl implements EmailService {
             variables.put(STATUS, ticketResponse.getTicketStatusEnum().toString());
             variables.put(HEADER, HEADER);
             context.setVariables(variables);
+            String to = passenger.getEmail();
             helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            helper.setTo(passenger.getEmail());
+            helper.setTo(to);
             helper.setSubject(SUBJECT);
             String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
             helper.setText(htmlContent, true);
             helper.addInline(HEADER, new ClassPathResource("static/images/header.jpg"), "image/jpeg");
             LOG.debug(String.format("mime message helper : %s", helper));
             emailSender.send(mimeMessage);
-            LOG.info(String.format("Email sent to %s : %s", passenger.getEmail(), mimeMessage));
+            LOG.info(String.format("Email sent to %s : %s", to, mimeMessage));
         } catch (MessagingException e) {
             try {
                 throw new EmailSendingException(e.getMessage());

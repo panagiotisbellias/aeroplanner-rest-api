@@ -13,10 +13,9 @@ public class AeroplannerRestApiApplication {
 	private static final Log LOG = LogFactory.getLog(AeroplannerRestApiApplication.class);
 
 	public static void main(String[] args) {
-		LOG.debug(String.format("main(%s)", Arrays.toString(args)));
-		LOG.info("Main process is being started");
+		LOG.info("Main process started");
 		SpringApplication.run(AeroplannerRestApiApplication.class, args);
-		LOG.info("Main process is being stopped");
+		LOG.info("Main process is up");
 	}
 
 }

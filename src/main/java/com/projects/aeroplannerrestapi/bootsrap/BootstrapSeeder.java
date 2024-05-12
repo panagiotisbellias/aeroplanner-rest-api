@@ -41,7 +41,7 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        LOG.debug(String.format("onApplicationEvent(%s)", event));
+        LOG.debug(String.format("onApplicationEvent(%s)", event.toString()));
         this.loadRoles();
         this.createSuperAdministrator();
     }
@@ -60,7 +60,7 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
                 role.setName(roleEnum);
                 role.setDescription(roleNameDescriptionMap.get(roleEnum));
                 roleRepository.save(role);
-                LOG.info(String.format("Role %s with name '%s' created", role, roleEnum));
+                LOG.info(String.format("Role %s with name '%s' created", role.getId(), roleEnum));
             }
         });
     }
@@ -79,7 +79,7 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
             set.add(role.get());
             user.setRoles(set);
             userRepository.save(user);
-            LOG.info(String.format("Super administrator '%s' created", user));
+            LOG.info(String.format("Super administrator '%s' created", user.getFullName()));
         }
     }
 

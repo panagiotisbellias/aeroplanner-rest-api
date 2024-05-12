@@ -33,14 +33,14 @@ public class SecurityConfiguration {
 
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
                                  AuthenticationProvider authenticationProvider) {
-        LOG.debug("Security Configuration instantiated");
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        LOG.debug("Security Configuration instantiated");
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        LOG.debug(String.format("securityFilterChain(%s)", http));
+        LOG.debug(String.format("securityFilterChain(%s)", http.getClass()));
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeRequests -> authorizeRequests

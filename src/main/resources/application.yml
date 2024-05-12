@@ -35,3 +35,7 @@ super:
     name: ${SUPER_ADMIN_NAME}
     email: ${SUPER_ADMIN_EMAIL}
     password: ${SUPER_ADMIN_PASSWORD}
+
+logging:
+  level:
+    com.projects.aeroplannerrestapi: DEBUG # Set to WARN for production

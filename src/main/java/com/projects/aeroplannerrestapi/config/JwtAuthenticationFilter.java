@@ -39,11 +39,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        LOG.debug(String.format("doFilterInternal(%s, %s, %s)", request, response, filterChain));
+        LOG.debug(String.format("doFilterInternal(%s, %s, %s)", request.getClass(), response.getClass(), filterChain.getClass()));
         final String authHeader = request.getHeader(AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith(BEARER)) {
-            LOG.info("Authentication header is null/non-bearer");
+            LOG.debug(String.format("Authentication header : %s", authHeader));
+            LOG.warn("Authentication header is null/non-bearer");
             filterChain.doFilter(request, response);
             return;
         }

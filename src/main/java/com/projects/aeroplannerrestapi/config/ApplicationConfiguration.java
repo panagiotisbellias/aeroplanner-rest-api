@@ -41,7 +41,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        LOG.debug(String.format("authenticationManager(%s)", config));
+        LOG.debug(String.format("authenticationManager(%s)", config.getClass()));
         return config.getAuthenticationManager();
     }
 
