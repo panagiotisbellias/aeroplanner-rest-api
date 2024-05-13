@@ -9,6 +9,8 @@ Before you begin, ensure you have met the following requirements:
 - You have installed **Java v17**
 - You have installed **Maven (mvn)**
 - You have a **Postgres server** running
+- You have installed **Docker** and **docker-compose** (optional)
+- You have **Docker service** running (optional)
 
 ## 🚀Running Aeroplanner REST API Locally
 
@@ -86,6 +88,16 @@ mvn clean package -DskipTests
 docker build -t jcilacad/aeroplanner-rest-api .
 docker run -p 8005:8005 jcilacad/aeroplanner-rest-api # add also --network <NETWORK_NAME> in case postgres is running in another docker network
 ```
+
+### Run with docker-compose (optional)
+
+Use the following commands to build and run the application along with the database as docker containers
+```bash
+mvn clean package -DskipTests
+docker compose up -d
+```
+
+To stop the docker containers at once run `docker compose down` and add  `--volumes` option in case you want to remove also the database volumes
 
 ## Run unit tests
 
