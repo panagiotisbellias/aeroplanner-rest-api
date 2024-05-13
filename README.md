@@ -99,6 +99,14 @@ docker compose up -d
 
 To stop the docker containers at once run `docker compose down` and add  `--volumes` option in case you want to remove also the database volumes
 
+### Publish docker image in GitHub Container Registry (optional)
+
+Follow the instructions below to push the docker image in the GitHub Container Registry
+1. Create personal access token in GitHub via Settings / Developer settings / Personal access tokens
+2. Tag the image running `docker build -t ghcr.io/jcilacad/aeroplanner-rest-api:latest -t ghcr.io/jcilacad/aeroplanner-rest-api:0.0.1-SNAPSHOT .`
+3. Login to registry like `docker login ghcr.io -u jcilacad` providing also the personal access token when prompted
+4. Push image to registry : `docker push ghcr.io/jcilacad/aeroplanner-rest-api:latest ghcr.io/jcilacad/aeroplanner-rest-api:0.0.1-SNAPSHOT`
+
 ## Run unit tests
 
 Use the following command to run the unit tests:
