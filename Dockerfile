@@ -1,0 +1,17 @@
+# Use a base image with Java 17
+FROM openjdk:17-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the env properties
+COPY env.properties .
+
+# Copy the jar file
+COPY target/aeroplanner-rest-api*.jar .
+
+# Expose port 8005
+EXPOSE 8005
+
+# Command to run the Spring Boot application
+CMD ["java", "-jar", "aeroplanner-rest-api-0.0.1-SNAPSHOT.jar"]
