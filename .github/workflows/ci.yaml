@@ -59,8 +59,5 @@ jobs:
           distribution: 'adopt'
           architecture: 'x64'
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarcloud-github-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        run: mvn sonar:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
