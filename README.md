@@ -18,7 +18,7 @@ Follow these steps to get the application running on your machine:
 1. **Clone the application**
 
 Use the following command to clone the application:
-```
+```bash
 git clone https://github.com/jcilacad/aeroplanner-rest-api.git
 ```
 
@@ -53,8 +53,9 @@ Your directory structure should look like this:
 ```
 
 Inside the "env.properties" file, add the following properties (replace the placeholders with your actual data):
-```
+```properties
 DATABASE_NAME=aeroplanner_db
+DATABASE_HOST=<DATABASE HOST AND PORT>
 DATABASE_USERNAME=<DATABASE USERNAME>
 DATABASE_PASSWORD=<DATABASE PASSWORD>
 
@@ -70,18 +71,26 @@ GMAIL_USERNAME=<GOOGLE ACCOUNT EMAIL>
 GMAIL_PASSWORD=<GENERATED APP PASSWORD>
 ```
 
-
-6. **Run the application**
+### Run as standalone
 
 Use the following command to run the application:
-```
+```bash
 mvn clean spring-boot:run
+```
+
+### Run with docker (optional)
+
+Use the following commands to build and run the application as docker container
+```bash
+mvn clean package -DskipTests
+docker build -t jcilacad/aeroplanner-rest-api .
+docker run -p 8005:8005 jcilacad/aeroplanner-rest-api # add also --network <NETWORK_NAME> in case postgres is running in another docker network
 ```
 
 ## Run unit tests
 
 Use the following command to run the unit tests:
-```
+```bash
 mvn verify
 ```
 This way, unit tests are executed along JaCoCo tool to gather the code coverage which can be read from Sonarqube
@@ -91,7 +100,7 @@ This way, unit tests are executed along JaCoCo tool to gather the code coverage 
 - Have a **Sonarqube server** running
 - Generate an authentication token
 - Use the following command to analyze the application's code
-```
+```bash
 mvn sonar:sonar -D"sonar.token=<SONAR_AUTH_TOKEN>" -D"sonar.host.url=<SONAR_HOST>"
 ```
 - The `sonar.host.url` property can be omitted if using the default, which is `http://localhost:9000`
