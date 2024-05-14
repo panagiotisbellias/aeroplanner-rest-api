@@ -33,7 +33,6 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public PaginatedAndSortedPassengerResponse getPassengers(int pageNumber, int pageSize, String sortBy, String sortDir) {
-        LOG.debug(String.format("getPassengers(%d, %d, %s, %s)", pageNumber, pageSize, sortBy, sortDir));
         Sort sort = sortBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
@@ -49,13 +48,12 @@ public class PassengerServiceImpl implements PassengerService {
         passengerResponse.setTotalPages(page.getTotalPages());
         passengerResponse.setTotalElements(page.getTotalElements());
         passengerResponse.setLast(page.isLast());
-        LOG.info(String.format("Passengers : %s", passengerResponse));
+        LOG.info(String.format("Passengers : %s", passengerResponse.getTotalElements()));
         return passengerResponse;
     }
 
     @Override
     public UserResponse getPassenger(Long id) {
-        LOG.debug(String.format("getPassenger(%d)", id));
         return userRepository.findByIdAndRolesName(id, RoleEnum.USER)
                 .map(UserMapper.INSTANCE::userToUserResponse)
                 .orElseThrow(() -> new ResourceNotFoundException(PASSENGER, ID, id.toString()));
@@ -63,7 +61,6 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public void deletePassenger(Long id) {
-        LOG.debug(String.format("deletePassenger(%d)", id));
         if (!userRepository.existsByIdAndRoles_Name(id, RoleEnum.USER)) {
             throw new ResourceNotFoundException(PASSENGER, ID, id.toString());
         }

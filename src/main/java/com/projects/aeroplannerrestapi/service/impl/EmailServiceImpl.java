@@ -51,13 +51,13 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject(subject);
         message.setText(text);
         emailSender.send(message);
-        LOG.info(String.format("Email sent to %s", to));
+        LOG.info("Email sent %n");
+        LOG.debug(String.format("to %s", to));
     }
 
     @Async
     @Override
     public void sendEmail(TicketResponse ticketResponse) {
-        LOG.debug(String.format("sendEmail(%s)", ticketResponse));
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
@@ -82,7 +82,6 @@ public class EmailServiceImpl implements EmailService {
             String htmlContent = templateEngine.process(EMAIL_TEMPLATE, context);
             helper.setText(htmlContent, true);
             helper.addInline(HEADER, new ClassPathResource("static/images/header.jpg"), "image/jpeg");
-            LOG.debug(String.format("mime message helper : %s", helper));
             emailSender.send(mimeMessage);
             LOG.info(String.format("Email sent to %s : %s", to, mimeMessage));
         } catch (MessagingException e) {

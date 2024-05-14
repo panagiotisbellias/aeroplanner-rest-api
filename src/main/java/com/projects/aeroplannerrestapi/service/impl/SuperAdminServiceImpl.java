@@ -37,7 +37,6 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public UserResponse createAdministrator(RegisterRequest registerRequest) {
-        LOG.debug(String.format("createAdministrator(%s)", registerRequest));
         String email = registerRequest.getEmail();
         Optional<Role> role = roleRepository.findByName(RoleEnum.ADMIN);
         if (role.isEmpty()) throw new ResourceNotFoundException(ROLE, NAME, RoleEnum.ADMIN.name());
@@ -50,22 +49,20 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         roles.add(role.get());
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
-        LOG.info("Administrator is registered");
+        LOG.info(String.format("Administrator %s is registered", user.getEmail()));
         return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponse getAdministrator(Long id) {
-        LOG.debug(String.format("getAdministrator(%d)", id));
         User user = findByIdAndRole(id);
-        LOG.debug(String.format("Administrator %d : %s", id, user));
+        LOG.debug(String.format("Administrator %d : %s", id, user.getEmail()));
         return UserMapper.INSTANCE.userToUserResponse(user);
     }
 
     @Override
     public UserResponse updateAdministrator(Long id, RegisterRequest registerRequest) {
-        LOG.debug(String.format("updateAdministrator(%d, %s)", id, registerRequest));
         User user = findByIdAndRole(id);
         user.setUpdatedAt(LocalDateTime.now());
         user.setEmail(registerRequest.getEmail());
@@ -78,14 +75,12 @@ public class SuperAdminServiceImpl implements SuperAdminService {
 
     @Override
     public void deleteAdministrator(Long id) {
-        LOG.debug(String.format("deleteAdministrator(%d)", id));
         User user = findByIdAndRole(id);
         userRepository.delete(user);
         LOG.info(String.format("Administrator %d is deleted", id));
     }
 
     private User findByIdAndRole(Long id) {
-        LOG.debug(String.format("findByIdAndRole(%d)", id));
         return userRepository.findByIdAndRolesName(id, RoleEnum.ADMIN)
                 .orElseThrow(() -> new ResourceNotFoundException(USER, ID, id.toString()));
     }

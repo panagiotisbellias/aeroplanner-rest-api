@@ -32,7 +32,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketResponse createTicket(TicketRequest ticketRequest) {
-        LOG.debug(String.format("createTicket(%s)", ticketRequest));
         Long reservationId = ticketRequest.getReservationId();
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESERVATION, ID, reservationId.toString()));
@@ -49,7 +48,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<TicketResponse> getAllTickets() {
-        LOG.debug("getAllTickets()");
         return ticketRepository.findAll().stream()
                 .map(TicketMapper.INSTANCE::ticketToTicketResponse)
                 .toList();
@@ -57,7 +55,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketResponse getTicket(Long id) {
-        LOG.debug(String.format("getTicket(%d)", id));
         return ticketRepository.findById(id)
                 .map(TicketMapper.INSTANCE::ticketToTicketResponse)
                 .orElseThrow(() -> new ResourceNotFoundException(TICKET, ID, id.toString()));
@@ -65,7 +62,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketResponse updateTicket(Long id, TicketRequest ticketRequest) {
-        LOG.debug(String.format("updateTicket(%d, %s)", id, ticketRequest));
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(TICKET, ID, id.toString()));
         ticket.setTicketStatusEnum(TicketStatusEnum.ISSUED);
@@ -76,7 +72,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void cancelTicket(Long id) {
-        LOG.debug(String.format("cancelTicket(%d)", id));
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(TICKET, ID, id.toString()));
         ticket.setTicketStatusEnum(TicketStatusEnum.CANCELLED);

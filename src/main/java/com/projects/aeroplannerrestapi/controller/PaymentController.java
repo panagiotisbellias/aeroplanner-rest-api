@@ -36,7 +36,7 @@ public class PaymentController {
     @Operation(summary = MAKE_PAYMENT)
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = MADE_PAYMENT))
     public ResponseEntity<PaymentResponse> makePayment(@RequestBody @Valid PaymentRequest paymentRequest) {
-        LOG.debug(String.format("makePayment(%s)", paymentRequest));
+        LOG.debug(String.format("makePayment(%s)", paymentRequest.getId()));
         return new ResponseEntity<>(paymentService.processPayment(paymentRequest), HttpStatus.CREATED);
     }
 

@@ -44,7 +44,7 @@ public class ReservationCheckTask {
             Ticket ticket = ticketRepository.findByReservationId(reservationId)
                     .orElseThrow(() -> new ResourceNotFoundException(TICKET, RESERVATION_ID, reservationId));
             if (!ticket.getTicketStatusEnum().toString().equals(TicketStatusEnum.ISSUED.name())) {
-                LOG.warn("%tTicket is not issued");
+                LOG.warn("\tTicket is not issued");
                 String reservationDate = reservation.getReservationDate();
                 LocalDateTime givenDateTime = LocalDateTime.parse(reservationDate, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                 LocalDateTime twoDaysBefore = givenDateTime.minusDays(2);
@@ -53,7 +53,7 @@ public class ReservationCheckTask {
                     Long flightId = reservation.getFlightId();
                     reservation.setReservationStatus(ReservationStatusEnum.CANCELLED);
                     Reservation updatedReservation = reservationRepository.save(reservation);
-                    LOG.warn("%tReservation got cancelled due to the fact that less than two days left until flight");
+                    LOG.warn("\tReservation got cancelled due to the fact that less than two days left until flight");
                     Flight flight = flightRepository.findById(flightId)
                             .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, flightId.toString()));
                     flight.setCurrentAvailableSeat(flight.getCurrentAvailableSeat() + updatedReservation.getSeatNumber());

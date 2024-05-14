@@ -47,7 +47,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public UserResponse register(RegisterRequest registerRequest) {
-        LOG.debug(String.format("register(%s)", registerRequest));
         String email = registerRequest.getEmail();
         boolean isUserExists = userRepository.existsByEmail(email);
         Optional<Role> role = roleRepository.findByName(RoleEnum.USER);
@@ -61,13 +60,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         roles.add(role.get());
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
-        LOG.info(String.format("User %s registered", user));
+        LOG.info(String.format("User %s registered", user.getFullName()));
         return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
 
     @Override
     public LoginResponse authenticate(LoginRequest loginRequest) {
-        LOG.debug(String.format("authenticate(%s)", loginRequest));
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -78,20 +76,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(token);
         loginResponse.setExpiredIn(jwtService.getExpirationTime());
-        LOG.info(String.format("Login response : %s", loginResponse));
+        LOG.info(String.format("Login response's token expiration: %s", loginResponse.getExpiredIn()));
         return loginResponse;
     }
 
     @Override
     public void logout(HttpServletRequest request) {
-        LOG.debug(String.format("logout(%s)", request));
         String token = this.extractTokenFromRequest(request);
         tokenBlacklistService.addToBlacklist(token);
     }
 
     @Override
     public String extractTokenFromRequest(HttpServletRequest request) {
-        LOG.debug(String.format("extractTokenFromRequest(%s)", request));
+        LOG.debug(String.format("extractTokenFromRequest(%s)", request.getContextPath()));
         String authorizationHeader = request.getHeader("Authorization");
 
         if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {

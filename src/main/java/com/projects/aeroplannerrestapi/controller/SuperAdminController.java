@@ -33,7 +33,7 @@ public class SuperAdminController {
     @Operation(summary = CREATE_ADMINISTRATOR)
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = ADMINISTRATOR_CREATED))
     public ResponseEntity<UserResponse> createAdministrator(@RequestBody RegisterRequest registerRequest) {
-        LOG.debug(String.format("createAdministrator(%s)", registerRequest));
+        LOG.debug(String.format("createAdministrator(%s)", registerRequest.getEmail()));
         return new ResponseEntity<>(superAdminService.createAdministrator(registerRequest), HttpStatus.CREATED);
     }
 
@@ -50,7 +50,7 @@ public class SuperAdminController {
     @ApiResponses(@ApiResponse(responseCode = OK, description = ADMINISTRATOR_UPDATED))
     public ResponseEntity<UserResponse> updateAdministrator(@PathVariable Long id,
                                                        @RequestBody RegisterRequest registerRequest) {
-        LOG.debug(String.format("updateAdministrator(%d, %s)", id, registerRequest));
+        LOG.debug(String.format("updateAdministrator(%d, %s)", id, registerRequest.getEmail()));
         return ResponseEntity.ok(superAdminService.updateAdministrator(id, registerRequest));
     }
 

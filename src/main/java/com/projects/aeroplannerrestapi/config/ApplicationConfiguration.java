@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Objects;
+
 import static com.projects.aeroplannerrestapi.constants.ErrorMessage.USER_NOT_FOUND;
 
 @EnableAsync
@@ -28,26 +30,25 @@ public class ApplicationConfiguration {
 
     @Bean
     UserDetailsService userDetailsService() {
-        LOG.debug("userDetailsService()");
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
-        LOG.debug("passwordEncoder()");
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        LOG.debug(String.format("authenticationManager(%s)", config.getClass()));
-        return config.getAuthenticationManager();
+        if (config == null) {
+            LOG.warn("Authentication Configuration is null");
+        }
+        return Objects.requireNonNull(config).getAuthenticationManager();
     }
 
     @Bean
     AuthenticationProvider authenticationProvider() {
-        LOG.debug("authenticationProvider()");
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());

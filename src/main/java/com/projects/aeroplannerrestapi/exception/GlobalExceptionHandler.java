@@ -51,17 +51,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        LOG.debug(String.format("handleMethodArgumentNotValidException(%s)", exception));
+        LOG.debug(String.format("handleMethodArgumentNotValidException(%s)", exception.getMessage()));
         Map<String, String> errors = new HashMap<>();
         exception.getBindingResult()
                 .getAllErrors()
                 .forEach(error -> {
                     String fieldName = ((FieldError) error).getField();
                     String message = error.getDefaultMessage();
-                    LOG.info(message);
+                    LOG.info(error);
                     errors.put(fieldName, message);
                 });
-        LOG.info(String.format("errors equal to %d", errors.size()));
+        LOG.info(String.format("%d error(s)", errors.size()));
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
@@ -96,8 +96,7 @@ public class GlobalExceptionHandler {
         } else if (exception != null){
             errorMessage.append(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
         }
-        LOG.info(String.format("HTTP Status is %s%n" +
-                "Error message : %s", httpStatus, errorMessage));
+        LOG.info(String.format("HTTP Status is %s%n", httpStatus));
         return buildErrorDetailsResponse(errorMessage.toString(), webRequest.getDescription(false), httpStatus);
     }
 

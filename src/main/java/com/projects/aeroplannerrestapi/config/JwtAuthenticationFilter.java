@@ -39,7 +39,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        LOG.debug(String.format("doFilterInternal(%s, %s, %s)", request.getClass(), response.getClass(), filterChain.getClass()));
         final String authHeader = request.getHeader(AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith(BEARER)) {
@@ -55,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userEmail != null && authentication == null && !tokenBlacklistService.isBlacklisted(jwt)) {
-                LOG.info("No authentication");
+                LOG.info("No existing authentication header");
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
@@ -68,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
-            LOG.error(exception.getStackTrace());
+            LOG.error(exception.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }

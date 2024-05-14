@@ -30,7 +30,6 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public FlightResponse createFlight(FlightRequest flightRequest) {
-        LOG.debug(String.format("createFlight(%s)", flightRequest));
         Flight flight = FlightMapper.INSTANCE.flightRequestToFlight(flightRequest);
         flight.setCurrentAvailableSeat(flightRequest.getSeatAvailability());
         flight.setDuration(Duration.between(LocalDateTime.parse(flightRequest.getDepartureTime()),
@@ -42,7 +41,6 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public List<FlightResponse> getAllFlights() {
-        LOG.debug("getAllFlights()");
         return flightRepository.findAll().stream()
                 .map(FlightMapper.INSTANCE::flightToFlightResponse)
                 .toList();
@@ -50,17 +48,15 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public FlightResponse getFlight(Long id) {
-        LOG.debug(String.format("getFlight(%d)", id));
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
-        LOG.info(String.format("Flight with id : %d retrieved : %s", id, flight));
+        LOG.info(String.format("Flight with id : %d retrieved", id));
         return FlightMapper.INSTANCE.flightToFlightResponse(flight);
     }
 
     @Override
     @Transactional
     public FlightResponse updateFlight(Long id, FlightRequest flightRequest) {
-        LOG.debug(String.format("updateFlight(%s, %s)", id, flightRequest));
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
         flight.setFlightNumber(flightRequest.getFlightNumber());
@@ -80,7 +76,6 @@ public class FlightServiceImpl implements FlightService {
     @Override
     @Transactional
     public void deleteFlight(Long id) {
-        LOG.debug(String.format("deleteFlight(%d)", id));
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
         flightRepository.delete(flight);

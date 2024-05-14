@@ -65,7 +65,7 @@ class EmailServiceTest {
 
         Mockito.when(ticketResponse.getPassengerId()).thenReturn("0");
         Mockito.when(ticketResponse.getTicketStatusEnum()).thenReturn(TicketStatusEnum.BOARDED);
-        Mockito.when(passenger.getEmail()).thenReturn(EMAIL);
+        Mockito.when(passenger.getEmail()).thenReturn("test@email.com");
         Mockito.when(userRepository.findById(0L)).thenReturn(Optional.of(passenger));
         Mockito.when(emailSender.createMimeMessage()).thenReturn(mimeMessage);
         Mockito.when(templateEngine.process(ArgumentMatchers.eq(EMAIL_TEMPLATE), ArgumentMatchers.any(Context.class))).thenReturn(EMAIL_TEMPLATE);

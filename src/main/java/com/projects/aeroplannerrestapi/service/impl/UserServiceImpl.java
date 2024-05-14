@@ -32,17 +32,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse getAuthenticatedUser() {
-        LOG.debug("getAuthenticatedUser()");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        LOG.info(String.format("Current authenticated user : %s", currentUser));
+        LOG.info(String.format("Current authenticated user : %s", currentUser.getEmail()));
         return UserMapper.INSTANCE.userToUserResponse(currentUser);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PaginatedAndSortedUserResponse getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDirection) {
-        LOG.debug(String.format("getAllUsers(%d, %d, %s, %s)", pageNumber, pageSize, sortBy, sortDirection));
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
@@ -57,7 +55,7 @@ public class UserServiceImpl implements UserService {
         userResponse.setTotalElements(page.getTotalElements());
         userResponse.setTotalPages(page.getTotalPages());
         userResponse.setLast(page.isLast());
-        LOG.info(String.format("All users : %s", userResponse));
+        LOG.info(String.format("All users : %s", userResponse.getTotalElements()));
         return userResponse;
     }
 }

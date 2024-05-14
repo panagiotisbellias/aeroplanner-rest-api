@@ -51,7 +51,7 @@ public class TicketController {
     @Operation(summary = UPDATE_TICKET)
     @ApiResponses(@ApiResponse(responseCode = OK, description = TICKET_UPDATED))
     public ResponseEntity<TicketResponse> updateTicket(@PathVariable Long id, @RequestBody @Valid TicketRequest ticketRequest) {
-        LOG.debug(String.format("updateTicket(%d, %s)", id, ticketRequest));
+        LOG.debug(String.format("updateTicket(%d, %s)", id, ticketRequest.getId()));
         return ResponseEntity.ok(ticketService.updateTicket(id, ticketRequest));
     }
 

@@ -47,7 +47,6 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
     }
 
     private void loadRoles() {
-        LOG.debug("loadRoles()");
         RoleEnum[] roleEnums = new RoleEnum[]{RoleEnum.USER, RoleEnum.ADMIN, RoleEnum.SUPER_ADMIN};
         Map<RoleEnum, String> roleNameDescriptionMap = Map.of(
                 RoleEnum.USER, "Default user role",
@@ -60,13 +59,12 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
                 role.setName(roleEnum);
                 role.setDescription(roleNameDescriptionMap.get(roleEnum));
                 roleRepository.save(role);
-                LOG.info(String.format("Role %s with name '%s' created", role.getId(), roleEnum));
+                LOG.info(String.format("Role with name '%s' created", roleEnum));
             }
         });
     }
 
     private void createSuperAdministrator() {
-        LOG.debug("createSuperAdministrator()");
         if (!userRepository.existsByEmail(superAdminEmail)) {
             LOG.info(String.format("Super administrator with email '%s' does not exist", superAdminEmail));
             Optional<Role> role = roleRepository.findByName(RoleEnum.SUPER_ADMIN);

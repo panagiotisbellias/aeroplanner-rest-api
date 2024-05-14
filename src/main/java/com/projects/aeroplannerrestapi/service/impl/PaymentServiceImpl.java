@@ -41,7 +41,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponse processPayment(PaymentRequest paymentRequest) {
-        LOG.debug(String.format("processPayment(%s)", paymentRequest));
         Payment payment = PaymentMapper.INSTANCE.paymentRequestToPayment(paymentRequest);
         payment.setStatus(PaymentStatusEnum.PAID);
         payment.setTransactionId(UUID.randomUUID().toString());
@@ -70,7 +69,6 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional(readOnly = true)
     public Payment getPaymentDetails(Long id) {
-        LOG.debug(String.format("getPaymentDetails(%s)", id));
         return paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(PAYMENT, ID, id.toString()));
     }

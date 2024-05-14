@@ -56,7 +56,7 @@ public class User extends BaseEntityAudit implements UserDetails {
             String role = "ROLE_".concat(r.getName().toString());
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
             list.add(authority);
-            LOG.info(String.format("Retrieved role: %s and authority: %s", role, authority));
+            LOG.info(String.format("Retrieved role and authority: %s", role));
         }
         LOG.info(String.format("Retrieved %d authorities/roles", list.size()));
         return list;

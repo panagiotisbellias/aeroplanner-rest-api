@@ -36,7 +36,7 @@ public class ReservationController {
     @Operation(summary = CREATE_RESERVATION)
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = RESERVATION_CREATED))
     public ResponseEntity<ReservationResponse> createReservation(@RequestBody @Valid ReservationRequest reservationDto) {
-        LOG.debug(String.format("createReservation(%s)", reservationDto));
+        LOG.debug(String.format("createReservation(%s)", reservationDto.getId()));
         return new ResponseEntity<>(reservationService.createReservation(reservationDto), HttpStatus.CREATED);
     }
 
@@ -65,7 +65,7 @@ public class ReservationController {
     @ApiResponses(@ApiResponse(responseCode = OK, description = RESERVATION_UPDATED))
     public ResponseEntity<ReservationResponse> updateReservation(@PathVariable Long id,
                                                             @RequestBody @Valid ReservationRequest reservationRequest) {
-        LOG.debug(String.format("updateReservation(%d, %s)", id, reservationRequest));
+        LOG.debug(String.format("updateReservation(%d, %s)", id, reservationRequest.getId()));
         return ResponseEntity.ok(reservationService.updateReservation(id, reservationRequest));
     }
 

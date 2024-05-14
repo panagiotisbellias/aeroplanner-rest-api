@@ -66,8 +66,8 @@ class FlightServiceTest {
 
     @Test
     void testGetFlight() {
-        Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
-        FlightResponse response = flightService.getFlight(0L);
+        Mockito.when(flightRepository.findById(6L)).thenReturn(Optional.of(flight));
+        FlightResponse response = flightService.getFlight(6L);
 
         Assertions.assertEquals(0L, response.getId());
         Assertions.assertEquals(flight.getAirline(), response.getAirline());
@@ -83,35 +83,35 @@ class FlightServiceTest {
 
     @Test
     void testGetFlightNotFound() {
-        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.getFlight(0L));
-        Assertions.assertEquals(String.format(ErrorMessage.RESOURCE_NOT_FOUND, ErrorMessage.FLIGHT, ErrorMessage.ID, "0"), resourceNotFoundException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.getFlight(2L));
+        Assertions.assertEquals(String.format(ErrorMessage.RESOURCE_NOT_FOUND, ErrorMessage.FLIGHT, ErrorMessage.ID, "2"), resourceNotFoundException.getMessage());
     }
 
     @Test
     void testUpdateFlight() {
-        Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
-        Assertions.assertNull(flightService.updateFlight(0L, flightRequest));
+        Mockito.when(flightRepository.findById(4L)).thenReturn(Optional.of(flight));
+        Assertions.assertNull(flightService.updateFlight(4L, flightRequest));
     }
 
     @Test
     void testUpdateFlightNotFound() {
-        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.updateFlight(0L, flightRequest));
-        Assertions.assertEquals(ErrorMessage.FLIGHT.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 0"), resourceNotFoundException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.updateFlight(1L, flightRequest));
+        Assertions.assertEquals(ErrorMessage.FLIGHT.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 1"), resourceNotFoundException.getMessage());
     }
 
     @Test
     void testDeleteFlight() {
-        Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
-        flightService.deleteFlight(0L);
+        Mockito.when(flightRepository.findById(5L)).thenReturn(Optional.of(flight));
+        flightService.deleteFlight(5L);
 
-        Mockito.verify(flightRepository).findById(0L);
+        Mockito.verify(flightRepository).findById(5L);
         Mockito.verify(flightRepository).delete(flight);
     }
 
     @Test
     void testDeleteFlightNotFound() {
-        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.deleteFlight(0L));
-        Assertions.assertEquals(ErrorMessage.FLIGHT.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 0"), resourceNotFoundException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> flightService.deleteFlight(3L));
+        Assertions.assertEquals(ErrorMessage.FLIGHT.concat(" not found with ").concat(ErrorMessage.ID).concat(" : 3"), resourceNotFoundException.getMessage());
     }
 
 }

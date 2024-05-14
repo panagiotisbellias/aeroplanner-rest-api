@@ -40,7 +40,10 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        LOG.debug(String.format("securityFilterChain(%s)", http.getClass()));
+        if (http == null) {
+            LOG.warn("HttpSecurity object is null");
+            return null;
+        }
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeRequests -> authorizeRequests
@@ -59,7 +62,6 @@ public class SecurityConfiguration {
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        LOG.debug("corsConfigurationSource()");
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:8005"));
         configuration.setAllowedMethods(List.of("*"));

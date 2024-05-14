@@ -38,7 +38,10 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        LOG.debug(String.format("extractClaim(%s, %s)", token, claimsResolver));
+        if (claimsResolver == null) {
+            LOG.warn("Claims resolver is null");
+            return null;
+        }
         final Claims claims = extractAllClaims(token);
         LOG.debug(String.format("Claims : %s", claims));
         return claimsResolver.apply(claims);
@@ -46,13 +49,13 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateToken(UserDetails userDetails) {
-        LOG.debug(String.format("generateToken(%s)", userDetails));
+        LOG.debug(String.format("generateToken(%s)", userDetails.getUsername()));
         return generateToken(new HashMap<>(), userDetails);
     }
 
     @Override
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        LOG.debug(String.format("generateToken(%s, %s)", extraClaims, userDetails));
+        LOG.debug(String.format("generateToken(%s, %s)", extraClaims.size(), userDetails.getUsername()));
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
@@ -63,7 +66,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
-        LOG.debug(String.format("buildToken(%s, %s, %d)", extraClaims, userDetails, jwtExpiration));
+        LOG.debug(String.format("buildToken(%s, %s, %d)", extraClaims.size(), userDetails.getUsername(), jwtExpiration));
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -76,24 +79,21 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        LOG.debug(String.format("isTokenValid(%s, %s)", token, userDetails));
+        LOG.debug(String.format("isTokenValid(%s, %s)", token, userDetails.getUsername()));
         final String username = extractUsername(token);
         LOG.debug(String.format("Username is %s", username));
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
-        LOG.debug(String.format("isTokenExpired(%s)", token));
         return extractExpiration(token).before(new Date());
     }
 
     private Date extractExpiration(String token) {
-        LOG.debug(String.format("extractExpiration(%s)", token));
         return extractClaim(token, Claims::getExpiration);
     }
 
     private Claims extractAllClaims(String token) {
-        LOG.debug(String.format("extractAllClaims(%s)", token));
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -103,7 +103,6 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Key getSignInKey() {
-        LOG.debug("getSigningKey()");
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         LOG.debug(String.format("Key bytes are : %s", Arrays.toString(keyBytes)));
         return Keys.hmacShaKeyFor(keyBytes);
