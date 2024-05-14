@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,8 @@ import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.*;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final Log LOG = LogFactory.getLog(JwtAuthenticationFilter.class);
+
     private final HandlerExceptionResolver handlerExceptionResolver;
     private final TokenBlacklistService tokenBlacklistService;
     private final UserDetailsService userDetailsService;
@@ -38,6 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader(AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith(BEARER)) {
+            LOG.debug(String.format("Authentication header : %s", authHeader));
+            LOG.warn("Authentication header is null/non-bearer");
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,9 +54,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userEmail != null && authentication == null && !tokenBlacklistService.isBlacklisted(jwt)) {
+                LOG.info("No existing authentication header");
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
+                    LOG.debug(String.format("Invalid JWT: %s", jwt));
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -59,6 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            LOG.error(exception.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }

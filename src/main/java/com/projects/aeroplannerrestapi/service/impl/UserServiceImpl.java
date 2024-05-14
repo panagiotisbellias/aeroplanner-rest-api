@@ -7,6 +7,8 @@ import com.projects.aeroplannerrestapi.mapper.UserMapper;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final Log LOG = LogFactory.getLog(UserServiceImpl.class);
+
     private final UserRepository userRepository;
 
     @Override
@@ -30,6 +34,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
+        LOG.info(String.format("Current authenticated user : %s", currentUser.getEmail()));
         return UserMapper.INSTANCE.userToUserResponse(currentUser);
     }
 
@@ -50,6 +55,7 @@ public class UserServiceImpl implements UserService {
         userResponse.setTotalElements(page.getTotalElements());
         userResponse.setTotalPages(page.getTotalPages());
         userResponse.setLast(page.isLast());
+        LOG.info(String.format("All users : %s", userResponse.getTotalElements()));
         return userResponse;
     }
 }

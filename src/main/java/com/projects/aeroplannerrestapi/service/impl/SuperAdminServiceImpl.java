@@ -12,6 +12,8 @@ import com.projects.aeroplannerrestapi.repository.RoleRepository;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.SuperAdminService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 @Service
 @RequiredArgsConstructor
 public class SuperAdminServiceImpl implements SuperAdminService {
+
+    private static final Log LOG = LogFactory.getLog(SuperAdminServiceImpl.class);
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
@@ -45,6 +49,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         roles.add(role.get());
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
+        LOG.info(String.format("Administrator %s is registered", user.getEmail()));
         return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
 
@@ -52,6 +57,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     @Transactional(readOnly = true)
     public UserResponse getAdministrator(Long id) {
         User user = findByIdAndRole(id);
+        LOG.debug(String.format("Administrator %d : %s", id, user.getEmail()));
         return UserMapper.INSTANCE.userToUserResponse(user);
     }
 
@@ -63,6 +69,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
         user.setFullName(registerRequest.getFullName());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         User updatedUser = userRepository.save(user);
+        LOG.info(String.format("Administrator %d is updated", id));
         return UserMapper.INSTANCE.userToUserResponse(updatedUser);
     }
 
@@ -70,6 +77,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     public void deleteAdministrator(Long id) {
         User user = findByIdAndRole(id);
         userRepository.delete(user);
+        LOG.info(String.format("Administrator %d is deleted", id));
     }
 
     private User findByIdAndRole(Long id) {

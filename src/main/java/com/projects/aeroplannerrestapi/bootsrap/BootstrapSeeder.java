@@ -7,6 +7,8 @@ import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.repository.RoleRepository;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -21,6 +23,8 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ROLE;
 @Component
 @RequiredArgsConstructor
 public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEvent> {
+
+    private static final Log LOG = LogFactory.getLog(BootstrapSeeder.class);
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
@@ -37,6 +41,7 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        LOG.debug(String.format("onApplicationEvent(%s)", event.toString()));
         this.loadRoles();
         this.createSuperAdministrator();
     }
@@ -49,16 +54,19 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
                 RoleEnum.SUPER_ADMIN, "Super administrator role");
         Arrays.stream(roleEnums).forEach(roleEnum -> {
             if (!roleRepository.existsByName(roleEnum)) {
+                LOG.info(String.format("Role %s does not exist", roleEnum));
                 Role role = new Role();
                 role.setName(roleEnum);
                 role.setDescription(roleNameDescriptionMap.get(roleEnum));
                 roleRepository.save(role);
+                LOG.info(String.format("Role with name '%s' created", roleEnum));
             }
         });
     }
 
     private void createSuperAdministrator() {
         if (!userRepository.existsByEmail(superAdminEmail)) {
+            LOG.info(String.format("Super administrator with email '%s' does not exist", superAdminEmail));
             Optional<Role> role = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
             if (role.isEmpty()) throw new ResourceNotFoundException(ROLE, NAME, RoleEnum.SUPER_ADMIN.name());
             User user = new User();
@@ -69,6 +77,7 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
             set.add(role.get());
             user.setRoles(set);
             userRepository.save(user);
+            LOG.info(String.format("Super administrator '%s' created", user.getFullName()));
         }
     }
 

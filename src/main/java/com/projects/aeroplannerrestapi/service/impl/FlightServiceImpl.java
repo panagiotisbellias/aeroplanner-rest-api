@@ -8,6 +8,8 @@ import com.projects.aeroplannerrestapi.mapper.FlightMapper;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.service.FlightService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ID;
 @RequiredArgsConstructor
 public class FlightServiceImpl implements FlightService {
 
+    private static final Log LOG = LogFactory.getLog(FlightServiceImpl.class);
+
     private final FlightRepository flightRepository;
 
     @Override
@@ -31,6 +35,7 @@ public class FlightServiceImpl implements FlightService {
         flight.setDuration(Duration.between(LocalDateTime.parse(flightRequest.getDepartureTime()),
                 LocalDateTime.parse(flightRequest.getArrivalTime())));
         Flight savedFlight = flightRepository.save(flight);
+        LOG.info(String.format("New flight with id : %d created", flight.getId()));
         return FlightMapper.INSTANCE.flightToFlightResponse(savedFlight);
     }
 
@@ -45,6 +50,7 @@ public class FlightServiceImpl implements FlightService {
     public FlightResponse getFlight(Long id) {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
+        LOG.info(String.format("Flight with id : %d retrieved", id));
         return FlightMapper.INSTANCE.flightToFlightResponse(flight);
     }
 
@@ -63,6 +69,7 @@ public class FlightServiceImpl implements FlightService {
         flight.setArrivalTime(flightRequest.getArrivalTime());
         flight.setDepartureTime(flightRequest.getDepartureTime());
         flight.setSeatAvailability(flightRequest.getSeatAvailability());
+        LOG.info(String.format("Flight with id : %d gets updated", id));
         return FlightMapper.INSTANCE.flightToFlightResponse(flightRepository.save(flight));
     }
 
@@ -72,5 +79,6 @@ public class FlightServiceImpl implements FlightService {
         Flight flight = flightRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(FLIGHT, ID, id.toString()));
         flightRepository.delete(flight);
+        LOG.info(String.format("Flight with id : %d deleted", id));
     }
 }

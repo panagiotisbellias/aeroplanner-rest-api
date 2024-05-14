@@ -17,6 +17,8 @@ import com.projects.aeroplannerrestapi.service.EmailService;
 import com.projects.aeroplannerrestapi.service.PaymentService;
 import com.projects.aeroplannerrestapi.service.TicketService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,8 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 @Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
+
+    private static final Log LOG = LogFactory.getLog(PaymentServiceImpl.class);
 
     private final PaymentRepository paymentRepository;
     private final ReservationRepository reservationRepository;
@@ -41,6 +45,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setStatus(PaymentStatusEnum.PAID);
         payment.setTransactionId(UUID.randomUUID().toString());
         Payment savedPayment = paymentRepository.save(payment);
+        LOG.info("Payment done");
         Long flightId = savedPayment.getFlightId();
         Long passengerId = savedPayment.getPassengerId();
         Flight flight = flightRepository.findById(flightId)

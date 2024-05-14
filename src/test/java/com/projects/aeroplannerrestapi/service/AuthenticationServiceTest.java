@@ -73,6 +73,7 @@ class AuthenticationServiceTest {
     @Test
     void testRegister() {
         Mockito.when(roleRepository.findByName(RoleEnum.USER)).thenReturn(Optional.of(role));
+        Mockito.when(registerRequest.getFullName()).thenReturn("Test User");
         Assertions.assertNull(authenticationService.register(registerRequest));
     }
 
@@ -105,8 +106,9 @@ class AuthenticationServiceTest {
 
     @Test
     void testAuthenticateUserNotFound() {
+        Mockito.when(loginRequest.getEmail()).thenReturn("test@email.com");
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> authenticationService.authenticate(loginRequest));
-        Assertions.assertEquals(ErrorMessage.USER_NOT_FOUND.concat(" with ").concat(ErrorMessage.EMAIL).concat(" : null"), resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.USER_NOT_FOUND.concat(" with ").concat(ErrorMessage.EMAIL).concat(" : test@email.com"), resourceNotFoundException.getMessage());
     }
 
     @Test

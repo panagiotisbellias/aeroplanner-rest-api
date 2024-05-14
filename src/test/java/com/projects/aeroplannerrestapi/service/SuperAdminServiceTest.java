@@ -54,6 +54,7 @@ class SuperAdminServiceTest {
     @Test
     void testCreateAdministrator() {
         Mockito.when(roleRepository.findByName(RoleEnum.ADMIN)).thenReturn(Optional.of(role));
+        Mockito.when(registerRequest.getEmail()).thenReturn("test@email.com");
         Assertions.assertNull(superAdminService.createAdministrator(registerRequest));
     }
 
@@ -81,16 +82,16 @@ class SuperAdminServiceTest {
 
     @Test
     void testUpdateAdministrator() {
-        Mockito.when(userRepository.findByIdAndRolesName(0L, RoleEnum.ADMIN)).thenReturn(Optional.of(user));
-        Assertions.assertNull(superAdminService.updateAdministrator(0L, registerRequest));
+        Mockito.when(userRepository.findByIdAndRolesName(1L, RoleEnum.ADMIN)).thenReturn(Optional.of(user));
+        Assertions.assertNull(superAdminService.updateAdministrator(1L, registerRequest));
     }
 
     @Test
     void testDeleteAdministrator() {
-        Mockito.when(userRepository.findByIdAndRolesName(0L, RoleEnum.ADMIN)).thenReturn(Optional.of(user));
-        superAdminService.deleteAdministrator(0L);
+        Mockito.when(userRepository.findByIdAndRolesName(2L, RoleEnum.ADMIN)).thenReturn(Optional.of(user));
+        superAdminService.deleteAdministrator(2L);
 
-        Mockito.verify(userRepository).findByIdAndRolesName(0L, RoleEnum.ADMIN);
+        Mockito.verify(userRepository).findByIdAndRolesName(2L, RoleEnum.ADMIN);
         Mockito.verify(userRepository).delete(user);
     }
 

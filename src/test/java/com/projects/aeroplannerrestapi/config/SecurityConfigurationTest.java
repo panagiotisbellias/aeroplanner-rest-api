@@ -42,6 +42,11 @@ class SecurityConfigurationTest {
     }
 
     @Test
+    void testSecurityFilterChainNull() throws Exception {
+        Assertions.assertNull(securityConfiguration.securityFilterChain(null));
+    }
+
+    @Test
     void testCorsConfigurationSource() {
         Assertions.assertInstanceOf(CorsConfigurationSource.class, securityConfiguration.corsConfigurationSource());
     }

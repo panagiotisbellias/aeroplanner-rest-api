@@ -18,6 +18,8 @@ import com.projects.aeroplannerrestapi.service.JwtService;
 import com.projects.aeroplannerrestapi.service.TokenBlacklistService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +35,8 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
+
+    private static final Log LOG = LogFactory.getLog(AuthenticationServiceImpl.class);
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -56,6 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         roles.add(role.get());
         user.setRoles(roles);
         User savedUser = userRepository.save(user);
+        LOG.info(String.format("User %s registered", user.getFullName()));
         return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
 
@@ -67,9 +72,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(USER, EMAIL, email));
         String token = jwtService.generateToken(user);
+        LOG.debug(String.format("Token : %s", token));
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(token);
         loginResponse.setExpiredIn(jwtService.getExpirationTime());
+        LOG.info(String.format("Login response's token expiration: %s", loginResponse.getExpiredIn()));
         return loginResponse;
     }
 
@@ -81,9 +88,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public String extractTokenFromRequest(HttpServletRequest request) {
+        LOG.debug(String.format("extractTokenFromRequest(%s)", request.getContextPath()));
         String authorizationHeader = request.getHeader("Authorization");
 
         if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            LOG.debug(String.format("Authentication header '%s' is valid", authorizationHeader));
             return authorizationHeader.substring(7);
         }
         throw new TokenNotFoundException();

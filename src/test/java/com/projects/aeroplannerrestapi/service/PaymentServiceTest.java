@@ -82,11 +82,12 @@ class PaymentServiceTest {
 
     @Test
     void testProcessPaymentReservationNotFound() {
-        Mockito.when(payment.getFlightId()).thenReturn(0L);
+        Mockito.when(payment.getFlightId()).thenReturn(1L);
+        Mockito.when(payment.getPassengerId()).thenReturn(2L);
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
-        Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
+        Mockito.when(flightRepository.findById(1L)).thenReturn(Optional.of(flight));
         ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> paymentService.processPayment(paymentRequest));
-        Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 0 : 0"), resourceNotFoundException.getMessage());
+        Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 1 : 2"), resourceNotFoundException.getMessage());
     }
 
     @Test

@@ -9,6 +9,8 @@ import com.projects.aeroplannerrestapi.mapper.UserMapper;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.PassengerService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,8 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.PASSENGER;
 @Service
 @RequiredArgsConstructor
 public class PassengerServiceImpl implements PassengerService {
+
+    private static final Log LOG = LogFactory.getLog(PassengerServiceImpl.class);
 
     private final UserRepository userRepository;
 
@@ -44,6 +48,7 @@ public class PassengerServiceImpl implements PassengerService {
         passengerResponse.setTotalPages(page.getTotalPages());
         passengerResponse.setTotalElements(page.getTotalElements());
         passengerResponse.setLast(page.isLast());
+        LOG.info(String.format("Passengers : %s", passengerResponse.getTotalElements()));
         return passengerResponse;
     }
 
@@ -60,5 +65,6 @@ public class PassengerServiceImpl implements PassengerService {
             throw new ResourceNotFoundException(PASSENGER, ID, id.toString());
         }
         userRepository.deleteByIdAndRoles_Name(id, RoleEnum.USER);
+        LOG.info(String.format("Passenger with id : %d is deleted", id));
     }
 }

@@ -1,5 +1,7 @@
 package com.projects.aeroplannerrestapi.config;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -24,6 +26,8 @@ import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+    private static final Log LOG = LogFactory.getLog(SecurityConfiguration.class);
+
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -31,10 +35,15 @@ public class SecurityConfiguration {
                                  AuthenticationProvider authenticationProvider) {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        LOG.debug("Security Configuration instantiated");
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        if (http == null) {
+            LOG.warn("HttpSecurity object is null");
+            return null;
+        }
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeRequests -> authorizeRequests

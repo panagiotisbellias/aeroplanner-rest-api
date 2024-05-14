@@ -67,19 +67,20 @@ class TicketServiceTest {
 
     @Test
     void testUpdateTicket() {
-        Mockito.when(ticketRepository.findById(0L)).thenReturn(Optional.of(ticket));
-        Assertions.assertNull(ticketService.updateTicket(0L, ticketRequest));
+        Mockito.when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticket));
+        Assertions.assertNull(ticketService.updateTicket(1L, ticketRequest));
     }
 
     @Test
     void testCancelTicket() {
         Mockito.when(ticket.getFlightId()).thenReturn("0");
         Mockito.when(ticket.getPassengerId()).thenReturn("1");
-        Mockito.when(ticketRepository.findById(0L)).thenReturn(Optional.of(ticket));
+        Mockito.when(ticketRepository.findById(2L)).thenReturn(Optional.of(ticket));
+        Mockito.when(reservation.getId()).thenReturn(2L);
         Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
-        ticketService.cancelTicket(0L);
+        ticketService.cancelTicket(2L);
 
-        Mockito.verify(ticketRepository).findById(0L);
+        Mockito.verify(ticketRepository).findById(2L);
         Mockito.verify(ticket).setTicketStatusEnum(TicketStatusEnum.CANCELLED);
         Mockito.verify(ticketRepository).save(ticket);
         Mockito.verify(ticket).getFlightId();
@@ -91,12 +92,12 @@ class TicketServiceTest {
 
     @Test
     void testCancelTicketReservationNotFound() {
-        Mockito.when(ticket.getFlightId()).thenReturn("0");
-        Mockito.when(ticket.getPassengerId()).thenReturn("1");
-        Mockito.when(ticketRepository.findById(0L)).thenReturn(Optional.of(ticket));
+        Mockito.when(ticket.getFlightId()).thenReturn("1");
+        Mockito.when(ticket.getPassengerId()).thenReturn("2");
+        Mockito.when(ticketRepository.findById(3L)).thenReturn(Optional.of(ticket));
 
-        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> ticketService.cancelTicket(0L));
-        Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 0 : 1"), resourceNotFoundException.getMessage());
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> ticketService.cancelTicket(3L));
+        Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 1 : 2"), resourceNotFoundException.getMessage());
     }
 
 }
