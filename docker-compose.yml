@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13.2
+    container_name: postgres
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=aeroplanner_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+    networks:
+      - aeroplanner  # Connect to the network
+
+  aeroplanner-rest-api:
+    build: .
+    container_name: aeroplanner-rest-api
+    ports:
+      - "8005:8005"  # Map host port to container port
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/aeroplanner_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    networks:
+      - aeroplanner  # Connect to the network
+
+networks:
+  aeroplanner:
+    driver: bridge
+
+volumes:
+  postgresql:
+  postgresql_data:

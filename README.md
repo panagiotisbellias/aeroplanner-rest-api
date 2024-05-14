@@ -9,6 +9,8 @@ Before you begin, ensure you have met the following requirements:
 - You have installed **Java v17**
 - You have installed **Maven (mvn)**
 - You have a **Postgres server** running
+- You have installed **Docker** and **docker-compose** (optional)
+- You have **Docker service** running (optional)
 
 ## 🚀Running Aeroplanner REST API Locally
 
@@ -18,7 +20,7 @@ Follow these steps to get the application running on your machine:
 1. **Clone the application**
 
 Use the following command to clone the application:
-```
+```bash
 git clone https://github.com/jcilacad/aeroplanner-rest-api.git
 ```
 
@@ -53,8 +55,9 @@ Your directory structure should look like this:
 ```
 
 Inside the "env.properties" file, add the following properties (replace the placeholders with your actual data):
-```
+```properties
 DATABASE_NAME=aeroplanner_db
+DATABASE_HOST=<DATABASE HOST AND PORT>
 DATABASE_USERNAME=<DATABASE USERNAME>
 DATABASE_PASSWORD=<DATABASE PASSWORD>
 
@@ -70,18 +73,44 @@ GMAIL_USERNAME=<GOOGLE ACCOUNT EMAIL>
 GMAIL_PASSWORD=<GENERATED APP PASSWORD>
 ```
 
-
-6. **Run the application**
+### Run as standalone
 
 Use the following command to run the application:
-```
+```bash
 mvn clean spring-boot:run
 ```
+
+### Run with docker (optional)
+
+Use the following commands to build and run the application as docker container
+```bash
+mvn clean package -DskipTests
+docker build -t jcilacad/aeroplanner-rest-api .
+docker run -p 8005:8005 jcilacad/aeroplanner-rest-api # add also --network <NETWORK_NAME> in case postgres is running in another docker network
+```
+
+### Run with docker-compose (optional)
+
+Use the following commands to build and run the application along with the database as docker containers
+```bash
+mvn clean package -DskipTests
+docker compose up -d
+```
+
+To stop the docker containers at once run `docker compose down` and add  `--volumes` option in case you want to remove also the database volumes
+
+### Publish docker image in GitHub Container Registry (optional)
+
+Follow the instructions below to push the docker image in the GitHub Container Registry
+1. Create personal access token in GitHub via Settings / Developer settings / Personal access tokens
+2. Tag the image running `docker build -t ghcr.io/jcilacad/aeroplanner-rest-api:latest -t ghcr.io/jcilacad/aeroplanner-rest-api:0.0.1-SNAPSHOT .`
+3. Login to registry like `docker login ghcr.io -u jcilacad` providing also the personal access token when prompted
+4. Push image to registry : `docker push ghcr.io/jcilacad/aeroplanner-rest-api:latest ghcr.io/jcilacad/aeroplanner-rest-api:0.0.1-SNAPSHOT`
 
 ## Run unit tests
 
 Use the following command to run the unit tests:
-```
+```bash
 mvn verify
 ```
 This way, unit tests are executed along JaCoCo tool to gather the code coverage which can be read from Sonarqube
@@ -91,7 +120,7 @@ This way, unit tests are executed along JaCoCo tool to gather the code coverage 
 - Have a **Sonarqube server** running
 - Generate an authentication token
 - Use the following command to analyze the application's code
-```
+```bash
 mvn sonar:sonar -D"sonar.token=<SONAR_AUTH_TOKEN>" -D"sonar.host.url=<SONAR_HOST>"
 ```
 - The `sonar.host.url` property can be omitted if using the default, which is `http://localhost:9000`
