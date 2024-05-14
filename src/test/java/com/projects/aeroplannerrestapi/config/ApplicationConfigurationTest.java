@@ -49,6 +49,11 @@ class ApplicationConfigurationTest {
     }
 
     @Test
+    void testAuthenticationManagerNull() {
+        Assertions.assertThrows(NullPointerException.class, () -> applicationConfiguration.authenticationManager(null));
+    }
+
+    @Test
     void testAuthenticationProvider() {
         Assertions.assertInstanceOf(AuthenticationProvider.class, applicationConfiguration.authenticationProvider());
     }
