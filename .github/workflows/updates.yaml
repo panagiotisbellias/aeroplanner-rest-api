@@ -28,4 +28,4 @@ jobs:
         run: mvn versions:display-plugin-updates
 
       - name: Update dependencies and plugins
-        run: mvn versions:update-properties versions:resolve-dependencies
+        run: mvn versions:update-properties versions:use-latest-versions
