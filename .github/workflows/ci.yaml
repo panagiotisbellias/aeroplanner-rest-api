@@ -62,6 +62,9 @@ jobs:
       - name: Copy env.properties
         run: cp env.properties.example env.properties
 
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
       - name: Docker Build
         run: docker build -t jcilacad/aeroplanner-rest-api:latest -t jcilacad/aeroplanner-rest-api:0.0.1-SNAPSHOT .
 
