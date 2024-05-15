@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the env properties
 COPY env.properties .
 
+# Set the source label
+LABEL org.opencontainers.image.source https://github.com/jcilacad/aeroplanner-rest-api
+
 # Copy the jar file
 COPY target/aeroplanner-rest-api*.jar .
 
