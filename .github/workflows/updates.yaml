@@ -29,3 +29,9 @@ jobs:
 
       - name: Update dependencies and plugins
         run: mvn versions:update-properties versions:use-latest-versions
+
+      - name: Build project
+        run: mvn clean install -DskipTests=true
+
+      - name: Run tests
+        run: mvn test
