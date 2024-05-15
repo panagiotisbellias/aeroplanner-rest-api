@@ -23,3 +23,9 @@ jobs:
 
       - name: Check for dependency updates
         run: mvn versions:display-dependency-updates
+
+      - name: Check for plugin updates
+        run: mvn versions:display-plugin-updates
+
+      - name: Update dependencies and plugins
+        run: mvn versions:update-properties versions:resolve-dependencies
