@@ -59,6 +59,9 @@ jobs:
           distribution: 'adopt'
           architecture: 'x64'
 
+      - name: Copy env.properties
+        run: cp env.properties.example env.properties
+
       - name: Docker Build
         run: docker build -t jcilacad/aeroplanner-rest-api:latest -t jcilacad/aeroplanner-rest-api:0.0.1-SNAPSHOT .
 
