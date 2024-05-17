@@ -1,6 +1,10 @@
 name: CI
 
 on:
+  pull_request:
+    branches:
+      - main
+      - issue-101-cicd
   push:
     branches:
       - main
