@@ -4,6 +4,9 @@ FROM openjdk:17-alpine
 # Set the working directory inside the container
 WORKDIR /app
 
+# Set the source label
+LABEL org.opencontainers.image.source https://github.com/jcilacad/aeroplanner-rest-api
+
 # Copy the env properties
 COPY env.properties .
 
