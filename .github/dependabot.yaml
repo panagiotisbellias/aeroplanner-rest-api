@@ -3,8 +3,8 @@ version: 2
 updates:
   - package-ecosystem: "maven"
     directory: "/" # Location of the pom.xml file
-    schedule:
-      interval: "daily" # Check for updates daily
+#    schedule:
+#      interval: "daily" # Check for updates daily
     open-pull-requests-limit: 5 # Limit the number of open PRs
     target-branch: issue-101-cicd
 #    ignore:
