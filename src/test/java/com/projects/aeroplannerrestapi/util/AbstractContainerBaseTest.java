@@ -12,7 +12,7 @@ public abstract class AbstractContainerBaseTest {
         pgvector = new PostgreSQLContainer<>("pgvector/pgvector:pg16");
         pgvector.start();
     }
-    
+
     @DynamicPropertySource
     public static void dynamicPropertySource(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", pgvector::getJdbcUrl);
