@@ -1,6 +1,5 @@
 package com.projects.aeroplannerrestapi.bootstrap;
 
-import com.projects.aeroplannerrestapi.bootsrap.BootstrapSeeder;
 import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;

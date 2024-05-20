@@ -1,4 +1,4 @@
-package com.projects.aeroplannerrestapi.bootsrap;
+package com.projects.aeroplannerrestapi.bootstrap;
 
 import com.projects.aeroplannerrestapi.entity.Role;
 import com.projects.aeroplannerrestapi.entity.User;
