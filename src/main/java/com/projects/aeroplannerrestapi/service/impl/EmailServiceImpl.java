@@ -38,7 +38,7 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
 
-    @Value("${GMAIL_USERNAME}")
+    @Value("${GMAIL_USERNAME:aeroplanner@gmail.com}")
     private String gmailUsername;
 
     @Async

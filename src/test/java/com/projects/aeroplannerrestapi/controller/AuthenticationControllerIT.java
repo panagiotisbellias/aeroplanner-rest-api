@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -26,16 +25,13 @@ public class AuthenticationControllerIT extends AbstractContainerBaseTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Test
     public void givenRegisterRequest_whenRegister_thenReturnRegisteredUser() throws Exception {
         // given
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setEmail("sample@email.com");
-        registerRequest.setPassword(passwordEncoder.encode("password"));
         registerRequest.setFullName("full name");
+        registerRequest.setPassword("Password@123!");
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/register")
@@ -43,7 +39,9 @@ public class AuthenticationControllerIT extends AbstractContainerBaseTest {
                 .content(objectMapper.writeValueAsString(registerRequest)));
 
         // then
-        resultActions.andDo(print())
-                .andExpect(status().isCreated());
+        resultActions.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(registerRequest.getEmail()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fullName").value(registerRequest.getFullName()));
     }
 }
