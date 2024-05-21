@@ -104,5 +104,5 @@ jobs:
 
       - name: Run SonarLint Analysis
         run: |
-          cd sonarlint-cli-1.0
-          ./bin/sonarlint -Dsonar.java.binaries=target/classes -Dsonar.sources=src/main/java
+          ls sonarlint-cli-1.0
+          ./sonarlint-cli-1.0/bin/sonarlint -Dsonar.java.binaries=target/classes -Dsonar.sources=src/main/java
