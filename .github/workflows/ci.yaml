@@ -99,6 +99,7 @@ jobs:
             mkdir sonarlint-cli
             cd sonarlint-cli
             curl -L -o sonarlint-cli.zip https://binaries.sonarsource.com/Distribution/sonarlint-cli-1.0.zip
+            ls .
             unzip sonarlint-cli.zip
             chmod +x sonarlint-cli/bin/sonarlint
 
