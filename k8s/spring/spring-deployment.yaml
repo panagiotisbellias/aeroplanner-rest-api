@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: spring
+  template:
+    metadata:
+      labels:
+        component: spring
+    spec:
+      containers:
+        - name: spring
+          image: ghcr.io/panagiotisbellias/aeroplanner-rest-api
+          ports:
+            - containerPort: 8005
+          envFrom:
+            - configMapRef:
+                name: spring-config
+          imagePullPolicy: Always

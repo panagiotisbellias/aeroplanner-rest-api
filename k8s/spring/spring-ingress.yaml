@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spring-ingress
+spec:
+  rules:
+#    - host: ""
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: spring-cluster-ip
+                port:
+                  number: 8005
+
+#  tls:
+#    - hosts:
+#        -
+#      secretName: tls-secret
