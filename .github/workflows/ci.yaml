@@ -76,7 +76,7 @@ jobs:
         run: docker login ghcr.io -u panagiotisbellias -p ${{ secrets.REGISTRY_TOKEN }}
 
       - name: Docker push
-        run: docker push ghcr.io/panagiotisbellias/aeroplanner-rest-api:latest ghcr.io/panagiotisbellias/aeroplanner-rest-api:0.0.1-SNAPSHOT
+        run: docker push ghcr.io/panagiotisbellias/aeroplanner-rest-api --all-tags
 
 #  sonar:
 #    runs-on: ubuntu-latest
