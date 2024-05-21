@@ -115,6 +115,13 @@ mvn verify
 ```
 This way, unit tests are executed along JaCoCo tool to gather the code coverage which can be read from Sonarqube
 
+## Run integration tests
+
+Use the following command to run the integration tests:
+```bash
+mvn failsafe:integration-test
+```
+
 ## Analyze code quality using SonarQube
 
 - Have a **Sonarqube server** running
