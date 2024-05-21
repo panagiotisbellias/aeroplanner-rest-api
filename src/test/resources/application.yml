@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:h2:mem:db;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: sa
+    username: test
+    password: test
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,8 +10,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: sa
-    password: sa
+    username: superadmin@gmail.com
+    password: superadmin@password123
     properties:
       mail:
         smtp:
@@ -20,11 +20,11 @@ spring:
             enable: true
 security:
   jwt:
-    secret-key: sa
-    expiration-time: 0
+    secret-key: cc4469abac5a410f51b23ab892070d09df9dad44103502fa4b3b25a1a07e664e
+    expiration-time: 3600000
 
 super:
   admin:
-    name: sa
-    email: sa
-    password: sa
+    name: super admin
+    email: superadmin@gmail.com
+    password: superadmin@password123
