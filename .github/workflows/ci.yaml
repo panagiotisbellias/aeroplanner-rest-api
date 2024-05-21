@@ -70,7 +70,7 @@ jobs:
         run: mvn -B package --file pom.xml -DskipTests
 
       - name: Docker Build
-        run: docker build -t panagiotisbellias/aeroplanner-rest-api:latest -t panagiotisbellias/aeroplanner-rest-api:0.0.1-SNAPSHOT .
+        run: docker build -t ghcr.io/panagiotisbellias/aeroplanner-rest-api:latest -t ghcr.io/panagiotisbellias/aeroplanner-rest-api:0.0.1-SNAPSHOT .
 
       - name: Docker login
         run: docker login ghcr.io -u panagiotisbellias -p ${{ secrets.REGISTRY_TOKEN }}
