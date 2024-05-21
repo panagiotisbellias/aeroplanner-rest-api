@@ -100,9 +100,8 @@ jobs:
             cd sonarlint-cli
             curl -L -o sonarlint-cli.zip https://binaries.sonarsource.com/Distribution/sonarlint-cli-1.0.zip
             unzip sonarlint-cli.zip
-            chmod +x bin/sonarlint
+            chmod +x sonarlint-cli/bin/sonarlint
 
       - name: Run SonarLint Analysis
         run: |
-          ls sonarlint-cli-1.0
-          ./sonarlint-cli-1.0/bin/sonarlint -Dsonar.java.binaries=target/classes -Dsonar.sources=src/main/java
+          ./sonarlint-cli/bin/sonarlint -Dsonar.java.binaries=target/classes -Dsonar.sources=src/main/java
