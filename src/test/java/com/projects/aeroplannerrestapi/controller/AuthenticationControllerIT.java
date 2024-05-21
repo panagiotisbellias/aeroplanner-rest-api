@@ -23,12 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -90,9 +90,9 @@ public class AuthenticationControllerIT extends AbstractContainerBaseTest {
 
         // then
         resultActions.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(registerRequest.getEmail()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.fullName").value(registerRequest.getFullName()));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.email").value(registerRequest.getEmail()))
+                .andExpect(jsonPath("$.fullName").value(registerRequest.getFullName()));
     }
 
     @Test
@@ -126,8 +126,39 @@ public class AuthenticationControllerIT extends AbstractContainerBaseTest {
 
         // then
         resultActions.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.token").value(token))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.expiredIn").value(expirationTime));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").value(token))
+                .andExpect(jsonPath("$.expiredIn").value(expirationTime));
+    }
+
+    @Test
+    public void givenHttServletRequest_whenLogout_thenReturnSuccessMessage() throws Exception {
+        // given
+        User user = new User();
+        user.setFullName(fullName);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        Set<Role> roles = new HashSet<>();
+        Role role = new Role();
+        role.setName(RoleEnum.USER);
+        role.setDescription("Default user role");
+        Role savedRole = roleRepository.save(role);
+        roles.add(savedRole);
+        user.setRoles(roles);
+        userRepository.save(user);
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        User savedUser = userRepository.findByEmail(email).get();
+        String token = jwtService.generateToken(savedUser);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/logout")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token));
+
+        // then
+        resultActions.andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("Logged out successfully"));
     }
 }
