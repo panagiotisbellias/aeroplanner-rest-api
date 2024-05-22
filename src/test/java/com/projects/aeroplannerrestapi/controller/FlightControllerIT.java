@@ -6,9 +6,6 @@ import com.projects.aeroplannerrestapi.entity.Flight;
 import com.projects.aeroplannerrestapi.enums.FlightStatusEnum;
 import com.projects.aeroplannerrestapi.repository.FlightRepository;
 import com.projects.aeroplannerrestapi.util.AbstractContainerBaseTest;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +54,7 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
         flightRequest.setFlightNumber("Flight Number");
         flightRequest.setDepartureTime("2023-04-19T15:30:00");
         flightRequest.setArrivalTime("2024-04-19T15:30:00");
-        flightRequest.setPrice(BigDecimal.valueOf(1));
+        flightRequest.setPrice(BigDecimal.valueOf(1.0));
         flightRequest.setAircraftType("Aircraft Type");
         flightRequest.setSeatAvailability(0);
         flightRequest.setStatus(FlightStatusEnum.UNKNOWN);
@@ -91,7 +88,7 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
         flight1.setArrivalTime("2024-04-19T15:30:00");
         flight1.setDuration(Duration.between(LocalDateTime.parse("2023-04-19T15:30:00"),
                 LocalDateTime.parse("2024-04-19T15:30:00")));
-        flight1.setPrice(BigDecimal.valueOf(0));
+        flight1.setPrice(BigDecimal.valueOf(0.0));
         flight1.setAircraftType("Aircraft Type 1");
         flight1.setSeatAvailability(0);
         flight1.setCurrentAvailableSeat(0);
@@ -104,7 +101,7 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
         flight2.setArrivalTime("2023-04-19T15:50:00");
         flight2.setDuration(Duration.between(LocalDateTime.parse("2022-04-19T15:50:00"),
                 LocalDateTime.parse("2023-04-19T15:50:00")));
-        flight2.setPrice(BigDecimal.valueOf(1));
+        flight2.setPrice(BigDecimal.valueOf(1.0));
         flight2.setAircraftType("Aircraft Type 2");
         flight2.setSeatAvailability(1);
         flight2.setCurrentAvailableSeat(1);
@@ -119,5 +116,40 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
         resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(flightRepository.findAll().size()));
+    }
+
+    @Test
+    public void givenFlightId_whenGetFlight_thenReturnFlightResponse() throws Exception {
+        // given
+        Flight flight = new Flight();
+        flight.setAirline("Airline 1");
+        flight.setFlightNumber("Flight Number 1");
+        flight.setDepartureTime("2023-04-19T15:30:00");
+        flight.setArrivalTime("2024-04-19T15:30:00");
+        flight.setDuration(Duration.between(LocalDateTime.parse("2023-04-19T15:30:00"),
+                LocalDateTime.parse("2024-04-19T15:30:00")));
+        flight.setPrice(BigDecimal.valueOf(0.0));
+        flight.setAircraftType("Aircraft Type 1");
+        flight.setSeatAvailability(0);
+        flight.setCurrentAvailableSeat(0);
+        flight.setStatus(FlightStatusEnum.UNKNOWN);
+
+        Flight savedFlight = flightRepository.save(flight);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/flights/{id}", savedFlight.getId()));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.airline").value(flight.getAirline()))
+                .andExpect(jsonPath("$.flightNumber").value(flight.getFlightNumber()))
+                .andExpect(jsonPath("$.departureTime").value(flight.getDepartureTime()))
+                .andExpect(jsonPath("$.arrivalTime").value(flight.getArrivalTime()))
+                .andExpect(jsonPath("$.price").value(flight.getPrice()))
+                .andExpect(jsonPath("$.aircraftType").value(flight.getAircraftType()))
+                .andExpect(jsonPath("$.seatAvailability").value(flight.getSeatAvailability()))
+                .andExpect(jsonPath("$.currentAvailableSeat").value(flight.getSeatAvailability()))
+                .andExpect(jsonPath("$.status").value(flight.getStatus().name()));
     }
 }
