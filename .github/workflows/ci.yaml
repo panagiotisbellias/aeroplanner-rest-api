@@ -44,8 +44,11 @@ jobs:
           distribution: 'adopt'
           architecture: 'x64'
 
-      - name: Run tests
-        run: mvn test
+      - name: Run unit tests
+        run: mvn verify
+
+      - name: Run integration tests
+        run: mvn failsafe:integration-test
 
   docker:
     runs-on: ubuntu-latest
