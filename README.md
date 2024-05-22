@@ -117,7 +117,7 @@ This way, unit tests are executed along JaCoCo tool to gather the code coverage 
 
 ## Run integration tests
 
-Use the following command to run the integration tests:
+Use the following command to run the integration tests. Please note that the Docker service must be running to execute this command.
 ```bash
 mvn failsafe:integration-test
 ```
