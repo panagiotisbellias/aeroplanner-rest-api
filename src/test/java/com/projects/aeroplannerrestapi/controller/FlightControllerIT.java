@@ -23,8 +23,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @WithMockUser(roles = "ADMIN")
@@ -189,5 +188,18 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
                 .andExpect(jsonPath("$.seatAvailability").value(flightRequest.getSeatAvailability()))
                 .andExpect(jsonPath("$.currentAvailableSeat").value(flight.getCurrentAvailableSeat()))
                 .andExpect(jsonPath("$.status").value(flightRequest.getStatus().name()));
+    }
+
+    @Test
+    public void givenFlightId_whenDeleteFlight_thenReturnNothing() throws Exception {
+        // given
+        Flight savedFlight = flightRepository.save(flight);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/flights/{id}", savedFlight.getId()));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isNoContent());
     }
 }
