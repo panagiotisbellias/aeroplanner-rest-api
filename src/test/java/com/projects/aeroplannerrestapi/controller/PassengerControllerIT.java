@@ -16,14 +16,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @WithMockUser(roles = "ADMIN")
@@ -88,13 +89,38 @@ public class PassengerControllerIT extends AbstractContainerBaseTest {
                 .param("sortDir", "asc"));
 
         // then
-        resultActions.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0][0].id").value(savedUsers.get(0).getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0][0].fullName").value(savedUsers.get(0).getFullName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0][0].email").value(savedUsers.get(0).getEmail()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0][1].id").value(savedUsers.get(1).getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0][1].fullName").value(savedUsers.get(1).getFullName()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0][1].email").value(savedUsers.get(1).getEmail()));
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0][0].id").value(savedUsers.get(0).getId()))
+                .andExpect(jsonPath("$.content[0][0].fullName").value(savedUsers.get(0).getFullName()))
+                .andExpect(jsonPath("$.content[0][0].email").value(savedUsers.get(0).getEmail()))
+                .andExpect(jsonPath("$.content[0][1].id").value(savedUsers.get(1).getId()))
+                .andExpect(jsonPath("$.content[0][1].fullName").value(savedUsers.get(1).getFullName()))
+                .andExpect(jsonPath("$.content[0][1].email").value(savedUsers.get(1).getEmail()));
+    }
+
+    @Test
+    public void givenPassengerId_whenGetPassenger_thenReturnPassenger() throws Exception {
+        // given
+        Role savedRole = roleRepository.save(role);
+
+        User user = new User();
+        user.setFullName("Full Name");
+        user.setEmail("sample@email.com");
+        user.setPassword(passwordEncoder.encode("password"));
+        Set<Role> roles1 = new HashSet<>();
+        roles1.add(savedRole);
+        user.setRoles(roles1);
+
+        User savedUser = userRepository.save(user);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/passengers/{id}", savedUser.getId()));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName").value(user.getFullName()))
+                .andExpect(jsonPath("$.email").value(user.getEmail()));
     }
 }
