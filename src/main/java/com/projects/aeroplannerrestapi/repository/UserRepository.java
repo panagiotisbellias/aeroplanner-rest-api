@@ -19,8 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByIdAndRolesName(Long id, RoleEnum roleName);
 
-    void deleteByIdAndRoles_Name(Long id, RoleEnum roleEnum);
-
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleEnum")
     Page<User> findByRole(RoleEnum roleEnum, Pageable pageable);
 }

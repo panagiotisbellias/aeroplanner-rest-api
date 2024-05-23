@@ -33,7 +33,7 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public PaginatedAndSortedPassengerResponse getPassengers(int pageNumber, int pageSize, String sortBy, String sortDir) {
-        Sort sort = sortBy.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ?
                 Sort.by(sortBy).ascending() :
                 Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
@@ -64,7 +64,7 @@ public class PassengerServiceImpl implements PassengerService {
         if (!userRepository.existsByIdAndRoles_Name(id, RoleEnum.USER)) {
             throw new ResourceNotFoundException(PASSENGER, ID, id.toString());
         }
-        userRepository.deleteByIdAndRoles_Name(id, RoleEnum.USER);
+        userRepository.deleteById(id);
         LOG.info(String.format("Passenger with id : %d is deleted", id));
     }
 }

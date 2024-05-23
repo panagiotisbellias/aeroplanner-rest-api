@@ -88,7 +88,7 @@ class PassengerServiceTest {
         passengerService.deletePassenger(0L);
 
         Mockito.verify(userRepository).existsByIdAndRoles_Name(0L, RoleEnum.USER);
-        Mockito.verify(userRepository).deleteByIdAndRoles_Name(0L, RoleEnum.USER);
+        Mockito.verify(userRepository).deleteById(0L);
     }
 
     @Test
