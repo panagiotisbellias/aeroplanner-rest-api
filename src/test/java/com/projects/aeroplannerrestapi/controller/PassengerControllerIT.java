@@ -17,7 +17,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,38 +45,33 @@ public class PassengerControllerIT extends AbstractContainerBaseTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private Role role;
+    private Role savedRole;
 
     @BeforeEach
     public void setup() {
-        role = new Role();
-        role.setName(RoleEnum.USER);
-        role.setDescription("Default user role");
-
         userRepository.deleteAll();
         roleRepository.deleteAll();
+
+        Role role = new Role();
+        role.setName(RoleEnum.USER);
+        role.setDescription("Default user role");
+        savedRole = roleRepository.save(role);
     }
 
     @Test
     public void givenListOfPassengers_whenGetPassengers_thenReturnPaginatedAndSortedPassengers() throws Exception {
         // given
-        Role savedRole = roleRepository.save(role);
-
         User user1 = new User();
         user1.setFullName("Full Name 1");
         user1.setEmail("sample1@email.com");
         user1.setPassword(passwordEncoder.encode("password1"));
-        Set<Role> roles1 = new HashSet<>();
-        roles1.add(savedRole);
-        user1.setRoles(roles1);
+        user1.setRoles(Set.of(savedRole));
 
         User user2 = new User();
         user2.setFullName("Full Name 2");
         user2.setEmail("sample2@email.com");
         user2.setPassword(passwordEncoder.encode("password 2"));
-        Set<Role> roles2 = new HashSet<>();
-        roles2.add(savedRole);
-        user2.setRoles(roles2);
+        user2.setRoles(Set.of(savedRole));
 
         List<User> savedUsers = userRepository.saveAll(List.of(user1, user2));
 
@@ -102,15 +96,11 @@ public class PassengerControllerIT extends AbstractContainerBaseTest {
     @Test
     public void givenPassengerId_whenGetPassenger_thenReturnPassenger() throws Exception {
         // given
-        Role savedRole = roleRepository.save(role);
-
         User user = new User();
         user.setFullName("Full Name");
         user.setEmail("sample@email.com");
         user.setPassword(passwordEncoder.encode("password"));
-        Set<Role> roles1 = new HashSet<>();
-        roles1.add(savedRole);
-        user.setRoles(roles1);
+        user.setRoles(Set.of(savedRole));
 
         User savedUser = userRepository.save(user);
 
@@ -122,5 +112,24 @@ public class PassengerControllerIT extends AbstractContainerBaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value(user.getFullName()))
                 .andExpect(jsonPath("$.email").value(user.getEmail()));
+    }
+
+    @Test
+    public void givenPassengerId_whenDeletePassenger_thenReturnNothing() throws Exception {
+        // given
+        User user = new User();
+        user.setFullName("Full Name");
+        user.setEmail("sample@email.com");
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setRoles(Set.of(savedRole));
+
+        User savedUser = userRepository.save(user);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/passengers/{id}", savedUser.getId()));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isNoContent());
     }
 }

@@ -102,13 +102,11 @@ public class AuthenticationControllerIT extends AbstractContainerBaseTest {
         user.setFullName(fullName);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        Set<Role> roles = new HashSet<>();
         Role role = new Role();
         role.setName(RoleEnum.USER);
         role.setDescription("Default user role");
         Role savedRole = roleRepository.save(role);
-        roles.add(savedRole);
-        user.setRoles(roles);
+        user.setRoles(Set.of(savedRole));
         userRepository.save(user);
 
         LoginRequest loginRequest = new LoginRequest();
@@ -138,13 +136,11 @@ public class AuthenticationControllerIT extends AbstractContainerBaseTest {
         user.setFullName(fullName);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        Set<Role> roles = new HashSet<>();
         Role role = new Role();
         role.setName(RoleEnum.USER);
         role.setDescription("Default user role");
         Role savedRole = roleRepository.save(role);
-        roles.add(savedRole);
-        user.setRoles(roles);
+        user.setRoles(Set.of(savedRole));
         userRepository.save(user);
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));

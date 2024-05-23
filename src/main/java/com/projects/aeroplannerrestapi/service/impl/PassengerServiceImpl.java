@@ -64,7 +64,7 @@ public class PassengerServiceImpl implements PassengerService {
         if (!userRepository.existsByIdAndRoles_Name(id, RoleEnum.USER)) {
             throw new ResourceNotFoundException(PASSENGER, ID, id.toString());
         }
-        userRepository.deleteByIdAndRoles_Name(id, RoleEnum.USER);
+        userRepository.deleteById(id);
         LOG.info(String.format("Passenger with id : %d is deleted", id));
     }
 }
