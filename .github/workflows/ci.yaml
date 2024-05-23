@@ -73,13 +73,13 @@ jobs:
         run: mvn -B package --file pom.xml -DskipTests
 
       - name: Docker Build
-        run: docker build -t ghcr.io/jcilacad/aeroplanner-rest-api:latest -t ghcr.io/jcilacad/aeroplanner-rest-api:0.0.1-SNAPSHOT .
+        run: docker build -t ghcr.io/${{ secrets.REGISTRY_USERNAME }}/aeroplanner-rest-api:latest -t ghcr.io/${{ secrets.REGISTRY_USERNAME }}/aeroplanner-rest-api:0.0.1-SNAPSHOT .
 
       - name: Docker login
-        run: docker login ghcr.io -u jcilacad -p ${{ secrets.REGISTRY_TOKEN }}
+        run: docker login ghcr.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_TOKEN }}
 
       - name: Docker push
-        run: docker push ghcr.io/jcilacad/aeroplanner-rest-api --all-tags
+        run: docker push ghcr.io/${{ secrets.REGISTRY_USERNAME }}/aeroplanner-rest-api --all-tags
 
 #  sonar:
 #    runs-on: ubuntu-latest
