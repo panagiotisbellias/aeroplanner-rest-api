@@ -1,0 +1,41 @@
+spring:
+  config:
+    import: "file:env.properties"
+  application:
+    name: aeroplanner-rest-api
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    expiration-time: ${JWT_EXPIRATION_TIME}
+server:
+  port: 8005
+
+super:
+  admin:
+    name: ${SUPER_ADMIN_NAME}
+    email: ${SUPER_ADMIN_EMAIL}
+    password: ${SUPER_ADMIN_PASSWORD}
+
+logging:
+  level:
+    com.projects.aeroplannerrestapi: DEBUG # Set to WARN for production
