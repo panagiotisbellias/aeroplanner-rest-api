@@ -2,15 +2,9 @@ package com.projects.aeroplannerrestapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projects.aeroplannerrestapi.dto.request.PaymentRequest;
-import com.projects.aeroplannerrestapi.entity.Flight;
-import com.projects.aeroplannerrestapi.entity.Reservation;
-import com.projects.aeroplannerrestapi.entity.Role;
-import com.projects.aeroplannerrestapi.entity.User;
+import com.projects.aeroplannerrestapi.entity.*;
 import com.projects.aeroplannerrestapi.enums.*;
-import com.projects.aeroplannerrestapi.repository.FlightRepository;
-import com.projects.aeroplannerrestapi.repository.ReservationRepository;
-import com.projects.aeroplannerrestapi.repository.RoleRepository;
-import com.projects.aeroplannerrestapi.repository.UserRepository;
+import com.projects.aeroplannerrestapi.repository.*;
 import com.projects.aeroplannerrestapi.util.AbstractContainerBaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,6 +52,9 @@ public class PaymentControllerIT extends AbstractContainerBaseTest {
     private FlightRepository flightRepository;
 
     @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
@@ -66,6 +63,7 @@ public class PaymentControllerIT extends AbstractContainerBaseTest {
         roleRepository.deleteAll();
         reservationRepository.deleteAll();
         flightRepository.deleteAll();
+        paymentRepository.deleteAll();
     }
 
     @Test
@@ -126,5 +124,39 @@ public class PaymentControllerIT extends AbstractContainerBaseTest {
                 .andExpect(jsonPath("$.amount").value(paymentRequest.getAmount()))
                 .andExpect(jsonPath("$.status").value(PaymentStatusEnum.PAID.name()))
                 .andExpect(jsonPath("$.message").value(PaymentStatusEnum.PAID.name()));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "ADMIN"})
+    public void givenPaymentId_whenGetPaymentDetails_thenReturnPaymentObject() throws Exception {
+        // given
+        Payment payment = new Payment();
+        payment.setPassengerId(1L);
+        payment.setFlightId(1L);
+        payment.setStatus(PaymentStatusEnum.PAID);
+        payment.setTransactionId("transaction id");
+        payment.setCvv("4431");
+        payment.setAmount(BigDecimal.valueOf(100.00));
+        payment.setCardNumber("4532280979380570");
+        payment.setCardHolderName("Card Holder Name");
+        payment.setExpiryDate("11/30");
+        Payment savedPayment = paymentRepository.save(payment);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/payments/{id}", savedPayment.getId()));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(savedPayment.getId()))
+                .andExpect(jsonPath("$.passengerId").value(savedPayment.getPassengerId()))
+                .andExpect(jsonPath("$.flightId").value(savedPayment.getFlightId()))
+                .andExpect(jsonPath("$.status").value(savedPayment.getStatus().name()))
+                .andExpect(jsonPath("$.transactionId").value(savedPayment.getTransactionId()))
+                .andExpect(jsonPath("$.cvv").value(savedPayment.getCvv()))
+                .andExpect(jsonPath("$.amount").value(savedPayment.getAmount()))
+                .andExpect(jsonPath("$.cardNumber").value(savedPayment.getCardNumber()))
+                .andExpect(jsonPath("$.cardHolderName").value(savedPayment.getCardHolderName()))
+                .andExpect(jsonPath("$.expiryDate").value(savedPayment.getExpiryDate()));
     }
 }
