@@ -122,15 +122,40 @@ public class ReservationControllerIT extends AbstractContainerBaseTest {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0][0].passengerId").value(reservation1.getPassengerId()))
-                .andExpect(jsonPath("$.content[0][0].flightId").value(reservation1.getFlightId()))
-                .andExpect(jsonPath("$.content[0][0].seatNumber").value(reservation1.getSeatNumber()))
-                .andExpect(jsonPath("$.content[0][0].reservationDate").value(reservation1.getReservationDate()))
-                .andExpect(jsonPath("$.content[0][0].reservationStatus").value(reservation1.getReservationStatus().name()))
-                .andExpect(jsonPath("$.content[0][1].passengerId").value(reservation2.getPassengerId()))
-                .andExpect(jsonPath("$.content[0][1].flightId").value(reservation2.getFlightId()))
-                .andExpect(jsonPath("$.content[0][1].seatNumber").value(reservation2.getSeatNumber()))
-                .andExpect(jsonPath("$.content[0][1].reservationDate").value(reservation2.getReservationDate()))
-                .andExpect(jsonPath("$.content[0][1].reservationStatus").value(reservation2.getReservationStatus().name()));
+                .andExpect(jsonPath("$.content[0][0].passengerId").value(reservations.get(0).getPassengerId()))
+                .andExpect(jsonPath("$.content[0][0].flightId").value(reservations.get(0).getFlightId()))
+                .andExpect(jsonPath("$.content[0][0].seatNumber").value(reservations.get(0).getSeatNumber()))
+                .andExpect(jsonPath("$.content[0][0].reservationDate").value(reservations.get(0).getReservationDate()))
+                .andExpect(jsonPath("$.content[0][0].reservationStatus").value(reservations.get(0).getReservationStatus().name()))
+                .andExpect(jsonPath("$.content[0][1].passengerId").value(reservations.get(1).getPassengerId()))
+                .andExpect(jsonPath("$.content[0][1].flightId").value(reservations.get(1).getFlightId()))
+                .andExpect(jsonPath("$.content[0][1].seatNumber").value(reservations.get(1).getSeatNumber()))
+                .andExpect(jsonPath("$.content[0][1].reservationDate").value(reservations.get(1).getReservationDate()))
+                .andExpect(jsonPath("$.content[0][1].reservationStatus").value(reservations.get(1).getReservationStatus().name()));
+    }
+
+    @Test
+    public void givenReservationId_whenGetReservation_thenReturnReservationResponse() throws Exception {
+        // given
+        Reservation reservation = new Reservation();
+        reservation.setPassengerId(1L);
+        reservation.setFlightId(1L);
+        reservation.setSeatNumber(1);
+        reservation.setReservationDate("2024-05-19T15:30:00");
+        reservation.setReservationStatus(ReservationStatusEnum.CONFIRMED);
+
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/reservations/{id}", savedReservation.getId()));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.passengerId").value(savedReservation.getPassengerId()))
+                .andExpect(jsonPath("$.flightId").value(savedReservation.getFlightId()))
+                .andExpect(jsonPath("$.seatNumber").value(savedReservation.getSeatNumber()))
+                .andExpect(jsonPath("$.reservationDate").value(savedReservation.getReservationDate()))
+                .andExpect(jsonPath("$.reservationStatus").value(savedReservation.getReservationStatus().name()));
     }
 }
