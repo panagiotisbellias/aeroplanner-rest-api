@@ -35,9 +35,9 @@ public class ReservationController {
     @PostMapping
     @Operation(summary = CREATE_RESERVATION)
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = RESERVATION_CREATED))
-    public ResponseEntity<ReservationResponse> createReservation(@RequestBody @Valid ReservationRequest reservationDto) {
-        LOG.debug(String.format("createReservation(%s)", reservationDto.getId()));
-        return new ResponseEntity<>(reservationService.createReservation(reservationDto), HttpStatus.CREATED);
+    public ResponseEntity<ReservationResponse> createReservation(@RequestBody @Valid ReservationRequest reservationRequest) {
+        LOG.debug(String.format("createReservation(%s)", reservationRequest.getId()));
+        return new ResponseEntity<>(reservationService.createReservation(reservationRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
