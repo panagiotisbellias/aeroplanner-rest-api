@@ -206,4 +206,38 @@ public class ReservationControllerIT extends AbstractContainerBaseTest {
                 .andExpect(jsonPath("$.reservationDate").value(updatedReservationRequest.getReservationDate()))
                 .andExpect(jsonPath("$.reservationStatus").value(updatedReservationRequest.getReservationStatus().name()));
     }
+
+    @Test
+    public void givenReservationId_whenCancelReservation_thenReturnNothing() throws Exception {
+        // given
+        Flight flight = new Flight();
+        flight.setAirline("Airline");
+        flight.setFlightNumber("Flight Number");
+        flight.setDepartureTime("2023-04-19T15:30:00");
+        flight.setArrivalTime("2024-04-19T15:30:00");
+        flight.setDuration(Duration.between(LocalDateTime.parse("2023-04-19T15:30:00"),
+                LocalDateTime.parse("2024-04-19T15:30:00")));
+        flight.setPrice(BigDecimal.valueOf(0.0));
+        flight.setAircraftType("Aircraft Type");
+        flight.setSeatAvailability(0);
+        flight.setCurrentAvailableSeat(0);
+        flight.setStatus(FlightStatusEnum.UNKNOWN);
+        Flight savedFlight = flightRepository.save(flight);
+
+        Reservation reservation = new Reservation();
+        reservation.setPassengerId(1L);
+        reservation.setFlightId(savedFlight.getId());
+        reservation.setSeatNumber(1);
+        reservation.setReservationDate("2024-05-19T15:30:00");
+        reservation.setReservationStatus(ReservationStatusEnum.CONFIRMED);
+
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        // when
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/reservations/{id}", savedReservation.getId()));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isNoContent());
+    }
 }
