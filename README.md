@@ -131,3 +131,10 @@ mvn failsafe:integration-test
 mvn sonar:sonar -D"sonar.token=<SONAR_AUTH_TOKEN>" -D"sonar.host.url=<SONAR_HOST>"
 ```
 - The `sonar.host.url` property can be omitted if using the default, which is `http://localhost:9000`
+
+## Run functional SoapUI tests
+
+1. Download and install SoapUI
+2. Import SoapUI project navigating to SoapUI and choosing 'File/Import Project' and choose the 'Aeroplanner-REST-API-soapui-project.xml'
+3. Run the application configuring another database for the tests
+4. Run the test suites
