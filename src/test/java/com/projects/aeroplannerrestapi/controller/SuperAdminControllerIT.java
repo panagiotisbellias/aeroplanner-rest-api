@@ -57,6 +57,11 @@ public class SuperAdminControllerIT extends AbstractContainerBaseTest {
     @Test
     public void givenRegisterRequest_whenCreateAdministrator_thenReturnUserResponse() throws Exception {
         // given
+        Role role = new Role();
+        role.setName(RoleEnum.ADMIN);
+        role.setDescription("Administrator role");
+        roleRepository.save(role);
+
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setEmail("sample@email.com");
         registerRequest.setPassword("password");

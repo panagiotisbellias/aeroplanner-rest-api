@@ -61,16 +61,6 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public TicketResponse updateTicket(Long id, TicketRequest ticketRequest) {
-        Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(TICKET, ID, id.toString()));
-        ticket.setTicketStatusEnum(TicketStatusEnum.ISSUED);
-        ticket.setIssueDate(LocalDateTime.now().toString());
-        LOG.info(String.format("Ticket %d gets updated", id));
-        return TicketMapper.INSTANCE.ticketToTicketResponse(ticketRepository.save(ticket));
-    }
-
-    @Override
     public void cancelTicket(Long id) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(TICKET, ID, id.toString()));
