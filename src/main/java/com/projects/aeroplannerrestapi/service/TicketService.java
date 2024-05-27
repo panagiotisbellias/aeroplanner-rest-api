@@ -13,7 +13,5 @@ public interface TicketService {
 
     TicketResponse getTicket(Long id);
 
-    TicketResponse updateTicket(Long id, TicketRequest ticketRequest);
-
     void cancelTicket(Long id);
 }
