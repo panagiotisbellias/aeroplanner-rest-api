@@ -1,6 +1,5 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
 import com.projects.aeroplannerrestapi.service.TicketService;
 import com.projects.aeroplannerrestapi.util.AssertionsUtil;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,13 +40,6 @@ class TicketControllerTest {
     @Test
     void testGetTicket() {
         ResponseEntity<TicketResponse> response = ticketController.getTicket(0L);
-        AssertionsUtil.assertNullBodyStatusCode(HttpStatus.OK, response);
-    }
-
-    @Test
-    void testUpdateTicket() {
-        TicketRequest ticketRequest = Mockito.mock(TicketRequest.class);
-        ResponseEntity<TicketResponse> response = ticketController.updateTicket(0L, ticketRequest);
         AssertionsUtil.assertNullBodyStatusCode(HttpStatus.OK, response);
     }
 

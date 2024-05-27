@@ -66,12 +66,6 @@ class TicketServiceTest {
     }
 
     @Test
-    void testUpdateTicket() {
-        Mockito.when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticket));
-        Assertions.assertNull(ticketService.updateTicket(1L, ticketRequest));
-    }
-
-    @Test
     void testCancelTicket() {
         Mockito.when(ticket.getFlightId()).thenReturn("0");
         Mockito.when(ticket.getPassengerId()).thenReturn("1");

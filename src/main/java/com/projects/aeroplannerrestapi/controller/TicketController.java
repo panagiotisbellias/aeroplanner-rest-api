@@ -1,12 +1,10 @@
 package com.projects.aeroplannerrestapi.controller;
 
-import com.projects.aeroplannerrestapi.dto.request.TicketRequest;
 import com.projects.aeroplannerrestapi.dto.response.TicketResponse;
 import com.projects.aeroplannerrestapi.service.TicketService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -45,14 +43,6 @@ public class TicketController {
     public ResponseEntity<TicketResponse> getTicket(@PathVariable Long id) {
         LOG.debug(String.format("getTicket(%d)", id));
         return ResponseEntity.ok(ticketService.getTicket(id));
-    }
-
-    @PutMapping(ID)
-    @Operation(summary = UPDATE_TICKET)
-    @ApiResponses(@ApiResponse(responseCode = OK, description = TICKET_UPDATED))
-    public ResponseEntity<TicketResponse> updateTicket(@PathVariable Long id, @RequestBody @Valid TicketRequest ticketRequest) {
-        LOG.debug(String.format("updateTicket(%d, %s)", id, ticketRequest.getId()));
-        return ResponseEntity.ok(ticketService.updateTicket(id, ticketRequest));
     }
 
     @DeleteMapping(ID)
