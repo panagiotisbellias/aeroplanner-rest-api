@@ -1,8 +1,10 @@
 package com.projects.aeroplannerrestapi.service.impl;
 
+import com.projects.aeroplannerrestapi.constants.ErrorMessage;
 import com.projects.aeroplannerrestapi.dto.response.PaginatedAndSortedUserResponse;
 import com.projects.aeroplannerrestapi.dto.response.UserResponse;
 import com.projects.aeroplannerrestapi.entity.User;
+import com.projects.aeroplannerrestapi.exception.ResourceNotFoundException;
 import com.projects.aeroplannerrestapi.mapper.UserMapper;
 import com.projects.aeroplannerrestapi.repository.UserRepository;
 import com.projects.aeroplannerrestapi.service.UserService;
@@ -33,9 +35,11 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserResponse getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        LOG.info(String.format("Current authenticated user : %s", currentUser.getEmail()));
-        return UserMapper.INSTANCE.userToUserResponse(currentUser);
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.USER,
+                ErrorMessage.EMAIL, email));
+        LOG.info(String.format("Current authenticated user : %s", user.getUsername()));
+        return UserMapper.INSTANCE.userToUserResponse(user);
     }
 
     @Override
