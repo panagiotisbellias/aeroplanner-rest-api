@@ -30,7 +30,7 @@ class UserControllerTest {
 
     @Test
     void testGetAllAdministrators() {
-        ResponseEntity<PaginatedAndSortedUserResponse> response = userController.getAllAdministrators(0, 1, "sort by", "sort dir");
+        ResponseEntity<PaginatedAndSortedUserResponse> response = userController.getAllUsers(0, 1, "sort by", "sort dir");
         AssertionsUtil.assertNullBodyStatusCode(HttpStatus.OK, response);
     }
 
