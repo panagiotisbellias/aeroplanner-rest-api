@@ -29,6 +29,8 @@ public class PaymentController {
 
     private static final Log LOG = LogFactory.getLog(PaymentController.class);
 
+    private static final String CACHE_KEY = "getPayment:";
+
     private final PaymentService paymentService;
 
     @PostMapping(PAYMENT)
@@ -37,7 +39,7 @@ public class PaymentController {
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = MADE_PAYMENT))
     public ResponseEntity<PaymentResponse> makePayment(@RequestBody @Valid PaymentRequest paymentRequest) {
         LOG.debug(String.format("makePayment(%s)", paymentRequest.getId()));
-        return new ResponseEntity<>(paymentService.processPayment(paymentRequest), HttpStatus.CREATED);
+        return new ResponseEntity<>(paymentService.processPayment(paymentRequest, CACHE_KEY.concat(String.valueOf(paymentRequest.getId()))), HttpStatus.CREATED);
     }
 
     @GetMapping(ID)
@@ -45,6 +47,6 @@ public class PaymentController {
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_PAYMENT_DETAILS))
     public ResponseEntity<Payment> getPaymentDetails(@PathVariable Long id) {
         LOG.debug(String.format("getPaymentDetails(%s)", id));
-        return ResponseEntity.ok(paymentService.getPaymentDetails(id));
+        return ResponseEntity.ok(paymentService.getPaymentDetails(id, CACHE_KEY.concat(String.valueOf(id))));
     }
 }

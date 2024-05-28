@@ -67,7 +67,7 @@ class PaymentServiceTest {
         Mockito.when(flightRepository.findById(0L)).thenReturn(Optional.of(flight));
         Mockito.when(reservationRepository.findByFlightIdAndPassengerId(0L, 1L)).thenReturn(Optional.of(reservation));
 
-        PaymentResponse response = paymentService.processPayment(paymentRequest);
+        PaymentResponse response = paymentService.processPayment(paymentRequest, "");
         Assertions.assertNull(response.getTransactionId());
         Assertions.assertNull(response.getAmount());
         Assertions.assertNull(response.getStatus());
@@ -76,7 +76,7 @@ class PaymentServiceTest {
 
     @Test
     void testProcessPaymentNull() {
-        NullPointerException nullPointerException = Assertions.assertThrows(NullPointerException.class, () -> paymentService.processPayment(null));
+        NullPointerException nullPointerException = Assertions.assertThrows(NullPointerException.class, () -> paymentService.processPayment(null, ""));
         Assertions.assertEquals("Cannot invoke \"com.projects.aeroplannerrestapi.entity.Payment.setStatus(com.projects.aeroplannerrestapi.enums.PaymentStatusEnum)\" because \"payment\" is null", nullPointerException.getMessage());
     }
 
@@ -86,14 +86,14 @@ class PaymentServiceTest {
         Mockito.when(payment.getPassengerId()).thenReturn(2L);
         Mockito.when(paymentRepository.save(ArgumentMatchers.any(Payment.class))).thenReturn(payment);
         Mockito.when(flightRepository.findById(1L)).thenReturn(Optional.of(flight));
-        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> paymentService.processPayment(paymentRequest));
+        ResourceNotFoundException resourceNotFoundException = Assertions.assertThrows(ResourceNotFoundException.class, () -> paymentService.processPayment(paymentRequest, ""));
         Assertions.assertEquals(ErrorMessage.RESERVATION.concat(" not found with ").concat(ErrorMessage.FLIGHT_ID_PASSENGER_ID).concat(" : 1 : 2"), resourceNotFoundException.getMessage());
     }
 
     @Test
     void testGetPaymentDetails() {
         Mockito.when(paymentRepository.findById(0L)).thenReturn(Optional.of(payment));
-        Assertions.assertEquals(payment, paymentService.getPaymentDetails(0L));
+        Assertions.assertEquals(payment, paymentService.getPaymentDetails(0L, ""));
     }
 
 }

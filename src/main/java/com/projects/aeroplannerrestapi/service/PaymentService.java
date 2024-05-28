@@ -6,7 +6,7 @@ import com.projects.aeroplannerrestapi.entity.Payment;
 
 public interface PaymentService {
 
-    PaymentResponse processPayment(PaymentRequest paymentRequest);
+    PaymentResponse processPayment(PaymentRequest paymentRequest, String cacheKey);
 
-    Payment getPaymentDetails(Long id);
+    Payment getPaymentDetails(Long id, String cacheKey);
 }

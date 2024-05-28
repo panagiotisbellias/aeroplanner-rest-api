@@ -19,6 +19,8 @@ import com.projects.aeroplannerrestapi.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static final Log LOG = LogFactory.getLog(PaymentServiceImpl.class);
 
+    private static final String CACHE_NAME = "payment";
+
     private final PaymentRepository paymentRepository;
     private final ReservationRepository reservationRepository;
     private final FlightRepository flightRepository;
@@ -40,7 +44,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentResponse processPayment(PaymentRequest paymentRequest) {
+    @CacheEvict(value = CACHE_NAME, key = "#cacheKey")
+    public PaymentResponse processPayment(PaymentRequest paymentRequest, String cacheKey) {
         Payment payment = PaymentMapper.INSTANCE.paymentRequestToPayment(paymentRequest);
         payment.setStatus(PaymentStatusEnum.PAID);
         payment.setTransactionId(UUID.randomUUID().toString());
@@ -68,7 +73,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Payment getPaymentDetails(Long id) {
+    @Cacheable(value = CACHE_NAME, key = "#cacheKey")
+    public Payment getPaymentDetails(Long id, String cacheKey) {
         return paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(PAYMENT, ID, id.toString()));
     }

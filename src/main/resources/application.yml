@@ -22,6 +22,12 @@ spring:
           auth: true
           starttls:
             enable: true
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      timeout: 60000
 
 security:
   jwt:
