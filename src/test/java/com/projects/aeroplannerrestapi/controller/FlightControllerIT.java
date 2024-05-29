@@ -17,18 +17,22 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_FLIGHTS;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.ADMIN;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.USER;
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-@ActiveProfiles("integration")
-@WithMockUser(roles = "ADMIN")
+@ActiveProfiles(INTEGRATION)
+@WithMockUser(roles = ADMIN)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FlightControllerIT extends AbstractContainerBaseTest {
 
@@ -45,18 +49,18 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
 
     @BeforeEach
     public void setup() {
-        flight = new Flight();
-        flight.setAirline("Airline");
-        flight.setFlightNumber("Flight Number");
-        flight.setDepartureTime("2023-04-19T15:30:00");
-        flight.setArrivalTime("2024-04-19T15:30:00");
-        flight.setDuration(Duration.between(LocalDateTime.parse("2023-04-19T15:30:00"),
-                LocalDateTime.parse("2024-04-19T15:30:00")));
-        flight.setPrice(BigDecimal.valueOf(0.0));
-        flight.setAircraftType("Aircraft Type");
-        flight.setSeatAvailability(0);
-        flight.setCurrentAvailableSeat(0);
-        flight.setStatus(FlightStatusEnum.UNKNOWN);
+        flight = Flight.builder()
+                .airline(AIRLINE)
+                .flightNumber(FLIGHT_NUMBER)
+                .departureTime(VALID_DEPARTURE_TIME)
+                .arrivalTime(VALID_ARRIVAL_TIME)
+                .duration(Duration.between(LocalDateTime.parse(VALID_DEPARTURE_TIME), LocalDateTime.parse(VALID_ARRIVAL_TIME)))
+                .price(VALID_PRICE)
+                .aircraftType(AIRCRAFT_TYPE)
+                .seatAvailability(ZERO)
+                .currentAvailableSeat(ZERO)
+                .status(FlightStatusEnum.UNKNOWN)
+                .build();
 
         flightRepository.deleteAll();
     }
@@ -65,97 +69,98 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
 
     public void givenFlightRequest_whenCreateFlight_thenReturnFlightResponse() throws Exception {
         // given
-        FlightRequest flightRequest = new FlightRequest();
-        flightRequest.setAirline("Airline");
-        flightRequest.setFlightNumber("Flight Number");
-        flightRequest.setDepartureTime("2023-04-19T15:30:00");
-        flightRequest.setArrivalTime("2024-04-19T15:30:00");
-        flightRequest.setPrice(BigDecimal.valueOf(1.0));
-        flightRequest.setAircraftType("Aircraft Type");
-        flightRequest.setSeatAvailability(0);
-        flightRequest.setStatus(FlightStatusEnum.UNKNOWN);
+        FlightRequest flightRequest = FlightRequest.builder()
+                .airline(AIRLINE)
+                .flightNumber(FLIGHT_NUMBER)
+                .departureTime(VALID_DEPARTURE_TIME)
+                .arrivalTime(VALID_ARRIVAL_TIME)
+                .price(VALID_PRICE)
+                .aircraftType(AIRCRAFT_TYPE)
+                .seatAvailability(ZERO)
+                .status(FlightStatusEnum.UNKNOWN)
+                .build();
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/flights")
+        ResultActions resultActions = mockMvc.perform(post(API_V1_FLIGHTS)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(flightRequest)));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.airline").value(flightRequest.getAirline()))
-                .andExpect(jsonPath("$.flightNumber").value(flightRequest.getFlightNumber()))
-                .andExpect(jsonPath("$.departureTime").value(flightRequest.getDepartureTime()))
-                .andExpect(jsonPath("$.arrivalTime").value(flightRequest.getArrivalTime()))
-                .andExpect(jsonPath("$.price").value(flightRequest.getPrice()))
-                .andExpect(jsonPath("$.aircraftType").value(flightRequest.getAircraftType()))
-                .andExpect(jsonPath("$.seatAvailability").value(flightRequest.getSeatAvailability()))
-                .andExpect(jsonPath("$.currentAvailableSeat").value(flightRequest.getSeatAvailability()))
-                .andExpect(jsonPath("$.status").value(flightRequest.getStatus().name()));
+                .andExpect(jsonPath(AIRLINE_PATH).value(flightRequest.getAirline()))
+                .andExpect(jsonPath(FLIGHT_NUMBER_PATH).value(flightRequest.getFlightNumber()))
+                .andExpect(jsonPath(DEPARTURE_TIME_PATH).value(flightRequest.getDepartureTime()))
+                .andExpect(jsonPath(ARRIVAL_TIME_PATH).value(flightRequest.getArrivalTime()))
+                .andExpect(jsonPath(PRICE_PATH).value(flightRequest.getPrice()))
+                .andExpect(jsonPath(AIRCRAFT_TYPE_PATH).value(flightRequest.getAircraftType()))
+                .andExpect(jsonPath(SEAT_AVAILABILITY_PATH).value(flightRequest.getSeatAvailability()))
+                .andExpect(jsonPath(CURRENT_SEAT_AVAILABILITY_PATH).value(flightRequest.getSeatAvailability()))
+                .andExpect(jsonPath(STATUS_PATH).value(flightRequest.getStatus().name()));
     }
 
     @Test
-    @WithMockUser(roles = {"USER", "ADMIN"})
+    @WithMockUser(roles = {USER, ADMIN})
     public void givenListOfFlights_whenGetAllFlights_thenReturnListOfFlights() throws Exception {
         // given
-        Flight flight1 = new Flight();
-        flight1.setAirline("Airline 1");
-        flight1.setFlightNumber("Flight Number 1");
-        flight1.setDepartureTime("2023-04-19T15:30:00");
-        flight1.setArrivalTime("2024-04-19T15:30:00");
-        flight1.setDuration(Duration.between(LocalDateTime.parse("2023-04-19T15:30:00"),
-                LocalDateTime.parse("2024-04-19T15:30:00")));
-        flight1.setPrice(BigDecimal.valueOf(0.0));
-        flight1.setAircraftType("Aircraft Type 1");
-        flight1.setSeatAvailability(0);
-        flight1.setCurrentAvailableSeat(0);
-        flight1.setStatus(FlightStatusEnum.UNKNOWN);
+        Flight flight1 = Flight.builder()
+                .airline(AIRLINE.concat(ONE))
+                .flightNumber(FLIGHT_NUMBER.concat(ONE))
+                .departureTime(VALID_DEPARTURE_TIME)
+                .arrivalTime(VALID_ARRIVAL_TIME)
+                .duration(Duration.between(LocalDateTime.parse(VALID_DEPARTURE_TIME), LocalDateTime.parse(VALID_ARRIVAL_TIME)))
+                .price(VALID_PRICE)
+                .aircraftType(AIRCRAFT_TYPE.concat(ONE))
+                .seatAvailability(ZERO)
+                .currentAvailableSeat(ZERO)
+                .status(FlightStatusEnum.UNKNOWN)
+                .build();
 
-        Flight flight2 = new Flight();
-        flight2.setAirline("Airline 2");
-        flight2.setFlightNumber("Flight Number 2");
-        flight2.setDepartureTime("2022-04-19T15:50:00");
-        flight2.setArrivalTime("2023-04-19T15:50:00");
-        flight2.setDuration(Duration.between(LocalDateTime.parse("2022-04-19T15:50:00"),
-                LocalDateTime.parse("2023-04-19T15:50:00")));
-        flight2.setPrice(BigDecimal.valueOf(1.0));
-        flight2.setAircraftType("Aircraft Type 2");
-        flight2.setSeatAvailability(1);
-        flight2.setCurrentAvailableSeat(1);
-        flight2.setStatus(FlightStatusEnum.IN_FLIGHT);
+        Flight flight2 = Flight.builder()
+                .airline(AIRLINE.concat(TWO))
+                .flightNumber(FLIGHT_NUMBER.concat(TWO))
+                .departureTime(VALID_DEPARTURE_TIME)
+                .arrivalTime(VALID_ARRIVAL_TIME)
+                .duration(Duration.between(LocalDateTime.parse(VALID_DEPARTURE_TIME), LocalDateTime.parse(VALID_ARRIVAL_TIME)))
+                .price(VALID_PRICE)
+                .aircraftType(AIRCRAFT_TYPE.concat(TWO))
+                .seatAvailability(ZERO)
+                .currentAvailableSeat(ZERO)
+                .status(FlightStatusEnum.UNKNOWN)
+                .build();
 
         flightRepository.saveAll(List.of(flight1, flight2));
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/api/v1/flights"));
+        ResultActions resultActions = mockMvc.perform(get(API_V1_FLIGHTS));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(flightRepository.findAll().size()));
+                .andExpect(jsonPath(SIZE_PATH).value(flightRepository.findAll().size()));
     }
 
     @Test
-    @WithMockUser(roles = {"USER", "ADMIN"})
+    @WithMockUser(roles = {USER, ADMIN})
     public void givenFlightId_whenGetFlight_thenReturnFlightResponse() throws Exception {
         // given
         Flight savedFlight = flightRepository.save(flight);
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/api/v1/flights/{id}", savedFlight.getId()));
+        ResultActions resultActions = mockMvc.perform(get(API_V1_FLIGHTS.concat(ID), savedFlight.getId()));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.airline").value(flight.getAirline()))
-                .andExpect(jsonPath("$.flightNumber").value(flight.getFlightNumber()))
-                .andExpect(jsonPath("$.departureTime").value(flight.getDepartureTime()))
-                .andExpect(jsonPath("$.arrivalTime").value(flight.getArrivalTime()))
-                .andExpect(jsonPath("$.price").value(flight.getPrice()))
-                .andExpect(jsonPath("$.aircraftType").value(flight.getAircraftType()))
-                .andExpect(jsonPath("$.seatAvailability").value(flight.getSeatAvailability()))
-                .andExpect(jsonPath("$.currentAvailableSeat").value(flight.getSeatAvailability()))
-                .andExpect(jsonPath("$.status").value(flight.getStatus().name()));
+                .andExpect(jsonPath(AIRLINE_PATH).value(flight.getAirline()))
+                .andExpect(jsonPath(FLIGHT_NUMBER_PATH).value(flight.getFlightNumber()))
+                .andExpect(jsonPath(DEPARTURE_TIME_PATH).value(flight.getDepartureTime()))
+                .andExpect(jsonPath(ARRIVAL_TIME_PATH).value(flight.getArrivalTime()))
+                .andExpect(jsonPath(PRICE_PATH).value(flight.getPrice()))
+                .andExpect(jsonPath(AIRCRAFT_TYPE_PATH).value(flight.getAircraftType()))
+                .andExpect(jsonPath(SEAT_AVAILABILITY_PATH).value(flight.getSeatAvailability()))
+                .andExpect(jsonPath(CURRENT_SEAT_AVAILABILITY_PATH).value(flight.getSeatAvailability()))
+                .andExpect(jsonPath(STATUS_PATH).value(flight.getStatus().name()));
     }
 
     @Test
@@ -163,33 +168,34 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
         // given
         Flight savedFlight = flightRepository.save(flight);
 
-        FlightRequest flightRequest = new FlightRequest();
-        flightRequest.setAirline("Updated Airline");
-        flightRequest.setFlightNumber("Updated Flight Number");
-        flightRequest.setDepartureTime("2022-04-19T15:30:00");
-        flightRequest.setArrivalTime("2023-04-19T15:30:00");
-        flightRequest.setPrice(BigDecimal.valueOf(2.0));
-        flightRequest.setAircraftType("Updated Aircraft Type");
-        flightRequest.setSeatAvailability(1);
-        flightRequest.setStatus(FlightStatusEnum.IN_FLIGHT);
+        FlightRequest flightRequest = FlightRequest.builder()
+                .airline(UPDATED.concat(AIRLINE))
+                .flightNumber(UPDATED.concat(FLIGHT_NUMBER))
+                .departureTime(VALID_DEPARTURE_TIME)
+                .arrivalTime(VALID_ARRIVAL_TIME)
+                .price(VALID_PRICE)
+                .aircraftType(UPDATED.concat(AIRCRAFT_TYPE))
+                .seatAvailability(Integer.parseInt(ONE))
+                .status(FlightStatusEnum.IN_FLIGHT)
+                .build();
 
         // when
-        ResultActions resultActions = mockMvc.perform(put("/api/v1/flights/{id}", savedFlight.getId())
+        ResultActions resultActions = mockMvc.perform(put(API_V1_FLIGHTS.concat(ID), savedFlight.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(flightRequest)));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.airline").value(flightRequest.getAirline()))
-                .andExpect(jsonPath("$.flightNumber").value(flightRequest.getFlightNumber()))
-                .andExpect(jsonPath("$.departureTime").value(flightRequest.getDepartureTime()))
-                .andExpect(jsonPath("$.arrivalTime").value(flightRequest.getArrivalTime()))
-                .andExpect(jsonPath("$.price").value(flightRequest.getPrice()))
-                .andExpect(jsonPath("$.aircraftType").value(flightRequest.getAircraftType()))
-                .andExpect(jsonPath("$.seatAvailability").value(flightRequest.getSeatAvailability()))
-                .andExpect(jsonPath("$.currentAvailableSeat").value(flight.getCurrentAvailableSeat()))
-                .andExpect(jsonPath("$.status").value(flightRequest.getStatus().name()));
+                .andExpect(jsonPath(AIRLINE_PATH).value(flightRequest.getAirline()))
+                .andExpect(jsonPath(FLIGHT_NUMBER_PATH).value(flightRequest.getFlightNumber()))
+                .andExpect(jsonPath(DEPARTURE_TIME_PATH).value(flightRequest.getDepartureTime()))
+                .andExpect(jsonPath(ARRIVAL_TIME_PATH).value(flightRequest.getArrivalTime()))
+                .andExpect(jsonPath(PRICE_PATH).value(flightRequest.getPrice()))
+                .andExpect(jsonPath(AIRCRAFT_TYPE_PATH).value(flightRequest.getAircraftType()))
+                .andExpect(jsonPath(SEAT_AVAILABILITY_PATH).value(flightRequest.getSeatAvailability()))
+                .andExpect(jsonPath(CURRENT_SEAT_AVAILABILITY_PATH).value(flight.getCurrentAvailableSeat()))
+                .andExpect(jsonPath(STATUS_PATH).value(flightRequest.getStatus().name()));
     }
 
     @Test
@@ -198,7 +204,7 @@ public class FlightControllerIT extends AbstractContainerBaseTest {
         Flight savedFlight = flightRepository.save(flight);
 
         // when
-        ResultActions resultActions = mockMvc.perform(delete("/api/v1/flights/{id}", savedFlight.getId()));
+        ResultActions resultActions = mockMvc.perform(delete(API_V1_FLIGHTS.concat(ID), savedFlight.getId()));
 
         // then
         resultActions.andDo(print())
