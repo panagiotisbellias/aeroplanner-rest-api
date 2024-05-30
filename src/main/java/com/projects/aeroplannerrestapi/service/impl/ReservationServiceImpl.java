@@ -28,6 +28,7 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReservationServiceImpl implements ReservationService {
 
     private static final Log LOG = LogFactory.getLog(ReservationServiceImpl.class);
@@ -36,6 +37,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final FlightRepository flightRepository;
 
     @Override
+    @Transactional
     public ReservationResponse createReservation(ReservationRequest reservationRequest) {
         Reservation reservation = ReservationMapper.INSTANCE.reservationRequestToReservation(reservationRequest);
         Long flightId = reservationRequest.getFlightId();

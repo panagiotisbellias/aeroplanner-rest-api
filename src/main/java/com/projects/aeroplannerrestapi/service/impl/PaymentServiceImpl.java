@@ -28,6 +28,7 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PaymentServiceImpl implements PaymentService {
 
     private static final Log LOG = LogFactory.getLog(PaymentServiceImpl.class);
@@ -67,7 +68,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Payment getPaymentDetails(Long id) {
         return paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(PAYMENT, ID, id.toString()));

@@ -22,6 +22,7 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.ID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class FlightServiceImpl implements FlightService {
 
     private static final Log LOG = LogFactory.getLog(FlightServiceImpl.class);
@@ -29,6 +30,7 @@ public class FlightServiceImpl implements FlightService {
     private final FlightRepository flightRepository;
 
     @Override
+    @Transactional
     public FlightResponse createFlight(FlightRequest flightRequest) {
         Flight flight = FlightMapper.INSTANCE.flightRequestToFlight(flightRequest);
         flight.setCurrentAvailableSeat(flightRequest.getSeatAvailability());

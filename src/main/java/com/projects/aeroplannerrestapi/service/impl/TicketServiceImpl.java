@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,7 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TicketServiceImpl implements TicketService {
 
     private static final Log LOG = LogFactory.getLog(TicketServiceImpl.class);
@@ -31,6 +33,7 @@ public class TicketServiceImpl implements TicketService {
     private final ReservationRepository reservationRepository;
 
     @Override
+    @Transactional
     public TicketResponse createTicket(TicketRequest ticketRequest) {
         Long reservationId = ticketRequest.getReservationId();
         Reservation reservation = reservationRepository.findById(reservationId)
@@ -61,6 +64,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public void cancelTicket(Long id) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(TICKET, ID, id.toString()));
