@@ -27,6 +27,7 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class SuperAdminServiceImpl implements SuperAdminService {
 
     private static final Log LOG = LogFactory.getLog(SuperAdminServiceImpl.class);
@@ -36,6 +37,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public UserResponse createAdministrator(RegisterRequest registerRequest) {
         String email = registerRequest.getEmail();
         Optional<Role> role = roleRepository.findByName(RoleEnum.ADMIN);
@@ -54,7 +56,6 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserResponse getAdministrator(Long id) {
         User user = findByIdAndRole(id);
         LOG.debug(String.format("Administrator %d : %s", id, user.getEmail()));
@@ -62,6 +63,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     }
 
     @Override
+    @Transactional
     public UserResponse updateAdministrator(Long id, RegisterRequest registerRequest) {
         User user = findByIdAndRole(id);
         user.setUpdatedAt(LocalDateTime.now());
@@ -74,6 +76,7 @@ public class SuperAdminServiceImpl implements SuperAdminService {
     }
 
     @Override
+    @Transactional
     public void deleteAdministrator(Long id) {
         User user = findByIdAndRole(id);
         userRepository.delete(user);
