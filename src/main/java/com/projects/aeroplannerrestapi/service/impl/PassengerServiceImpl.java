@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,7 @@ import static com.projects.aeroplannerrestapi.constants.ErrorMessage.PASSENGER;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PassengerServiceImpl implements PassengerService {
 
     private static final Log LOG = LogFactory.getLog(PassengerServiceImpl.class);
@@ -60,6 +62,7 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     @Override
+    @Transactional
     public void deletePassenger(Long id) {
         if (!userRepository.existsByIdAndRoles_Name(id, RoleEnum.USER)) {
             throw new ResourceNotFoundException(PASSENGER, ID, id.toString());
