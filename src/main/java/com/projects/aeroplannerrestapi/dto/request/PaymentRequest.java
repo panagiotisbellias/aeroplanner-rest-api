@@ -1,16 +1,14 @@
 package com.projects.aeroplannerrestapi.dto.request;
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentRequest {
