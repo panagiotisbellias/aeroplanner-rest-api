@@ -12,6 +12,8 @@ public class SecurityRoleConstants {
     public static final String AUTHORIZATION = "Authorization";
 
     public static final String SUPER_ADMIN = "SUPER_ADMIN";
+    public static final String ADMIN = "ADMIN";
+    public static final String USER = "USER";
     public static final String IS_AUTHENTICATED = "isAuthenticated()";
     public static final String USER_ROLE_AUTHORIZATION = "hasRole('USER')";
     public static final String ADMIN_ROLE_AUTHORIZATION = "hasRole('ADMIN')";

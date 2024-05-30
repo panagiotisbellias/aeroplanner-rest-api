@@ -36,7 +36,7 @@ public class UserController {
     @PreAuthorize(SUPER_ADMIN_OR_ADMIN_ROLE_AUTHORIZATION)
     @Operation(summary = GET_ALL_ADMINISTRATORS)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_ALL_THE_ADMINISTRATORS))
-    public ResponseEntity<PaginatedAndSortedUserResponse> getAllAdministrators(
+    public ResponseEntity<PaginatedAndSortedUserResponse> getAllUsers(
             @RequestParam(name = PAGE_NUM, defaultValue = DEFAULT_PAGE_NUM, required = false) int pageNumber,
             @RequestParam(name = PAGE_SIZE, defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(name = SORT_BY, defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,

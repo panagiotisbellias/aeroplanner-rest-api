@@ -25,14 +25,18 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.util.HashSet;
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.constants.OpenApiConstants.LOGGED_OUT_SUCCESSFULLY;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.*;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.AUTHORIZATION;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.BEARER;
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
-@ActiveProfiles("integration")
+@ActiveProfiles(INTEGRATION)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthenticationControllerIT extends AbstractContainerBaseTest {
 
@@ -63,100 +67,103 @@ public class AuthenticationControllerIT extends AbstractContainerBaseTest {
 
     private String password;
 
+    private Role savedRole;
+
     @BeforeEach
     public void setup() {
-        fullName = "full name";
-        email = "sample@email.com";
-        password = "Password@123!";
-
         userRepository.deleteAll();
         roleRepository.deleteAll();
+
+        Role role = Role.builder()
+                .name(RoleEnum.USER)
+                .description(DEFAULT_USER_ROLE)
+                .build();
+        savedRole = roleRepository.save(role);
+
+        fullName = FULL_NAME;
+        email = VALID_EMAIL_ADDRESS;
+        password = VALID_PASSWORD;
     }
 
     @Test
     public void givenRegisterRequest_whenRegister_thenReturnRegisteredUser() throws Exception {
         // given
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setFullName(fullName);
-        registerRequest.setEmail(email);
-        registerRequest.setPassword(passwordEncoder.encode(password));
-        Role role = new Role();
-        role.setName(RoleEnum.USER);
-        role.setDescription("Default user role");
-        roleRepository.save(role);
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .fullName(fullName)
+                .email(email)
+                .password(password)
+                .build();
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/register")
+        ResultActions resultActions = mockMvc.perform(post(API_V1_AUTH.concat(REGISTER))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerRequest)));
 
         // then
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").value(registerRequest.getEmail()))
-                .andExpect(jsonPath("$.fullName").value(registerRequest.getFullName()));
+                .andExpect(jsonPath(EMAIL_PATH).value(registerRequest.getEmail()))
+                .andExpect(jsonPath(FULL_NAME_PATH).value(registerRequest.getFullName()));
     }
 
     @Test
     public void givenLoginRequest_whenAuthenticate_thenReturnLoginResponse() throws Exception {
         // given
-        User user = new User();
-        user.setFullName(fullName);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        Role role = new Role();
-        role.setName(RoleEnum.USER);
-        role.setDescription("Default user role");
-        Role savedRole = roleRepository.save(role);
-        user.setRoles(Set.of(savedRole));
+        User user = User.builder()
+                .fullName(fullName)
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .roles(Set.of(savedRole))
+                .build();
         userRepository.save(user);
 
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail(email);
-        loginRequest.setPassword(password);
+        LoginRequest loginRequest = LoginRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        User savedUser = userRepository.findByEmail(email).get();
-        String token = jwtService.generateToken(savedUser);
+
+        User foundUser = userRepository.findByEmail(email).get();
+        String token = jwtService.generateToken(foundUser);
         long expirationTime = jwtService.getExpirationTime();
 
         // when
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post(API_V1_AUTH.concat(LOGIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginRequest)));
 
         // then
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(token))
-                .andExpect(jsonPath("$.expiredIn").value(expirationTime));
+                .andExpect(jsonPath(TOKEN_PATH).value(token))
+                .andExpect(jsonPath(EXPIRED_IN_PATH).value(expirationTime));
     }
 
     @Test
     public void givenHttServletRequest_whenLogout_thenReturnSuccessMessage() throws Exception {
         // given
-        User user = new User();
-        user.setFullName(fullName);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        Role role = new Role();
-        role.setName(RoleEnum.USER);
-        role.setDescription("Default user role");
-        Role savedRole = roleRepository.save(role);
-        user.setRoles(Set.of(savedRole));
+        User user = User.builder()
+                .fullName(fullName)
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .roles(Set.of(savedRole))
+                .build();
         userRepository.save(user);
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        User savedUser = userRepository.findByEmail(email).get();
-        String token = jwtService.generateToken(savedUser);
+
+        User foundUser = userRepository.findByEmail(email).get();
+        String token = jwtService.generateToken(foundUser);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/auth/logout")
+        ResultActions resultActions = mockMvc.perform(post(API_V1_AUTH.concat(LOGOUT))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + token));
+                .header(AUTHORIZATION, BEARER + token));
 
         // then
         resultActions.andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
-                .andExpect(content().string("Logged out successfully"));
+                .andExpect(content().string(LOGGED_OUT_SUCCESSFULLY));
     }
 }
