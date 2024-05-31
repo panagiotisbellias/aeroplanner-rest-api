@@ -33,7 +33,7 @@ public class SuperAdminController {
     @Operation(summary = CREATE_ADMINISTRATOR)
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = ADMINISTRATOR_CREATED))
     public ResponseEntity<UserResponse> createAdministrator(@RequestBody RegisterRequest registerRequest) {
-        LOG.debug(String.format("createAdministrator(%s)", registerRequest.getEmail()));
+        LOG.debug(String.format("== createAdministrator(%s)", registerRequest.getEmail()));
         return new ResponseEntity<>(superAdminService.createAdministrator(registerRequest), HttpStatus.CREATED);
     }
 
@@ -41,7 +41,7 @@ public class SuperAdminController {
     @Operation(summary = GET_ADMINISTRATOR)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_ADMINISTRATOR))
     public ResponseEntity<UserResponse> getAdministrator(@PathVariable Long id) {
-        LOG.debug(String.format("getAdministrator(%d)", id));
+        LOG.debug(String.format("== getAdministrator(%d)", id));
         return ResponseEntity.ok(superAdminService.getAdministrator(id));
     }
 
@@ -50,7 +50,7 @@ public class SuperAdminController {
     @ApiResponses(@ApiResponse(responseCode = OK, description = ADMINISTRATOR_UPDATED))
     public ResponseEntity<UserResponse> updateAdministrator(@PathVariable Long id,
                                                        @RequestBody RegisterRequest registerRequest) {
-        LOG.debug(String.format("updateAdministrator(%d, %s)", id, registerRequest.getEmail()));
+        LOG.debug(String.format("== updateAdministrator(%d, %s)", id, registerRequest.getEmail()));
         return ResponseEntity.ok(superAdminService.updateAdministrator(id, registerRequest));
     }
 
@@ -58,7 +58,7 @@ public class SuperAdminController {
     @Operation(summary = DELETE_ADMINISTRATOR)
     @ApiResponses(@ApiResponse(responseCode = NO_CONTENT, description = ADMINISTRATOR_DELETED))
     public ResponseEntity<Void> deleteAdministrator(@PathVariable Long id) {
-        LOG.debug(String.format("deleteAdministrator(%d)", id));
+        LOG.debug(String.format("== deleteAdministrator(%d)", id));
         superAdminService.deleteAdministrator(id);
         LOG.info(ADMINISTRATOR_DELETED);
         return ResponseEntity.noContent().build();

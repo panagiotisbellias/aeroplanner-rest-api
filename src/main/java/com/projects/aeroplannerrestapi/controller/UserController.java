@@ -41,7 +41,7 @@ public class UserController {
             @RequestParam(name = PAGE_SIZE, defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(name = SORT_BY, defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
             @RequestParam(name = SORT_DIR, defaultValue = DEFAULT_SORT_DIR, required = false) String sortDir) {
-        LOG.debug(String.format("getAllAdministrators(%d, %d, %s, %s)", pageNumber, pageSize, sortBy, sortDir));
+        LOG.debug(String.format("== getAllAdministrators(%d, %d, %s, %s)", pageNumber, pageSize, sortBy, sortDir));
         return ResponseEntity.ok(userService.getAllUsers(pageNumber, pageSize, sortBy, sortDir));
     }
 
@@ -50,7 +50,7 @@ public class UserController {
     @Operation(summary = GET_AUTHENTICATED_USER)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_AUTHENTICATED_USER))
     public ResponseEntity<UserResponse> getAuthenticatedUser() {
-        LOG.debug("getAuthenticatedUser()");
+        LOG.debug("== getAuthenticatedUser()");
         return ResponseEntity.ok(userService.getAuthenticatedUser());
     }
 }

@@ -41,7 +41,7 @@ public class BootstrapSeeder implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        LOG.debug(String.format("onApplicationEvent(%s)", event.toString()));
+        LOG.debug(String.format("== onApplicationEvent(%s)", event.toString()));
         this.loadRoles();
         this.createSuperAdministrator();
     }

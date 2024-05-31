@@ -37,7 +37,7 @@ public class PassengerController {
             @RequestParam(name = PAGE_SIZE, defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(name = SORT_BY, defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
             @RequestParam(name = SORT_DIR, defaultValue = DEFAULT_SORT_DIR, required = false) String sortDir) {
-        LOG.debug(String.format("getPassengers(%d, %d, %s, %s)", pageNumber, pageSize, sortBy, sortDir));
+        LOG.debug(String.format("== getPassengers(%d, %d, %s, %s)", pageNumber, pageSize, sortBy, sortDir));
         return ResponseEntity.ok(adminService.getPassengers(pageNumber, pageSize, sortBy, sortDir));
     }
 
@@ -45,7 +45,7 @@ public class PassengerController {
     @Operation(summary = GET_PASSENGER)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_PASSENGER))
     public ResponseEntity<UserResponse> getPassenger(@PathVariable Long id) {
-        LOG.debug(String.format("getPassenger(%d)", id));
+        LOG.debug(String.format("== getPassenger(%d)", id));
         return ResponseEntity.ok(adminService.getPassenger(id));
     }
 
@@ -53,7 +53,7 @@ public class PassengerController {
     @Operation(summary = DELETE_PASSENGER)
     @ApiResponses(@ApiResponse(responseCode = NO_CONTENT, description = PASSENGER_DELETED))
     public ResponseEntity<Void> deletePassenger(@PathVariable Long id) {
-        LOG.debug(String.format("deletePassenger(%d)", id));
+        LOG.debug(String.format("== deletePassenger(%d)", id));
         adminService.deletePassenger(id);
         LOG.info(PASSENGER_DELETED);
         return ResponseEntity.noContent().build();

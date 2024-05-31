@@ -36,7 +36,7 @@ public class PaymentController {
     @Operation(summary = MAKE_PAYMENT)
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = MADE_PAYMENT))
     public ResponseEntity<PaymentResponse> makePayment(@RequestBody @Valid PaymentRequest paymentRequest) {
-        LOG.debug(String.format("makePayment(%s)", paymentRequest.getId()));
+        LOG.debug(String.format("== makePayment(%s)", paymentRequest.getId()));
         return new ResponseEntity<>(paymentService.processPayment(paymentRequest), HttpStatus.CREATED);
     }
 
@@ -44,7 +44,7 @@ public class PaymentController {
     @Operation(summary = GET_PAYMENT_DETAILS)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_PAYMENT_DETAILS))
     public ResponseEntity<Payment> getPaymentDetails(@PathVariable Long id) {
-        LOG.debug(String.format("getPaymentDetails(%s)", id));
+        LOG.debug(String.format("== getPaymentDetails(%s)", id));
         return ResponseEntity.ok(paymentService.getPaymentDetails(id));
     }
 }

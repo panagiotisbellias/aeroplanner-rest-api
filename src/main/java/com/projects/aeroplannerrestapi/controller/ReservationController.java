@@ -36,7 +36,7 @@ public class ReservationController {
     @Operation(summary = CREATE_RESERVATION)
     @ApiResponses(@ApiResponse(responseCode = CREATED, description = RESERVATION_CREATED))
     public ResponseEntity<ReservationResponse> createReservation(@RequestBody @Valid ReservationRequest reservationRequest) {
-        LOG.debug(String.format("createReservation(%s)", reservationRequest.getId()));
+        LOG.debug(String.format("== createReservation(%s)", reservationRequest.getId()));
         return new ResponseEntity<>(reservationService.createReservation(reservationRequest), HttpStatus.CREATED);
     }
 
@@ -48,7 +48,7 @@ public class ReservationController {
             @RequestParam(name = PAGE_SIZE, defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(name = SORT_BY, defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
             @RequestParam(name = SORT_DIR, defaultValue = DEFAULT_SORT_DIR, required = false) String sortDir) {
-        LOG.debug(String.format("getAllReservations(%d, %d, %s, %s)", pageNum, pageSize, sortBy, sortDir));
+        LOG.debug(String.format("== getAllReservations(%d, %d, %s, %s)", pageNum, pageSize, sortBy, sortDir));
         return ResponseEntity.ok(reservationService.getAllReservations(pageNum, pageSize, sortBy, sortDir));
     }
 
@@ -56,7 +56,7 @@ public class ReservationController {
     @Operation(summary = GET_RESERVATION)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_RESERVATION))
     public ResponseEntity<ReservationResponse> getReservation(@PathVariable Long id) {
-        LOG.debug(String.format("getReservation(%d)", id));
+        LOG.debug(String.format("== getReservation(%d)", id));
         return ResponseEntity.ok(reservationService.getReservation(id));
     }
 
@@ -65,7 +65,7 @@ public class ReservationController {
     @ApiResponses(@ApiResponse(responseCode = OK, description = RESERVATION_UPDATED))
     public ResponseEntity<ReservationResponse> updateReservation(@PathVariable Long id,
                                                             @RequestBody @Valid ReservationRequest reservationRequest) {
-        LOG.debug(String.format("updateReservation(%d, %s)", id, reservationRequest.getId()));
+        LOG.debug(String.format("== updateReservation(%d, %s)", id, reservationRequest.getId()));
         return ResponseEntity.ok(reservationService.updateReservation(id, reservationRequest));
     }
 
@@ -73,7 +73,7 @@ public class ReservationController {
     @Operation(summary = CANCEL_RESERVATION)
     @ApiResponses(@ApiResponse(responseCode = NO_CONTENT, description = RESERVATION_CANCELLED))
     public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
-        LOG.debug(String.format("cancelReservation(%d)", id));
+        LOG.debug(String.format("== cancelReservation(%d)", id));
         reservationService.cancelReservation(id);
         LOG.info(RESERVATION_CANCELLED);
         return ResponseEntity.noContent().build();

@@ -33,7 +33,7 @@ public class TicketController {
     @Operation(summary = GET_ALL_TICKETS)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_ALL_THE_TICKETS))
     public ResponseEntity<List<TicketResponse>> getAllTickets() {
-        LOG.debug("getAllTickets()");
+        LOG.debug("== getAllTickets()");
         return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
@@ -41,7 +41,7 @@ public class TicketController {
     @Operation(summary = GET_TICKET)
     @ApiResponses(@ApiResponse(responseCode = OK, description = FOUND_THE_TICKET))
     public ResponseEntity<TicketResponse> getTicket(@PathVariable Long id) {
-        LOG.debug(String.format("getTicket(%d)", id));
+        LOG.debug(String.format("== getTicket(%d)", id));
         return ResponseEntity.ok(ticketService.getTicket(id));
     }
 
@@ -49,7 +49,7 @@ public class TicketController {
     @Operation(summary = CANCEL_TICKET)
     @ApiResponses(@ApiResponse(responseCode = NO_CONTENT, description = TICKET_CANCELLED))
     public ResponseEntity<Void> cancelTicket(@PathVariable Long id) {
-        LOG.debug(String.format("cancelTicket(%s)", id));
+        LOG.debug(String.format("== cancelTicket(%s)", id));
         ticketService.cancelTicket(id);
         LOG.info(TICKET_CANCELLED);
         return ResponseEntity.noContent().build();
