@@ -45,7 +45,7 @@ jobs:
           architecture: 'x64'
 
       - name: Copy env files
-        run: cp env.properties.example env.properties && cp src/main/resources/application.test.yml src/main/resources/application.yml
+        run: cp env.properties.example env.properties && cp src/main/resources/application.test.yaml src/main/resources/application.yml
         
       - name: Run unit tests
         run: mvn verify
