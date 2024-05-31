@@ -44,8 +44,8 @@ jobs:
           distribution: 'adopt'
           architecture: 'x64'
 
-      - name: Copy env.properties
-        run: cp env.properties.example env.properties
+      - name: Copy env files
+        run: cp env.properties.example env.properties && cp src/main/resources/application.test.yaml src/main/resources/application.yml
         
       - name: Run unit tests
         run: mvn verify
