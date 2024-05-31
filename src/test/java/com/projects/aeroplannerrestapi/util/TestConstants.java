@@ -49,6 +49,7 @@ public class TestConstants {
     public static final BigDecimal VALID_PRICE = BigDecimal.valueOf(0.0);
 
     public static final String DEFAULT_USER_ROLE = "Default user role";
+    public static final String ADMINISTRATOR_ROLE = "Administrator role";
 
     public static final String EMAIL_PATH = "$.email";
     public static final String FULL_NAME_PATH = "$.fullName";
@@ -74,4 +75,7 @@ public class TestConstants {
     public static final String CARD_HOLDER_NAME_PATH = "$.cardHolderName";
     public static final String EXPIRY_DATE_PATH = "$.expiryDate";
     public static final String SIZE_PATH = "$.size()";
+    public static final String SEAT_NUMBER_PATH = "$.seatNumber";
+    public static final String RESERVATION_DATE_PATH = "$.reservationDate";
+    public static final String RESERVATION_STATUS_PATH = "$.reservationStatus";
 }
