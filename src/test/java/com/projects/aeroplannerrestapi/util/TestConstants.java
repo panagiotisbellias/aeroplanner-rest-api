@@ -31,6 +31,10 @@ public class TestConstants {
     public static final String TOKEN = "token";
     public static final String TRANSACTION_ID = "transaction id";
     public static final String DESCRIPTION = "description";
+    public static final String PASSENGER_ID = "passenger id";
+    public static final String FLIGHT_ID = "flight id";
+    public static final String RESERVATION_ID = "reservation id";
+    public static final String ISSUE_DATE = "issue date";
 
     public static final String INTEGRATION = "integration";
     public static final String UPDATED = "updated";
@@ -78,4 +82,6 @@ public class TestConstants {
     public static final String SEAT_NUMBER_PATH = "$.seatNumber";
     public static final String RESERVATION_DATE_PATH = "$.reservationDate";
     public static final String RESERVATION_STATUS_PATH = "$.reservationStatus";
+    public static final String ISSUE_DATE_PATH = "$.issueDate";
+    public static final String TICKET_STATUS_ENUM_PATH = "$.ticketStatusEnum";
 }
