@@ -25,6 +25,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_USERS;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.ME;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.*;
+import static com.projects.aeroplannerrestapi.constants.SortingAndPaginationConstants.*;
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -32,8 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @AutoConfigureMockMvc
-@ActiveProfiles("integration")
-@WithMockUser(roles = {"SUPER_ADMIN", "ADMIN"})
+@ActiveProfiles(INTEGRATION)
+@WithMockUser(roles = {SUPER_ADMIN, ADMIN})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerIT extends AbstractContainerBaseTest {
 
@@ -65,35 +70,39 @@ public class UserControllerIT extends AbstractContainerBaseTest {
         userRepository.deleteAll();
         roleRepository.deleteAll();
 
-        Role role = new Role();
-        role.setName(RoleEnum.USER);
-        role.setDescription("Default user role");
+        Role role = Role.builder()
+                .name(RoleEnum.USER)
+                .description(DEFAULT_USER_ROLE)
+                .build();
+
         savedRole = roleRepository.save(role);
     }
 
     @Test
     public void givenListOfAllUsers_whenGetAllUsers_thenReturnPaginatedAndSortedUsers() throws Exception {
         // given
-        User user1 = new User();
-        user1.setFullName("Full Name 1");
-        user1.setEmail("sample1@email.com");
-        user1.setPassword(passwordEncoder.encode("password1"));
-        user1.setRoles(Set.of(savedRole));
+        User user1 = User.builder()
+                .fullName(FULL_NAME.concat(ONE))
+                .email(VALID_EMAIL_ADDRESS)
+                .password(passwordEncoder.encode(VALID_PASSWORD))
+                .roles(Set.of(savedRole))
+                .build();
 
-        User user2 = new User();
-        user2.setFullName("Full Name 2");
-        user2.setEmail("sample2@email.com");
-        user2.setPassword(passwordEncoder.encode("password 2"));
-        user2.setRoles(Set.of(savedRole));
+        User user2 = User.builder()
+                .fullName(FULL_NAME.concat(TWO))
+                .email(VALID_EMAIL_ADDRESS)
+                .password(passwordEncoder.encode(VALID_PASSWORD))
+                .roles(Set.of(savedRole))
+                .build();
 
         List<User> savedUsers = userRepository.saveAll(List.of(user1, user2));
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/api/v1/users")
-                .param("pageNum", "1")
-                .param("pageSize", "10")
-                .param("sortBy", "id")
-                .param("sortDir", "asc"));
+        ResultActions resultActions = mockMvc.perform(get(API_V1_USERS)
+                .param(PAGE_NUM, DEFAULT_PAGE_NUM)
+                .param(PAGE_SIZE, DEFAULT_PAGE_SIZE)
+                .param(SORT_BY, DEFAULT_SORT_BY)
+                .param(SORT_DIR, DEFAULT_SORT_DIR));
 
         // then
         resultActions.andDo(print())
@@ -107,31 +116,30 @@ public class UserControllerIT extends AbstractContainerBaseTest {
     }
 
     @Test
-    @WithMockUser(username = "sample@email.com")
+    @WithMockUser(username = VALID_EMAIL_ADDRESS)
     public void givenAuthenticatedUser_whenGetAuthenticatedUser_thenReturnAuthenticatedUser() throws Exception {
         // given
-        String email = "sample@email.com";
-        String password = "password";
+        User authenticatedUser = User.builder()
+                .fullName(FULL_NAME)
+                .email(VALID_EMAIL_ADDRESS)
+                .password(passwordEncoder.encode(VALID_PASSWORD))
+                .roles(Set.of(savedRole))
+                .build();
 
-        User authenticatedUser = new User();
-        authenticatedUser.setFullName("Full Name");
-        authenticatedUser.setEmail(email);
-        authenticatedUser.setPassword(passwordEncoder.encode(password));
-        authenticatedUser.setRoles(Set.of(savedRole));
         User savedUser = userRepository.save(authenticatedUser);
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(VALID_EMAIL_ADDRESS, VALID_PASSWORD));
         String token = jwtService.generateToken(savedUser);
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/api/v1/users/me")
+        ResultActions resultActions = mockMvc.perform(get(API_V1_USERS.concat(ME))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + token));
+                .header(AUTHORIZATION, BEARER + token));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(savedUser.getEmail()))
-                .andExpect(jsonPath("$.fullName").value(savedUser.getFullName()));
+                .andExpect(jsonPath(EMAIL_PATH).value(savedUser.getEmail()))
+                .andExpect(jsonPath(FULL_NAME_PATH).value(savedUser.getFullName()));
     }
 }

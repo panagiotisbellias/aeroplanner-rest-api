@@ -22,14 +22,18 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Set;
 
+import static com.projects.aeroplannerrestapi.constants.PathConstants.API_V1_SUPER_ADMINS;
+import static com.projects.aeroplannerrestapi.constants.PathConstants.ID;
+import static com.projects.aeroplannerrestapi.constants.SecurityRoleConstants.SUPER_ADMIN;
+import static com.projects.aeroplannerrestapi.util.TestConstants.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@ActiveProfiles("integration")
-@WithMockUser(roles = "SUPER_ADMIN")
+@ActiveProfiles(INTEGRATION)
+@WithMockUser(roles = SUPER_ADMIN)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SuperAdminControllerIT extends AbstractContainerBaseTest {
 
@@ -48,108 +52,101 @@ public class SuperAdminControllerIT extends AbstractContainerBaseTest {
     @Autowired
     private RoleRepository roleRepository;
 
+    private User user;
+
+    private Role role;
+
     @BeforeEach
     public void setup() {
         userRepository.deleteAll();
         roleRepository.deleteAll();
+
+        user = User.builder()
+                .fullName(FULL_NAME)
+                .email(VALID_EMAIL_ADDRESS)
+                .password(passwordEncoder.encode(VALID_PASSWORD))
+                .build();
+
+        role = Role.builder()
+                .name(RoleEnum.ADMIN)
+                .description(ADMINISTRATOR_ROLE)
+                .build();
     }
 
     @Test
     public void givenRegisterRequest_whenCreateAdministrator_thenReturnUserResponse() throws Exception {
         // given
-        Role role = new Role();
-        role.setName(RoleEnum.ADMIN);
-        role.setDescription("Administrator role");
         roleRepository.save(role);
 
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setEmail("sample@email.com");
-        registerRequest.setPassword("password");
-        registerRequest.setFullName("Full Name");
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .email(VALID_EMAIL_ADDRESS)
+                .password(VALID_PASSWORD)
+                .fullName(FULL_NAME)
+                .build();
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/super-admins")
+        ResultActions resultActions = mockMvc.perform(post(API_V1_SUPER_ADMINS)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(registerRequest)));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").value(registerRequest.getEmail()))
-                .andExpect(jsonPath("$.fullName").value(registerRequest.getFullName()));
+                .andExpect(jsonPath(EMAIL_PATH).value(registerRequest.getEmail()))
+                .andExpect(jsonPath(FULL_NAME_PATH).value(registerRequest.getFullName()));
     }
 
     @Test
     public void givenAdminId_whenGetAdministrator_thenReturnUserResponse() throws Exception {
         // given
-        User user = new User();
-        user.setFullName("Full Name");
-        user.setEmail("sample@email.com");
-        user.setPassword(passwordEncoder.encode("password"));
-        Role role = new Role();
-        role.setName(RoleEnum.ADMIN);
-        role.setDescription("Administrator role");
         Role savedRole = roleRepository.save(role);
         user.setRoles(Set.of(savedRole));
         User savedUser = userRepository.save(user);
 
         // when
-        ResultActions resultActions = mockMvc.perform(get("/api/v1/super-admins/{id}", savedUser.getId()));
+        ResultActions resultActions = mockMvc.perform(get(API_V1_SUPER_ADMINS.concat(ID), savedUser.getId()));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(savedUser.getEmail()))
-                .andExpect(jsonPath("$.fullName").value(savedUser.getFullName()));
+                .andExpect(jsonPath(EMAIL_PATH).value(savedUser.getEmail()))
+                .andExpect(jsonPath(FULL_NAME_PATH).value(savedUser.getFullName()));
     }
 
     @Test
     public void givenAdminIdAndRegisterRequest_whenUpdateAdministrator_thenReturnUserResponse() throws Exception {
         // given
-        User user = new User();
-        user.setFullName("Full Name");
-        user.setEmail("sample@email.com");
-        user.setPassword(passwordEncoder.encode("password"));
-        Role role = new Role();
-        role.setName(RoleEnum.ADMIN);
-        role.setDescription("Administrator role");
         Role savedRole = roleRepository.save(role);
         user.setRoles(Set.of(savedRole));
         User savedUser = userRepository.save(user);
 
-        RegisterRequest updatedRegisterRequest = new RegisterRequest();
-        updatedRegisterRequest.setEmail("updated@email.com");
-        updatedRegisterRequest.setPassword("updated password");
-        updatedRegisterRequest.setFullName("Updated Full Name");
+        RegisterRequest updatedRegisterRequest = RegisterRequest.builder()
+                .email(UPDATED.concat(VALID_EMAIL_ADDRESS))
+                .password(UPDATED.concat(VALID_PASSWORD))
+                .fullName(UPDATED.concat(FULL_NAME))
+                .build();
 
         // when
-        ResultActions resultActions = mockMvc.perform(put("/api/v1/super-admins/{id}", savedUser.getId())
+        ResultActions resultActions = mockMvc.perform(put(API_V1_SUPER_ADMINS.concat(ID), savedUser.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedRegisterRequest)));
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(updatedRegisterRequest.getEmail()))
-                .andExpect(jsonPath("$.fullName").value(updatedRegisterRequest.getFullName()));
+                .andExpect(jsonPath(EMAIL_PATH).value(updatedRegisterRequest.getEmail()))
+                .andExpect(jsonPath(FULL_NAME_PATH).value(updatedRegisterRequest.getFullName()));
     }
 
     @Test
     public void givenAdminId_whenDeleteAdministrator_thenReturnNothing() throws Exception {
         // given
-        User user = new User();
-        user.setFullName("Full Name");
-        user.setEmail("sample@email.com");
-        user.setPassword(passwordEncoder.encode("password"));
-        Role role = new Role();
-        role.setName(RoleEnum.ADMIN);
-        role.setDescription("Administrator role");
         Role savedRole = roleRepository.save(role);
         user.setRoles(Set.of(savedRole));
         User savedUser = userRepository.save(user);
 
         // when
-        ResultActions resultActions = mockMvc.perform(delete("/api/v1/super-admins/{id}", savedUser.getId()));
+        ResultActions resultActions = mockMvc.perform(delete(API_V1_SUPER_ADMINS.concat(ID), savedUser.getId()));
 
         // then
         resultActions.andDo(print())
