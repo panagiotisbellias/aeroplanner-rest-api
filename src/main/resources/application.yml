@@ -23,6 +23,25 @@ spring:
           starttls:
             enable: true
 
+management:
+  info:
+    env:
+      enabled: true
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+info:
+  app:
+    name: Aeroplanner
+    description: Flight Booking Application RESTful API
+
 security:
   jwt:
     secret-key: ${JWT_SECRET_KEY}

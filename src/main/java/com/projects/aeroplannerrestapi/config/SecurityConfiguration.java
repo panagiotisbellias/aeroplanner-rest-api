@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                 .authorizeRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(API_V1_AUTH_ALL)
                         .permitAll()
-                        .requestMatchers(V3_API_DOCS_ALL, SWAGGER_UI_ALL)
+                        .requestMatchers(V3_API_DOCS_ALL, SWAGGER_UI_ALL, ACTUATOR_ALL)
                         .hasRole(SUPER_ADMIN)
                         .anyRequest()
                         .authenticated())
