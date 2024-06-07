@@ -136,5 +136,12 @@ mvn sonar:sonar -D"sonar.token=<SONAR_AUTH_TOKEN>" -D"sonar.host.url=<SONAR_HOST
 
 1. Download and install SoapUI
 2. Import SoapUI project navigating to SoapUI and choosing 'File/Import Project' and choose the 'Aeroplanner-REST-API-soapui-project.xml'
-3. Run the application configuring another database for the tests
-4. Run the test suites
+3. Create a 'test_db' postgres database and run:
+  ```bash
+  cp env.properties env.properties.bkp
+  cp env.properties.test env.properties
+  ``` 
+4. Run the application
+5. Run the test suites
+
+After the test runs, recover the backed up env.properties by running `cp env.properties.bkp env.properties`
