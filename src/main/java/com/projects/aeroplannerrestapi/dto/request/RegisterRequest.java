@@ -11,6 +11,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
+
+//    TODO Test that validation annotations work. Trying empty request returns 201 instead of 400
     @NotBlank
     @Email
     private String email;
