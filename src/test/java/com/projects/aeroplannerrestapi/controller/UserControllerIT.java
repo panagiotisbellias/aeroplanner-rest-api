@@ -90,7 +90,7 @@ public class UserControllerIT extends AbstractContainerBaseTest {
 
         User user2 = User.builder()
                 .fullName(FULL_NAME.concat(TWO))
-                .email(VALID_EMAIL_ADDRESS)
+                .email(VALID_EMAIL_ADDRESS.concat(TWO))
                 .password(passwordEncoder.encode(VALID_PASSWORD))
                 .roles(Set.of(savedRole))
                 .build();
