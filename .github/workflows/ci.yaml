@@ -76,7 +76,7 @@ jobs:
         run: mvn -B package --file pom.xml -DskipTests
 
       - name: Docker Build
-        run: docker build -t ghcr.io/${{ secrets.REGISTRY_USERNAME }}/aeroplanner-rest-api:latest -t ghcr.io/${{ secrets.REGISTRY_USERNAME }}/aeroplanner-rest-api:0.0.1-SNAPSHOT .
+        run: docker build -t ghcr.io/${{ secrets.REGISTRY_USERNAME }}/aeroplanner-rest-api:latest -t ghcr.io/${{ secrets.REGISTRY_USERNAME }}/aeroplanner-rest-api:1.0.0 .
 
       - name: Docker login
         run: docker login ghcr.io -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_TOKEN }}
